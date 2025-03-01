@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/hari/Flutter_docs/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/hari/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/hari/path_finder/android/app/.cxx/Debug/444g4m46/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/hari/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/hari/path_finder/android/app/.cxx/Debug/444g4m46/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

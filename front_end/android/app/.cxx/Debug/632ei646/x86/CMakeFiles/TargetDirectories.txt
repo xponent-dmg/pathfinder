@@ -1,0 +1,2 @@
+/Users/hari/path_finder/android/app/.cxx/Debug/632ei646/x86/CMakeFiles/edit_cache.dir
+/Users/hari/path_finder/android/app/.cxx/Debug/632ei646/x86/CMakeFiles/rebuild_cache.dir
