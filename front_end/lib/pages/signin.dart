@@ -317,27 +317,6 @@ class _SigninPageState extends State<SigninPage>
                               ),
                               SizedBox(height: 40),
 
-                              // Social logins
-                              Text(
-                                'Or sign in with',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildSocialButton('assets/logos/google.png'),
-                                  SizedBox(width: 24),
-                                  _buildSocialButton('assets/logos/fb.png'),
-                                  SizedBox(width: 24),
-                                  _buildSocialButton('assets/logos/apple.png'),
-                                ],
-                              ),
-                              SizedBox(height: 30),
-
                               // Don't have an account
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -361,6 +340,55 @@ class _SigninPageState extends State<SigninPage>
                                     ),
                                   ),
                                 ],
+                              ),
+                              SizedBox(height: 25),
+
+                              // Club leader link - updated for better styling
+                              Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: Colors.grey[300]!,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, "/clubleader");
+                                      },
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0,
+                                          vertical: 12.0,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.group,
+                                              color: Colors.blue[700],
+                                              size: 18,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "Are you a club leader?",
+                                              style: TextStyle(
+                                                color: Colors.blue[700],
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                               SizedBox(height: 20),
                             ],
@@ -419,50 +447,6 @@ class _SigninPageState extends State<SigninPage>
           fillColor: Colors.white,
         ),
         validator: validator,
-      ),
-    );
-  }
-
-  // Helper method to build social login buttons
-  Widget _buildSocialButton(String iconPath) {
-    return InkWell(
-      onTap: () {
-        //temporarily navigate to home screen
-        Future.delayed(Duration(seconds: 1), () {
-          Navigator.pushReplacementNamed(context, '/home');
-        });
-        // Handle social login here
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                'Signing in with ${iconPath.split('/').last.split('.').first}...'),
-            duration: Duration(seconds: 1),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(30),
-      child: Ink(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(25),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Center(
-          child: Image.asset(
-            iconPath,
-            width: 24,
-            height: 24,
-          ),
-        ),
       ),
     );
   }

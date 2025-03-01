@@ -4,7 +4,7 @@
             "outputFile": "com.example.path_finder.app-mergeDebugResources-24:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/hari/path_finder/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/Users/hari/pathfinder/front_end/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

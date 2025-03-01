@@ -1,235 +1,235 @@
 -- Merging decision tree log ---
 application
-INJECTED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:2:5-33:19
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
-MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
-MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
-MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
-MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/9334d966882c901ab6fe3ad103da1c9b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/9334d966882c901ab6fe3ad103da1c9b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:2:5-33:19
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
+MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:22:5-29:19
+MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:28:5-89
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
 	android:extractNativeLibs
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	android:appComponentFactory
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
 	android:name
-		INJECTED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml
 manifest
-ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:1:1-45:12
-MERGED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:1:1-45:12
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml:1:1-7:12
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml:1:1-7:12
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml:1:1-7:12
-MERGED from [:path_provider_android] /Users/hari/path_finder/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/177a9a0cc07d66c1a8bd7d6aedb693ba/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:17:1-31:12
-MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/5ad2fe9a397ceebe8d5fcfd17ac46928/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:17:1-21:12
-MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/81c5b262453d2f11cffd806215d4ba8a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/31c803defc2105b5b2aec5cba5e67926/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/15b7d18111da3500472f5c1ea3a4c285/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/af793d0865f03bc2ccf1eb4d1b1f1f58/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/c1dfb3c67dc118d05238bb7cd3086e21/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/0447b28a82f276bba70af82d97f25c2b/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b1e54db1de54327375fd843c835de5f9/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/c7a8c7113ad491cb403fbb6ba451771b/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/bf3ebd95163bd4b21c10532c68139a1c/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/bbdcd85783a6e62842ae1de2ef641987/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/2e0cf4bfb4e04be0342a55c3a775a35d/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
-MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/be5b6264145f193b1a0ec656b2b677d9/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
-MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/80af517d1a48a3d7aea1ec5697fc1b4f/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/9cdcf27e52f13787db005ba399486a32/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/9334d966882c901ab6fe3ad103da1c9b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
-MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/5cff09cf268510bf751b0302dca02620/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/d24d71a3fb20b234ff4feadf89bf4558/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
-MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/50acc459ca0998b358c81beb847313db/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
-MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/d547277c3f7aabe8c489b7072b12dbb6/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:2:1-7:12
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:1:1-45:12
+MERGED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:1:1-45:12
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/815978cabde719eb8ad0162d3cf80a05/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:17:1-31:12
+MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/381245149d2a0189a8e1d65ddc3c6d2e/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:17:1-21:12
+MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/565a3f81ea7f38eee99a118e30e3a472/transformed/jetified-activity-1.8.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/0d29585d94a1fe99f9ef76a2959984a5/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/bdfaa7651017abe29a99d881e6f1f84d/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/ca6cbc917b487e761bd8533e228d79fe/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/09425917a4aeeb58f65ad34d637e2631/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/c4f7a4def1967ee03e7fa9771d479406/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b04e42209714dacb4a700483eed6663b/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/011cab769ab8bb98e067c208f8f4d69f/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/480d0828c31113d79b40ebf8b4e9a04b/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/9738dd8491a515c076c0c3b596b00ff4/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/b37794901beecd4a84f5be7df237d063/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/257ca5e7b7fd7e3e66754865397dccf7/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/d1871320248520d306517da14f88675a/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
+MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/4895c388b91412bc1e7ffd7f12799d57/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:2:1-7:12
 	package
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	android:versionName
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	android:versionCode
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:1:11-69
+		ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:1:11-69
 queries
-ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:39:5-44:15
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:39:5-44:15
 intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
-ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:40:9-43:18
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:40:9-43:18
 action#android.intent.action.PROCESS_TEXT
-ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:41:13-72
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:41:13-72
 	android:name
-		ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:41:21-70
+		ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:41:21-70
 data
-ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:42:13-50
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:42:13-50
 	android:mimeType
-		ADDED from /Users/hari/path_finder/android/app/src/main/AndroidManifest.xml:42:19-48
+		ADDED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifest.xml:42:19-48
 uses-permission#android.permission.INTERNET
-ADDED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml:6:5-66
+ADDED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:6:5-66
 	android:name
-		ADDED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml:6:22-64
+		ADDED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:6:22-64
 uses-sdk
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
-INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
-MERGED from [:path_provider_android] /Users/hari/path_finder/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
-MERGED from [:path_provider_android] /Users/hari/path_finder/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
-MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/177a9a0cc07d66c1a8bd7d6aedb693ba/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/177a9a0cc07d66c1a8bd7d6aedb693ba/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/5ad2fe9a397ceebe8d5fcfd17ac46928/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
-MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/5ad2fe9a397ceebe8d5fcfd17ac46928/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
-MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/81c5b262453d2f11cffd806215d4ba8a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/81c5b262453d2f11cffd806215d4ba8a/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/31c803defc2105b5b2aec5cba5e67926/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/31c803defc2105b5b2aec5cba5e67926/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/15b7d18111da3500472f5c1ea3a4c285/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/15b7d18111da3500472f5c1ea3a4c285/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/af793d0865f03bc2ccf1eb4d1b1f1f58/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/af793d0865f03bc2ccf1eb4d1b1f1f58/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/c1dfb3c67dc118d05238bb7cd3086e21/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/c1dfb3c67dc118d05238bb7cd3086e21/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/0447b28a82f276bba70af82d97f25c2b/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/0447b28a82f276bba70af82d97f25c2b/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b1e54db1de54327375fd843c835de5f9/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b1e54db1de54327375fd843c835de5f9/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/c7a8c7113ad491cb403fbb6ba451771b/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/c7a8c7113ad491cb403fbb6ba451771b/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/bf3ebd95163bd4b21c10532c68139a1c/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/bf3ebd95163bd4b21c10532c68139a1c/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/bbdcd85783a6e62842ae1de2ef641987/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/bbdcd85783a6e62842ae1de2ef641987/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/2e0cf4bfb4e04be0342a55c3a775a35d/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/2e0cf4bfb4e04be0342a55c3a775a35d/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
-MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/be5b6264145f193b1a0ec656b2b677d9/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/be5b6264145f193b1a0ec656b2b677d9/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
-MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/80af517d1a48a3d7aea1ec5697fc1b4f/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/80af517d1a48a3d7aea1ec5697fc1b4f/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/9cdcf27e52f13787db005ba399486a32/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/9cdcf27e52f13787db005ba399486a32/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/9334d966882c901ab6fe3ad103da1c9b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/9334d966882c901ab6fe3ad103da1c9b/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/5cff09cf268510bf751b0302dca02620/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/5cff09cf268510bf751b0302dca02620/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/d24d71a3fb20b234ff4feadf89bf4558/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/d24d71a3fb20b234ff4feadf89bf4558/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/50acc459ca0998b358c81beb847313db/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
-MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/50acc459ca0998b358c81beb847313db/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
-MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/d547277c3f7aabe8c489b7072b12dbb6/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
-MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/d547277c3f7aabe8c489b7072b12dbb6/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
+INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
+MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/815978cabde719eb8ad0162d3cf80a05/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/815978cabde719eb8ad0162d3cf80a05/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/381245149d2a0189a8e1d65ddc3c6d2e/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
+MERGED from [androidx.window:window-java:1.2.0] /Users/hari/.gradle/caches/transforms-3/381245149d2a0189a8e1d65ddc3c6d2e/transformed/jetified-window-java-1.2.0/AndroidManifest.xml:19:5-44
+MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/565a3f81ea7f38eee99a118e30e3a472/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.1] /Users/hari/.gradle/caches/transforms-3/565a3f81ea7f38eee99a118e30e3a472/transformed/jetified-activity-1.8.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/0d29585d94a1fe99f9ef76a2959984a5/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /Users/hari/.gradle/caches/transforms-3/0d29585d94a1fe99f9ef76a2959984a5/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/bdfaa7651017abe29a99d881e6f1f84d/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /Users/hari/.gradle/caches/transforms-3/bdfaa7651017abe29a99d881e6f1f84d/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/ca6cbc917b487e761bd8533e228d79fe/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0] /Users/hari/.gradle/caches/transforms-3/ca6cbc917b487e761bd8533e228d79fe/transformed/jetified-lifecycle-livedata-core-ktx-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/09425917a4aeeb58f65ad34d637e2631/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.7.0] /Users/hari/.gradle/caches/transforms-3/09425917a4aeeb58f65ad34d637e2631/transformed/lifecycle-livedata-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/c4f7a4def1967ee03e7fa9771d479406/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.7.0] /Users/hari/.gradle/caches/transforms-3/c4f7a4def1967ee03e7fa9771d479406/transformed/lifecycle-viewmodel-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b04e42209714dacb4a700483eed6663b/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.7.0] /Users/hari/.gradle/caches/transforms-3/b04e42209714dacb4a700483eed6663b/transformed/lifecycle-livedata-core-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/011cab769ab8bb98e067c208f8f4d69f/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0] /Users/hari/.gradle/caches/transforms-3/011cab769ab8bb98e067c208f8f4d69f/transformed/jetified-lifecycle-viewmodel-savedstate-2.7.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/480d0828c31113d79b40ebf8b4e9a04b/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.13.1] /Users/hari/.gradle/caches/transforms-3/480d0828c31113d79b40ebf8b4e9a04b/transformed/jetified-core-ktx-1.13.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/9738dd8491a515c076c0c3b596b00ff4/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /Users/hari/.gradle/caches/transforms-3/9738dd8491a515c076c0c3b596b00ff4/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/b37794901beecd4a84f5be7df237d063/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/b37794901beecd4a84f5be7df237d063/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/257ca5e7b7fd7e3e66754865397dccf7/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/257ca5e7b7fd7e3e66754865397dccf7/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/d1871320248520d306517da14f88675a/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/d1871320248520d306517da14f88675a/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
+MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/4895c388b91412bc1e7ffd7f12799d57/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
+MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/4895c388b91412bc1e7ffd7f12799d57/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
 	android:targetSdkVersion
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/hari/path_finder/android/app/src/debug/AndroidManifest.xml
+		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 uses-library#androidx.window.extensions
-ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
+ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:23:9-25:40
 	android:required
-		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
+		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:25:13-37
 	android:name
-		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
+		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:24:13-54
 uses-library#androidx.window.sidecar
-ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
+ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:26:9-28:40
 	android:required
-		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
+		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:28:13-37
 	android:name
-		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/0f22ae0b7c0d03075c57866995f4f309/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
+		ADDED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:27:13-51
 permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
 	android:name
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
 permission#com.example.path_finder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
 	android:name
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
 uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 	android:name
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
 uses-permission#com.example.path_finder.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
 	android:name
-		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/c5e9fe9adbff5c0dc8e82de7dfbca3f8/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+		ADDED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/11ebbcb0eb2df8cf013f6e024a8e71c6/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
 provider#androidx.startup.InitializationProvider
-ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
-MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/e481ae7a14d2ce9ec180675fb565a146/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
 	tools:node
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:28:13-31
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:28:13-31
 	android:authorities
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:26:13-68
 	android:exported
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:27:13-37
 	android:name
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:25:13-67
 meta-data#androidx.lifecycle.ProcessLifecycleInitializer
-ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
+ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:31:17-49
 	android:name
-		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/9bf9234e7387cd27ce327b202beb7892/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
+		ADDED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:30:17-78
 meta-data#androidx.profileinstaller.ProfileInstallerInitializer
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
 	android:value
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
 receiver#androidx.profileinstaller.ProfileInstallReceiver
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
 	android:enabled
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
 	android:exported
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
 	android:permission
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
 	android:directBootAware
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
 intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
 action#androidx.profileinstaller.action.INSTALL_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
 intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
 action#androidx.profileinstaller.action.SKIP_FILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
 intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
 action#androidx.profileinstaller.action.SAVE_PROFILE
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
 intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
 action#androidx.profileinstaller.action.BENCHMARK_OPERATION
-ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
 	android:name
-		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/7fecc200d9450868613456ff91245a53/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:50:25-92

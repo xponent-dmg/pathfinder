@@ -346,27 +346,6 @@ class _SignupPageState extends State<SignupPage>
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 24),
-
-                              // Social logins
-                              Text(
-                                'Or sign up with',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _buildSocialButton('assets/logos/google.png'),
-                                  SizedBox(width: 24),
-                                  _buildSocialButton('assets/logos/fb.png'),
-                                  SizedBox(width: 24),
-                                  _buildSocialButton('assets/logos/apple.png'),
-                                ],
-                              ),
                               SizedBox(height: 30),
 
                               // Already have an account
@@ -450,46 +429,6 @@ class _SignupPageState extends State<SignupPage>
           fillColor: Colors.white,
         ),
         validator: validator,
-      ),
-    );
-  }
-
-  // Helper method to build social login buttons
-  Widget _buildSocialButton(String iconPath) {
-    return InkWell(
-      onTap: () {
-        // Handle social login here
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                'Signing up with ${iconPath.split('/').last.split('.').first}...'),
-            duration: Duration(seconds: 1),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(30),
-      child: Ink(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withAlpha(25),
-              blurRadius: 8,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Center(
-          child: Image.asset(
-            iconPath,
-            width: 24,
-            height: 24,
-          ),
-        ),
       ),
     );
   }
