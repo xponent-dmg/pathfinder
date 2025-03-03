@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.path_finder.app-mergeDebugResources-24:/values-night-v8/values-night-v8.xml",
+            "outputFile": "com.example.path_finder.app-mergeDebugResources-25:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
                     "source": "/Users/hari/pathfinder/front_end/android/app/src/main/res/values-night/styles.xml",

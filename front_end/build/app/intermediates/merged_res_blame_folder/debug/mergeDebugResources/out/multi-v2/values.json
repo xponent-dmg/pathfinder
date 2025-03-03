@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.path_finder.app-mergeDebugResources-24:/values/values.xml",
+            "outputFile": "com.example.path_finder.app-mergeDebugResources-25:/values/values.xml",
             "map": [
                 {
                     "source": "/Users/hari/pathfinder/front_end/android/app/src/main/res/values/styles.xml",

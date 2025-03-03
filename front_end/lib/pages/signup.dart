@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/services/api_service.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -13,11 +14,37 @@ class _SignupPageState extends State<SignupPage>
 
   // Controllers
   final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  ApiService apiService = ApiService();
+
+  //custom snackbar
+  SnackBar customSnackBar(String content, Color? color) {
+    return SnackBar(
+      content: Text(content),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
 
   bool _obscurePassword = true;
   bool _agreeToTerms = false;
+
+  //authentication
+  void registerUser() async {
+    var response = await apiService.registerUser(_nameController.text,
+        _usernameController.text, _passwordController.text);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          customSnackBar("Registered user successfully", Colors.blue[400]));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(customSnackBar("Registering user failed", Colors.red));
+    }
+  }
 
   // Animation controllers
   late AnimationController _animationController;
@@ -58,7 +85,7 @@ class _SignupPageState extends State<SignupPage>
   void dispose() {
     _animationController.dispose();
     _nameController.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -73,14 +100,7 @@ class _SignupPageState extends State<SignupPage>
     if (_formKey.currentState!.validate() && _agreeToTerms) {
       // Process signup
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Creating your account...'),
-          backgroundColor: Colors.blue[400],
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
+        customSnackBar('Creating your account...', Colors.blue[400]),
       );
 
       // Navigate to next screen
@@ -90,14 +110,7 @@ class _SignupPageState extends State<SignupPage>
       });
     } else if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please agree to terms and conditions'),
-          backgroundColor: Colors.red[400],
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
+        customSnackBar('Please agree to terms and conditions', Colors.red),
       );
     }
   }
@@ -221,19 +234,15 @@ class _SignupPageState extends State<SignupPage>
                                     ),
                                     SizedBox(height: 16),
 
-                                    // Email Field
+                                    // username field
                                     _buildInputField(
-                                      controller: _emailController,
-                                      label: "Email Address",
-                                      icon: Icons.email_outlined,
-                                      keyboardType: TextInputType.emailAddress,
+                                      controller: _usernameController,
+                                      label: "Username",
+                                      icon: Icons.person_outlined,
+                                      keyboardType: TextInputType.text,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
-                                        } else if (!RegExp(
-                                                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                            .hasMatch(value)) {
-                                          return 'Please enter a valid email';
+                                          return 'Please enter your username';
                                         }
                                         return null;
                                       },

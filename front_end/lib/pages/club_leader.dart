@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/services/api_service.dart';
 
 class ClubLeaderSignin extends StatefulWidget {
   const ClubLeaderSignin({super.key});
@@ -11,12 +12,40 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
+  //custom snackBar
+  SnackBar customSnackBar(
+      {required String context,
+      Color? color = const Color.fromRGBO(66, 165, 245, 1)}) {
+    return SnackBar(
+      content: Text(context),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
   // Controllers
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  ApiService apiService = ApiService();
 
   bool _obscurePassword = true;
   bool _rememberMe = false;
+
+  //authentication
+  void loginClubLeader() async {
+    var response = await apiService.clubLeaderLogin(
+        _usernameController.text, _passwordController.text);
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          customSnackBar(context: "Registered user successfully"));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(customSnackBar(
+          context: "Registering user failed", color: Colors.red));
+    }
+  }
 
   // Animation controllers
   late AnimationController _animationController;
@@ -69,17 +98,7 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
 
   void _handleSignin() {
     if (_formKey.currentState!.validate()) {
-      // Process signin
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Signing in as Club Leader...'),
-          backgroundColor: Colors.blue[400],
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      );
+      loginClubLeader();
 
       // Navigate to next screen (club leader dashboard)
       Future.delayed(Duration(seconds: 2), () {

@@ -11,9 +11,9 @@ const bcrypt = require('bcrypt');
 
 router.post('/register-user', async (req, res) => {
     try {
-      const { username, password } = req.body;
-      if (!username || !password) {
-        return res.status(400).json({ error: 'Please provide username and password' });
+      const {name, username, password } = req.body;
+      if (!name || !username || !password) {
+        return res.status(400).json({ error: 'Please provide all the details' });
       }
   
       // Check if the user already exists in normal user model
@@ -23,7 +23,7 @@ router.post('/register-user', async (req, res) => {
       }
   
       // Create a new normal user
-      const newUser = new User({ username, password });
+      const newUser = new User({name, username, password });
       await newUser.save();
   
       res.status(201).json({ message: 'User registration successful' });

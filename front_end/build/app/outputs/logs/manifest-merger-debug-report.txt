@@ -26,6 +26,7 @@ MERGED from /Users/hari/pathfinder/front_end/android/app/src/main/AndroidManifes
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml:1:1-7:12
+MERGED from [:flutter_secure_storage] /Users/hari/pathfinder/front_end/build/flutter_secure_storage/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-10:12
 MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/815978cabde719eb8ad0162d3cf80a05/transformed/fragment-1.7.1/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.window:window:1.2.0] /Users/hari/.gradle/caches/transforms-3/5f447a4f1035551df6614cccdbc30970/transformed/jetified-window-1.2.0/AndroidManifest.xml:17:1-31:12
@@ -44,11 +45,12 @@ MERGED from [androidx.core:core:1.13.1] /Users/hari/.gradle/caches/transforms-3/
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.7.0] /Users/hari/.gradle/caches/transforms-3/b37794901beecd4a84f5be7df237d063/transformed/lifecycle-runtime-2.7.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:17:1-35:12
 MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/hari/.gradle/caches/transforms-3/7f73f76e999789727b9b84051b099bf4/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/257ca5e7b7fd7e3e66754865397dccf7/transformed/jetified-core-1.0.0/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/d1871320248520d306517da14f88675a/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:2:1-7:12
@@ -81,6 +83,8 @@ uses-sdk
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
+MERGED from [:flutter_secure_storage] /Users/hari/pathfinder/front_end/build/flutter_secure_storage/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-8:53
+MERGED from [:flutter_secure_storage] /Users/hari/pathfinder/front_end/build/flutter_secure_storage/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:6:5-8:53
 MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] /Users/hari/pathfinder/front_end/build/path_provider_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:5:5-44
 MERGED from [androidx.fragment:fragment:1.7.1] /Users/hari/.gradle/caches/transforms-3/815978cabde719eb8ad0162d3cf80a05/transformed/fragment-1.7.1/AndroidManifest.xml:5:5-44
@@ -117,16 +121,18 @@ MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/cac
 MERGED from [androidx.lifecycle:lifecycle-process:2.7.0] /Users/hari/.gradle/caches/transforms-3/1398d52f4c2e394e52279ee5bbd35e1f/transformed/jetified-lifecycle-process-2.7.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
 MERGED from [androidx.savedstate:savedstate:1.2.1] /Users/hari/.gradle/caches/transforms-3/3500ea2e94346dfdf5bce35c9636a358/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/hari/.gradle/caches/transforms-3/7f73f76e999789727b9b84051b099bf4/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
+MERGED from [androidx.security:security-crypto:1.1.0-alpha06] /Users/hari/.gradle/caches/transforms-3/7f73f76e999789727b9b84051b099bf4/transformed/jetified-security-crypto-1.1.0-alpha06/AndroidManifest.xml:20:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] /Users/hari/.gradle/caches/transforms-3/455188d85d7bbec4cfeb58c68567c92b/transformed/jetified-profileinstaller-1.3.1/AndroidManifest.xml:21:5-44
 MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.startup:startup-runtime:1.1.1] /Users/hari/.gradle/caches/transforms-3/066801df779f318d474da9ab4360fb37/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.tracing:tracing:1.2.0] /Users/hari/.gradle/caches/transforms-3/829e7a4e0b14dda853d517a2500540ea/transformed/jetified-tracing-1.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/hari/.gradle/caches/transforms-3/d20fd2fd7bbacb7b286ed83fddcbda42/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /Users/hari/.gradle/caches/transforms-3/6ecabc6d2a68ba134a06feb3b8effa96/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.interpolator:interpolator:1.0.0] /Users/hari/.gradle/caches/transforms-3/bd26368e30e047c94e4de894125e325a/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.window.extensions.core:core:1.0.0] /Users/hari/.gradle/caches/transforms-3/257ca5e7b7fd7e3e66754865397dccf7/transformed/jetified-core-1.0.0/AndroidManifest.xml:5:5-44
@@ -135,6 +141,8 @@ MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gra
 MERGED from [androidx.annotation:annotation-experimental:1.4.0] /Users/hari/.gradle/caches/transforms-3/d1871320248520d306517da14f88675a/transformed/jetified-annotation-experimental-1.4.0/AndroidManifest.xml:5:5-44
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/4895c388b91412bc1e7ffd7f12799d57/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
 MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/hari/.gradle/caches/transforms-3/4895c388b91412bc1e7ffd7f12799d57/transformed/jetified-relinker-1.4.5/AndroidManifest.xml:5:5-43
+	tools:overrideLibrary
+		ADDED from [:flutter_secure_storage] /Users/hari/pathfinder/front_end/build/flutter_secure_storage/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:8:9-50
 	android:targetSdkVersion
 		INJECTED from /Users/hari/pathfinder/front_end/android/app/src/debug/AndroidManifest.xml
 	android:minSdkVersion

@@ -1,4 +1,9 @@
 # This is a generated file; do not edit or check into version control.
+flutter_secure_storage=/Users/hari/.pub-cache/hosted/pub.dev/flutter_secure_storage-9.2.4/
+flutter_secure_storage_linux=/Users/hari/.pub-cache/hosted/pub.dev/flutter_secure_storage_linux-1.2.2/
+flutter_secure_storage_macos=/Users/hari/.pub-cache/hosted/pub.dev/flutter_secure_storage_macos-3.1.3/
+flutter_secure_storage_web=/Users/hari/.pub-cache/hosted/pub.dev/flutter_secure_storage_web-1.2.1/
+flutter_secure_storage_windows=/Users/hari/.pub-cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2/
 path_provider=/Users/hari/.pub-cache/hosted/pub.dev/path_provider-2.1.5/
 path_provider_android=/Users/hari/.pub-cache/hosted/pub.dev/path_provider_android-2.2.15/
 path_provider_foundation=/Users/hari/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.1/

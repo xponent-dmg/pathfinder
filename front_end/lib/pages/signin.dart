@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/services/api_service.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -11,12 +12,40 @@ class _SigninPageState extends State<SigninPage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
+  //custom snackBar
+  SnackBar customSnackBar(
+      {required String context,
+      Color? color = const Color.fromRGBO(66, 165, 245, 1)}) {
+    return SnackBar(
+      content: Text(context),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+
   // Controllers
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  ApiService apiService = ApiService();
 
   bool _obscurePassword = true;
   bool _rememberMe = false;
+
+  //authentication
+  void userLogin() async {
+    var response = await apiService.userLogin(
+        _usernameController.text, _passwordController.text);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(customSnackBar(context: "Login Successful"));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          customSnackBar(context: "Login unsuccessful", color: Colors.red));
+    }
+  }
 
   // Animation controllers
   late AnimationController _animationController;
@@ -56,7 +85,7 @@ class _SigninPageState extends State<SigninPage>
   @override
   void dispose() {
     _animationController.dispose();
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -71,14 +100,7 @@ class _SigninPageState extends State<SigninPage>
     if (_formKey.currentState!.validate()) {
       // Process signin
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Signing in...'),
-          backgroundColor: Colors.blue[400],
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
+        customSnackBar(context: 'Signing in...'),
       );
 
       // Navigate to next screen
@@ -194,19 +216,15 @@ class _SigninPageState extends State<SigninPage>
                                 key: _formKey,
                                 child: Column(
                                   children: [
-                                    // Email Field
+                                    // username Field
                                     _buildInputField(
-                                      controller: _emailController,
-                                      label: "Email Address",
-                                      icon: Icons.email_outlined,
-                                      keyboardType: TextInputType.emailAddress,
+                                      controller: _usernameController,
+                                      label: "Username",
+                                      icon: Icons.person_2,
+                                      keyboardType: TextInputType.text,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your email';
-                                        } else if (!RegExp(
-                                                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                            .hasMatch(value)) {
-                                          return 'Please enter a valid email';
+                                          return 'Please enter your username';
                                         }
                                         return null;
                                       },
