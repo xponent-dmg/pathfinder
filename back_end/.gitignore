@@ -1,0 +1,28 @@
+# System files
+.DS_Store
+
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Variables (Sensitive Information)
+.env
+
+# Build output
+dist/
+build/
+
+# Package manager lock files (Optional, but recommended to include for consistency)
+# If you want team members to have the exact same dependencies, REMOVE this line from .gitignore
+package-lock.json
+yarn.lock
+
+# OS-specific & Editor-specific files
+.idea/
+.vscode/

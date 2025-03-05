@@ -1,0 +1,39 @@
+# macOS System Files
+.DS_Store
+
+# IDE and Editor Settings
+.idea/
+.vscode/
+*.iml
+
+# Flutter & Dart Generated Files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android Specific
+android/.gradle/
+android/app/debug.keystore
+android/key.properties
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+
+# iOS Specific
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Runner.xcworkspace/
+
+# Linux, macOS, Windows, and Web Specific
+linux/
+macos/
+windows/
+web/
+
+# Logs & Lock Files
+pubspec.lock
+*.log
