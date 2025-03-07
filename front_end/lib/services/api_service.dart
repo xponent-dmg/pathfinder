@@ -4,7 +4,8 @@ import 'package:path_finder/services/token_service.dart';
 import '../utils/global.dart';
 
 class ApiService {
-  final String baseUrl = "http://$ipaddr:3000"; //ip of wifi im connected to
+  final String baseUrl =
+      "http://192.168.142.18:3000"; //ip of wifi im connected to
   final TokenService _tokenService = TokenService();
 
 //register user

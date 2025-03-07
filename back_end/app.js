@@ -9,8 +9,11 @@ app.use(express.json());
 
 // Updated MongoDB connection without deprecated options
 mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log("Connected to MongoDB"))
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to Atlas"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 const authRoutes = require("./routes/auth");
