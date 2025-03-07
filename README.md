@@ -1,14 +1,13 @@
-# Pathfinder 馃敟馃搫  
+# Pathfinder 
 A full-stack app built using **Flutter** and **Node.js** with **MongoDB Atlas** as the database.
 
-Pathfinder is a feature-rich application that showcases **Project Harishankar: The Legend Arc 馃敟馃搫**, blending modern technologies to build scalable and secure apps.
+Pathfinder is a feature-rich application that showcases blending modern technologies to build scalable and secure apps.
 
-## Tech Stack 馃洜锔�  
+## Tech Stack
 ### Frontend  
 - Flutter (Dart)  
 - HTTP Package  
-- Secure Storage  
-- Provider (State Management)  
+- Secure Storage 
 
 ### Backend  
 - Node.js  
@@ -17,8 +16,7 @@ Pathfinder is a feature-rich application that showcases **Project Harishankar: T
 - Railway (Deployment)  
 
 ### Features  
-- User Authentication (JWT-based)  
-- Image Upload and Storage  
+- User Authentication (JWT-based)    
 - Secure Data Storage  
 - Full CRUD Operations  
 - Async API Calls  
@@ -26,8 +24,8 @@ Pathfinder is a feature-rich application that showcases **Project Harishankar: T
 
 ## Folder Structure  
 ```bash
-鈹溾攢鈹€ backend           # Node.js Express API  
-鈹�   鈹溾攢鈹€ models       # MongoDB Models  
+鈹�   鈹溾攢鈹backend           # Node.js Express API  
+鈹�   鈹溾攢鈹€models       # MongoDB Models  
 鈹�   鈹溾攢鈹€ routes       # API Routes  
 鈹�   鈹斺攢鈹€ controllers  # Business Logic  
 鈹�  
@@ -40,7 +38,7 @@ Pathfinder is a feature-rich application that showcases **Project Harishankar: T
     鈹斺攢鈹€ assets       # Images & Icons  
 ```  
 
-## Environment Setup 馃寪  
+## Environment Setup
 ### Backend  
 1. Install Node.js  
 2. Clone the repo  
@@ -56,7 +54,7 @@ JWT_SECRET=your_jwt_secret
 ```  
 5. Start the server  
 ```bash
-node index.js  
+npm start
 ```  
 
 ### Frontend  
@@ -73,21 +71,22 @@ flutter run
 ```  
 
 ## API Endpoints  
-| Method | Endpoint        | Description        | Auth Required |  
-|--------|---------------|------------------|--------------|  
-| POST   | /auth/signup  | Register user    | 鉂�           |  
-| POST   | /auth/login   | Login user      | 鉂�           |  
-| GET    | /user/profile | Get user profile | 鉁�           |  
-| POST   | /image/upload | Upload Image    | 鉁�           |  
+| Method | Endpoint        | Description        | 
+|--------|---------------|------------------|
+| POST   | /auth/signup  | Register user    |         |  
+| POST   | /auth/login   | Login user      |         |  
+| GET    | /user/profile | Get user profile |         |  
+| POST   | /image/upload | Upload Image    |         |  
 
-## How Images are Stored 馃柤锔�  
+## How Images are Stored 
 Images are **Base64-encoded** and stored as strings in MongoDB for now. Upcoming updates will integrate **GridFS** for efficient binary storage.  
 
-## Future Features 馃敟  
+## Future Features
 - Dark Mode  
-- File Upload (GridFS)  
+- Image Upload and storage
+- File Upload (GridFS) 
 - Role-Based Authentication  
-- Google Sign-In  
+- Forget password
 
 ---
 
@@ -98,8 +97,9 @@ Fork the repo, create a branch, and submit a PR!
 
 ### Author  
 Harishankar R  
-**Project Harishankar: The Legend Arc 馃敟馃搫**  
-
+Dhruv John Samuel
+Antony Prajin
+Vyshnav M
 ---
 
-This journey is just getting started 馃殌  
+This journey is just getting started
