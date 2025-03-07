@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
 
 class ApiService {
-  final String baseUrl = "http://192.168.90.53:3000";
+  final String baseUrl = "http://192.168.228.242:3000"; //ip of my local device
   final TokenService _tokenService = TokenService();
 
+//register user
   Future<http.Response> registerUser(
       String name, String username, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/register-user");
@@ -23,6 +24,7 @@ class ApiService {
     return response;
   }
 
+//user login
   Future<Map<String, dynamic>> userLogin(
       String username, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/login-user");
@@ -62,13 +64,14 @@ class ApiService {
         result['message'] = errorData['error'] ?? 'Network error';
       } catch (e) {
         // If response body isn't valid JSON
-        result['message'] = 'Body isnt JSON';
+        result['message'] = 'Network error';
       }
     }
 
     return result;
   }
 
+//clubLeader login
   Future<Map<String, dynamic>> clubLeaderLogin(
       String username, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/login-clubleader");

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../utils/global.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -49,7 +50,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     // This will animate just once to show progress and completion
     _loadingLineController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3), // Line completes in 4 seconds
+      duration: Duration(seconds: 2), // Line completes in 4 seconds
     );
 
     _loadingAnimation =
@@ -67,10 +68,12 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     _loadingLineController.forward(); // Only run once (will not repeat)
 
     // Navigate to login page after delay
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 3), () {
       // Ensure we dispose controllers properly when navigating
       _dotsAnimationController.stop();
-      Navigator.pushReplacementNamed(context, '/signin');
+
+      Navigator.pushReplacementNamed(
+          context, (token != null) ? '/home' : '/signin');
     });
   }
 

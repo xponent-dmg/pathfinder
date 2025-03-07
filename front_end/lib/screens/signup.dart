@@ -1,55 +1,43 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
+import '../widgets/custom_snackbar.dart';
 
-class ClubLeaderSignin extends StatefulWidget {
-  const ClubLeaderSignin({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<ClubLeaderSignin> createState() => _ClubLeaderSigninState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _ClubLeaderSigninState extends State<ClubLeaderSignin>
+class _SignupPageState extends State<SignupPage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
-  //custom snackBar
-  SnackBar customSnackBar(
-      {required String context,
-      Color? color = const Color.fromRGBO(66, 165, 245, 1)}) {
-    return SnackBar(
-      content: Text(context),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
-  }
-
   // Controllers
+  final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   ApiService apiService = ApiService();
 
   bool _obscurePassword = true;
-  bool _rememberMe = false;
+  bool _agreeToTerms = false;
 
   //authentication
-  Future<void> loginClubLeader() async {
-    final result = await apiService.clubLeaderLogin(
+  void registerUser() async {
+    var response = await apiService.registerUser(_nameController.text.trim(),
         _usernameController.text.trim(), _passwordController.text.trim());
-
-    if (result['success']) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(customSnackBar(context: "Login Successful"));
-
-      // Navigate to home screen or club leader dashboard
-      Future.delayed(Duration(seconds: 1), () {
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-      });
+    if (response.statusCode == 201) {
+      var snackBar = ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackbar(text: "Registered user successfully").build());
+      await snackBar.closed;
+      // Future.delayed(Duration(seconds: 1), () {
+      Navigator.pop(context);
+      // });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar(context: result['message'], color: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(
+              text: jsonDecode(response.body)["error"], color: Colors.red)
+          .build());
     }
   }
 
@@ -91,6 +79,7 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
   @override
   void dispose() {
     _animationController.dispose();
+    _nameController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -102,10 +91,19 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
     });
   }
 
-  void _handleSignin() {
-    if (_formKey.currentState!.validate()) {
-      // Call login method
-      loginClubLeader();
+  void _handleSignup() {
+    if (_formKey.currentState!.validate() && _agreeToTerms) {
+      // Process signup
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackbar(text: 'Creating your account...').build(),
+      );
+      registerUser();
+    } else if (!_agreeToTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackbar(
+                text: 'Please agree to terms and conditions', color: Colors.red)
+            .build(),
+      );
     }
   }
 
@@ -200,7 +198,7 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                               ),
                               SizedBox(height: 12),
                               Text(
-                                "Club Leader Login",
+                                "Begin your journey",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -214,11 +212,26 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                 key: _formKey,
                                 child: Column(
                                   children: [
-                                    // Username Field
+                                    // Name Field
+                                    _buildInputField(
+                                      controller: _nameController,
+                                      label: "Full Name",
+                                      icon: Icons.person_outline,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter your name';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 16),
+
+                                    // username field
                                     _buildInputField(
                                       controller: _usernameController,
                                       label: "Username",
-                                      icon: Icons.person_outline,
+                                      icon: Icons.person_outlined,
+                                      keyboardType: TextInputType.text,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your username';
@@ -226,7 +239,7 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: 20),
+                                    SizedBox(height: 16),
 
                                     // Password Field
                                     _buildInputField(
@@ -245,59 +258,63 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter your password';
+                                          return 'Please enter a password';
+                                        } else if (value.length < 8) {
+                                          return 'Password must be at least 8 characters';
                                         }
                                         return null;
                                       },
                                     ),
                                     SizedBox(height: 24),
 
-                                    // Remember me and forgot password
+                                    // Terms and conditions checkbox
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // Remember me checkbox
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              height: 24,
-                                              width: 24,
-                                              child: Checkbox(
-                                                value: _rememberMe,
-                                                activeColor: Colors.blue[700],
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(4),
-                                                ),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _rememberMe =
-                                                        value ?? false;
-                                                  });
-                                                },
-                                              ),
+                                        SizedBox(
+                                          height: 24,
+                                          width: 24,
+                                          child: Checkbox(
+                                            value: _agreeToTerms,
+                                            activeColor: Colors.blue[700],
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
                                             ),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              'Remember me',
-                                              style: TextStyle(
-                                                color: Colors.black87,
-                                              ),
-                                            ),
-                                          ],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _agreeToTerms = value ?? false;
+                                              });
+                                            },
+                                          ),
                                         ),
-
-                                        // Forgot password
-                                        GestureDetector(
-                                          onTap: () {
-                                            // Navigate to forgot password
-                                          },
-                                          child: Text(
-                                            'Forgot Password?',
-                                            style: TextStyle(
-                                              color: Colors.blue[700],
-                                              fontWeight: FontWeight.bold,
+                                        SizedBox(width: 12),
+                                        Expanded(
+                                          child: RichText(
+                                            text: TextSpan(
+                                              text: 'I agree to the ',
+                                              style: TextStyle(
+                                                  color: Colors.black87),
+                                              children: [
+                                                TextSpan(
+                                                  text: 'Terms of Service',
+                                                  style: TextStyle(
+                                                    color: Colors.blue[700],
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' and ',
+                                                  style: TextStyle(
+                                                      color: Colors.black87),
+                                                ),
+                                                TextSpan(
+                                                  text: 'Privacy Policy',
+                                                  style: TextStyle(
+                                                    color: Colors.blue[700],
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -305,14 +322,14 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                     ),
                                     SizedBox(height: 32),
 
-                                    // Signin Button
+                                    // Signup Button
                                     ElevatedButton(
-                                      onPressed: _handleSignin,
+                                      onPressed: _handleSignup,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blue[700],
                                         foregroundColor: Colors.white,
                                         padding: EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 25),
+                                            vertical: 14, horizontal: 15),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -320,7 +337,7 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                         elevation: 0,
                                       ),
                                       child: Text(
-                                        'Sign In',
+                                        'Create Account',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -330,24 +347,24 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 40),
+                              SizedBox(height: 30),
 
-                              // Back to student login
+                              // Already have an account
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Not a club leader? ",
+                                    "Already have an account? ",
                                     style: TextStyle(
                                       color: Colors.black87,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(context, "/signin");
+                                      Navigator.pop(context);
                                     },
                                     child: Text(
-                                      "Student Login",
+                                      "Log in",
                                       style: TextStyle(
                                         color: Colors.blue[700],
                                         fontWeight: FontWeight.bold,

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/app.dart';
-import 'package:path_finder/pages/club_leader.dart';
-import 'package:path_finder/pages/signin.dart';
-import 'package:path_finder/pages/signup.dart';
-import 'package:path_finder/pages/start_page.dart';
-// import 'package:path_finder/pages/testpage.dart';
+import 'package:path_finder/screens/home_page.dart';
+import 'package:path_finder/screens/club_leader.dart';
+import 'package:path_finder/screens/signin.dart';
+import 'package:path_finder/screens/signup.dart';
+import 'package:path_finder/screens/start_page.dart';
+import './services/token_service.dart';
+import './utils/global.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  token = await TokenService().getToken();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SigninPage(),
+        '/': (context) => StartPage(),
         '/signup': (context) => SignupPage(),
         '/home': (context) => App(),
         '/signin': (context) => SigninPage(),

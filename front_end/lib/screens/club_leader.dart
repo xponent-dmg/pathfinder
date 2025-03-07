@@ -1,55 +1,42 @@
-import 'dart:convert';
-import 'package:path_finder/main.dart';
 import 'package:flutter/material.dart';
-import 'package:path_finder/pages/signin.dart';
 import 'package:path_finder/services/api_service.dart';
+import '../widgets/custom_snackbar.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class ClubLeaderSignin extends StatefulWidget {
+  const ClubLeaderSignin({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<ClubLeaderSignin> createState() => _ClubLeaderSigninState();
 }
 
-class _SignupPageState extends State<SignupPage>
+class _ClubLeaderSigninState extends State<ClubLeaderSignin>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers
-  final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   ApiService apiService = ApiService();
 
-  //custom snackbar
-  SnackBar customSnackBar(String content, Color? color) {
-    return SnackBar(
-      content: Text(content),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
-  }
-
   bool _obscurePassword = true;
-  bool _agreeToTerms = false;
+  bool _rememberMe = false;
 
   //authentication
-  void registerUser() async {
-    var response = await apiService.registerUser(_nameController.text.trim(),
+  Future<void> loginClubLeader() async {
+    final result = await apiService.clubLeaderLogin(
         _usernameController.text.trim(), _passwordController.text.trim());
-    if (response.statusCode == 201) {
-      var snackBar = ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar("Registered user successfully", Colors.blue[400]));
-      await snackBar.closed;
-      // Future.delayed(Duration(seconds: 1), () {
-      Navigator.pop(context);
-      // });
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CustomSnackbar(text: "Login Successful").build());
+
+      // Navigate to home screen or club leader dashboard
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar(jsonDecode(response.body)["error"], Colors.red));
+          CustomSnackbar(text: result['message'], color: Colors.red).build());
     }
   }
 
@@ -91,7 +78,6 @@ class _SignupPageState extends State<SignupPage>
   @override
   void dispose() {
     _animationController.dispose();
-    _nameController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -103,20 +89,10 @@ class _SignupPageState extends State<SignupPage>
     });
   }
 
-  void _handleSignup() {
-    // if (_formKey.currentState!.validate() && _agreeToTerms) {
-    //   // Process signup
-
-    // } else
-    if (!_agreeToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar('Please agree to terms and conditions', Colors.red),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar('Creating your account...', Colors.blue[400]),
-      );
-      registerUser();
+  void _handleSignin() {
+    if (_formKey.currentState!.validate()) {
+      // Call login method
+      loginClubLeader();
     }
   }
 
@@ -211,7 +187,7 @@ class _SignupPageState extends State<SignupPage>
                               ),
                               SizedBox(height: 12),
                               Text(
-                                "Begin your journey",
+                                "Club Leader Login",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -225,26 +201,11 @@ class _SignupPageState extends State<SignupPage>
                                 key: _formKey,
                                 child: Column(
                                   children: [
-                                    // Name Field
-                                    _buildInputField(
-                                      controller: _nameController,
-                                      label: "Full Name",
-                                      icon: Icons.person_outline,
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter your name';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(height: 16),
-
-                                    // username field
+                                    // Username Field
                                     _buildInputField(
                                       controller: _usernameController,
                                       label: "Username",
-                                      icon: Icons.person_outlined,
-                                      keyboardType: TextInputType.text,
+                                      icon: Icons.person_outline,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your username';
@@ -252,7 +213,7 @@ class _SignupPageState extends State<SignupPage>
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: 16),
+                                    SizedBox(height: 20),
 
                                     // Password Field
                                     _buildInputField(
@@ -271,63 +232,59 @@ class _SignupPageState extends State<SignupPage>
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          return 'Please enter a password';
-                                        } else if (value.length < 8) {
-                                          return 'Password must be at least 8 characters';
+                                          return 'Please enter your password';
                                         }
                                         return null;
                                       },
                                     ),
                                     SizedBox(height: 24),
 
-                                    // Terms and conditions checkbox
+                                    // Remember me and forgot password
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: Checkbox(
-                                            value: _agreeToTerms,
-                                            activeColor: Colors.blue[700],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
+                                        // Remember me checkbox
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              height: 24,
+                                              width: 24,
+                                              child: Checkbox(
+                                                value: _rememberMe,
+                                                activeColor: Colors.blue[700],
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _rememberMe =
+                                                        value ?? false;
+                                                  });
+                                                },
+                                              ),
                                             ),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _agreeToTerms = value ?? false;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Expanded(
-                                          child: RichText(
-                                            text: TextSpan(
-                                              text: 'I agree to the ',
+                                            SizedBox(width: 8),
+                                            Text(
+                                              'Remember me',
                                               style: TextStyle(
-                                                  color: Colors.black87),
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Terms of Service',
-                                                  style: TextStyle(
-                                                    color: Colors.blue[700],
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: ' and ',
-                                                  style: TextStyle(
-                                                      color: Colors.black87),
-                                                ),
-                                                TextSpan(
-                                                  text: 'Privacy Policy',
-                                                  style: TextStyle(
-                                                    color: Colors.blue[700],
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // Forgot password
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Navigate to forgot password
+                                          },
+                                          child: Text(
+                                            'Forgot Password?',
+                                            style: TextStyle(
+                                              color: Colors.blue[700],
+                                              fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                         ),
@@ -335,14 +292,14 @@ class _SignupPageState extends State<SignupPage>
                                     ),
                                     SizedBox(height: 32),
 
-                                    // Signup Button
+                                    // Signin Button
                                     ElevatedButton(
-                                      onPressed: _handleSignup,
+                                      onPressed: _handleSignin,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.blue[700],
                                         foregroundColor: Colors.white,
                                         padding: EdgeInsets.symmetric(
-                                            vertical: 14, horizontal: 15),
+                                            vertical: 12, horizontal: 25),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -350,7 +307,7 @@ class _SignupPageState extends State<SignupPage>
                                         elevation: 0,
                                       ),
                                       child: Text(
-                                        'Create Account',
+                                        'Sign In',
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
@@ -360,24 +317,24 @@ class _SignupPageState extends State<SignupPage>
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: 40),
 
-                              // Already have an account
+                              // Back to student login
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Already have an account? ",
+                                    "Not a club leader? ",
                                     style: TextStyle(
                                       color: Colors.black87,
                                     ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      Navigator.pushNamed(context, "/signin");
                                     },
                                     child: Text(
-                                      "Log in",
+                                      "Student Login",
                                       style: TextStyle(
                                         color: Colors.blue[700],
                                         fontWeight: FontWeight.bold,

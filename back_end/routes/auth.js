@@ -63,7 +63,7 @@ router.post("/login-clubleader", async (req, res) => {
         clubName: clubLeader.clubName,
       },
       SECRET_KEY,
-      { expiresIn: "30d" }
+      { expiresIn: "7h" }
     );
 
     console.log("Generated Token:", token);
@@ -101,7 +101,7 @@ router.post("/login-user", async (req, res) => {
     const token = jwt.sign(
       { id: user._id, username: user.username, clubName: user.clubName },
       SECRET_KEY,
-      { expiresIn: "30d" }
+      { expiresIn: "7d" }
     );
 
     console.log("Generated Token:", token);

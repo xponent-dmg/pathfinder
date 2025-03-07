@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
+import '../utils/global.dart';
+import '../widgets/custom_snackbar.dart';
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -12,20 +14,6 @@ class _SigninPageState extends State<SigninPage>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
-  //custom snackBar
-  SnackBar customSnackBar(
-      {required String context,
-      Color? color = const Color.fromRGBO(66, 165, 245, 1)}) {
-    return SnackBar(
-      content: Text(context),
-      backgroundColor: color,
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    );
-  }
-
   // Controllers
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -33,7 +21,6 @@ class _SigninPageState extends State<SigninPage>
 
   bool _obscurePassword = true;
   bool _rememberMe = false;
-
   //authentication
   Future<void> userLogin() async {
     final result = await apiService.userLogin(
@@ -41,15 +28,15 @@ class _SigninPageState extends State<SigninPage>
 
     if (result['success']) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(customSnackBar(context: "Login Successful"));
+          .showSnackBar(CustomSnackbar(text: "Login Successful").build());
 
       // Navigate to home screen
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 3), () {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar(context: result['message'], color: Colors.red));
+          CustomSnackbar(text: result['message'], color: Colors.red).build());
     }
   }
 
@@ -106,7 +93,7 @@ class _SigninPageState extends State<SigninPage>
     if (_formKey.currentState!.validate()) {
       // Process signin
       ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar(context: 'Signing in...'),
+        CustomSnackbar(text: 'Signing in...').build(),
       );
 
       // Call login method

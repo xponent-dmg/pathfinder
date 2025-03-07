@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/logout_service.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -8,6 +9,36 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  final LogoutService _logoutService = LogoutService();
+
+  void _showLogoutConfirmation() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _logoutService.logout(context);
+              },
+              child: Text('Logout'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -27,7 +58,7 @@ class _HeaderState extends State<Header> {
             )),
       ),
       leading: IconButton(
-        onPressed: () {},
+        onPressed: _showLogoutConfirmation,
         icon: Image.asset(
           "assets/menu-icon.png",
           width: 30,

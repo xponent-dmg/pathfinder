@@ -33,6 +33,11 @@ class TokenService {
     return await _storage.read(key: _userRoleKey);
   }
 
+  // Delete user role
+  Future<void> deleteUserRole() async {
+    await _storage.delete(key: _userRoleKey);
+  }
+
   // Check if user is logged in
   Future<bool> isLoggedIn() async {
     final token = await getToken();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/widgets/bottom_navbar.dart';
 import 'package:path_finder/widgets/header.dart';
-import 'package:path_finder/today.dart';
+import 'package:path_finder/widgets/today.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
