@@ -1,4 +1,4 @@
-ko# Pathfinder 
+# Pathfinder 
 A full-stack app built using **Flutter** and **Node.js** with **MongoDB Atlas** as the database.
 
 Pathfinder is a feature-rich application that showcases blending modern technologies to build scalable and secure apps.
