@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/logout_service.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -12,7 +11,6 @@ class _HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      // actionsPadding: EdgeInsets.symmetric(horizontal: 20),
       pinned: true,
       expandedHeight: 280.0,
       shape: RoundedRectangleBorder(
@@ -22,10 +20,13 @@ class _HeaderState extends State<Header> {
       ),
       backgroundColor: Color.fromRGBO(182, 222, 255, 1),
       title: Center(
-        child: Text("PathFinder",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+        child: Text(
+          "PathFinder",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
       ),
       leading: IconButton(
         onPressed: () {},
@@ -36,19 +37,32 @@ class _HeaderState extends State<Header> {
         ),
       ),
       actions: [
-        IconButton(
-            onPressed: () {
-              // Use the named route defined in main.dart
-              Navigator.of(context).pushNamed('/profile');
-            },
-            icon: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                "assets/profile-pic.jpg",
-                width: 40,
-                height: 40,
+        Padding(
+          padding: EdgeInsets.only(right: 8.0),
+          child: Hero(
+            tag: 'profile_pic',
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/profile');
+                },
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    "assets/profile-pic.jpg",
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-            )),
+            ),
+          ),
+        ),
       ],
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(90),

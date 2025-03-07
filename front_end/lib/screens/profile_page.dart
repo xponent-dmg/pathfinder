@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_finder/services/logout_service.dart';
 import '../widgets/custom_snackbar.dart';
-import '../utils/global.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -145,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Profile header with back button
+                  // Profile header with back button and title
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
@@ -184,64 +183,72 @@ class _ProfilePageState extends State<ProfilePage>
                       clipBehavior: Clip.none,
                       alignment: Alignment.center,
                       children: [
-                        // Avatar background circle
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 4,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withAlpha(40),
-                                blurRadius: 12,
-                                offset: Offset(0, 6),
+                        // Avatar background circle with Hero animation
+
+                        Hero(
+                          tag: 'profile_pic',
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Container(
+                              width: 120,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 4,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(40),
+                                    blurRadius: 12,
+                                    offset: Offset(0, 6),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.network(
-                              'https://randomuser.me/api/portraits/men/44.jpg',
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  CircleAvatar(
-                                backgroundColor: Colors.blue[100],
-                                child: Icon(
-                                  Icons.person,
-                                  size: 60,
-                                  color: Colors.blue[700],
+                              child: ClipOval(
+                                child: Image.asset(
+                                  "assets/profile-pic.jpg",
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      CircleAvatar(
+                                    backgroundColor: Colors.blue[100],
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 60,
+                                      color: Colors.blue[700],
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
 
-                        // Badge indicator
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            width: 35,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              color: Colors.blue[700],
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 2,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.verified,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
+                        //TODO: will implement this later
+                        // // Badge indicator for club leader
+                        // Positioned(
+                        //   bottom: 0,
+                        //   right: 0,
+                        //   child: Container(
+                        //     width: 35,
+                        //     height: 35,
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.blue[700],
+                        //       shape: BoxShape.circle,
+                        //       border: Border.all(
+                        //         color: Colors.white,
+                        //         width: 2,
+                        //       ),
+                        //     ),
+                        //     child: Icon(
+                        //       Icons.verified,
+                        //       color: Colors.white,
+                        //       size: 20,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
