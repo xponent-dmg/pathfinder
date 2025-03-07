@@ -35,15 +35,21 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
   bool _rememberMe = false;
 
   //authentication
-  void loginClubLeader() async {
-    var response = await apiService.clubLeaderLogin(
-        _usernameController.text, _passwordController.text);
-    if (response.statusCode == 201) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar(context: "Registered user successfully"));
+  Future<void> loginClubLeader() async {
+    final result = await apiService.clubLeaderLogin(
+        _usernameController.text.trim(), _passwordController.text.trim());
+
+    if (result['success']) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(customSnackBar(context: "Login Successful"));
+
+      // Navigate to home screen or club leader dashboard
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(customSnackBar(
-          context: "Registering user failed", color: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+          customSnackBar(context: result['message'], color: Colors.red));
     }
   }
 
@@ -98,13 +104,8 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
 
   void _handleSignin() {
     if (_formKey.currentState!.validate()) {
+      // Call login method
       loginClubLeader();
-
-      // Navigate to next screen (club leader dashboard)
-      Future.delayed(Duration(seconds: 2), () {
-        Navigator.pushReplacementNamed(
-            context, '/home'); // Replace with club leader dashboard route
-      });
     }
   }
 

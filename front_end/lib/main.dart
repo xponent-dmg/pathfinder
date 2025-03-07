@@ -4,6 +4,7 @@ import 'package:path_finder/pages/club_leader.dart';
 import 'package:path_finder/pages/signin.dart';
 import 'package:path_finder/pages/signup.dart';
 import 'package:path_finder/pages/start_page.dart';
+// import 'package:path_finder/pages/testpage.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => StartPage(),
+        '/': (context) => SigninPage(),
         '/signup': (context) => SignupPage(),
         '/home': (context) => App(),
         '/signin': (context) => SigninPage(),

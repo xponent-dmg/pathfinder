@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'package:path_finder/main.dart';
 import 'package:flutter/material.dart';
+import 'package:path_finder/pages/signin.dart';
 import 'package:path_finder/services/api_service.dart';
 
 class SignupPage extends StatefulWidget {
@@ -35,14 +38,18 @@ class _SignupPageState extends State<SignupPage>
 
   //authentication
   void registerUser() async {
-    var response = await apiService.registerUser(_nameController.text,
-        _usernameController.text, _passwordController.text);
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
+    var response = await apiService.registerUser(_nameController.text.trim(),
+        _usernameController.text.trim(), _passwordController.text.trim());
+    if (response.statusCode == 201) {
+      var snackBar = ScaffoldMessenger.of(context).showSnackBar(
           customSnackBar("Registered user successfully", Colors.blue[400]));
+      await snackBar.closed;
+      // Future.delayed(Duration(seconds: 1), () {
+      Navigator.pop(context);
+      // });
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(customSnackBar("Registering user failed", Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+          customSnackBar(jsonDecode(response.body)["error"], Colors.red));
     }
   }
 
@@ -97,21 +104,19 @@ class _SignupPageState extends State<SignupPage>
   }
 
   void _handleSignup() {
-    if (_formKey.currentState!.validate() && _agreeToTerms) {
-      // Process signup
-      ScaffoldMessenger.of(context).showSnackBar(
-        customSnackBar('Creating your account...', Colors.blue[400]),
-      );
+    // if (_formKey.currentState!.validate() && _agreeToTerms) {
+    //   // Process signup
 
-      // Navigate to next screen
-      Future.delayed(Duration(seconds: 2), () {
-        // ignore: use_build_context_synchronously
-        Navigator.pop(context);
-      });
-    } else if (!_agreeToTerms) {
+    // } else
+    if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         customSnackBar('Please agree to terms and conditions', Colors.red),
       );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        customSnackBar('Creating your account...', Colors.blue[400]),
+      );
+      registerUser();
     }
   }
 

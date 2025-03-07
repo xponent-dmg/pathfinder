@@ -56,6 +56,7 @@ class _HeaderState extends State<Header> {
             color: Colors.white,
           ),
           child: TextField(
+            controller: TextEditingController(),
             cursorColor: Colors.blue,
             decoration: InputDecoration(
               hintText: 'Search events...',

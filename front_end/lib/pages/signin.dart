@@ -35,15 +35,21 @@ class _SigninPageState extends State<SigninPage>
   bool _rememberMe = false;
 
   //authentication
-  void userLogin() async {
-    var response = await apiService.userLogin(
-        _usernameController.text, _passwordController.text);
-    if (response.statusCode == 200) {
+  Future<void> userLogin() async {
+    final result = await apiService.userLogin(
+        _usernameController.text.trim(), _passwordController.text.trim());
+
+    if (result['success']) {
       ScaffoldMessenger.of(context)
           .showSnackBar(customSnackBar(context: "Login Successful"));
+
+      // Navigate to home screen
+      Future.delayed(Duration(seconds: 2), () {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          customSnackBar(context: "Login unsuccessful", color: Colors.red));
+          customSnackBar(context: result['message'], color: Colors.red));
     }
   }
 
@@ -103,10 +109,8 @@ class _SigninPageState extends State<SigninPage>
         customSnackBar(context: 'Signing in...'),
       );
 
-      // Navigate to next screen
-      Future.delayed(Duration(seconds: 2), () {
-        Navigator.pushReplacementNamed(context, '/home');
-      });
+      // Call login method
+      userLogin();
     }
   }
 
