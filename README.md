@@ -1,4 +1,4 @@
-# Pathfinder 
+ko# Pathfinder 
 A full-stack app built using **Flutter** and **Node.js** with **MongoDB Atlas** as the database.
 
 Pathfinder is a feature-rich application that showcases blending modern technologies to build scalable and secure apps.
@@ -95,11 +95,11 @@ Fork the repo, create a branch, and submit a PR!
 
 ---
 
-### Author  
-Harishankar R  
-Dhruv John Samuel
-Antony Prajin
-Vyshnav M
+### Authors 
+- Harishankar R  
+- Dhruv John Samuel
+- Antony Prajin
+- Vyshnav M
 ---
 
 This journey is just getting started
