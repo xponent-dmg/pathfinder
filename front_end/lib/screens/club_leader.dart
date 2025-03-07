@@ -24,7 +24,9 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
   //authentication
   Future<void> loginClubLeader() async {
     final result = await apiService.clubLeaderLogin(
-        _usernameController.text.trim(), _passwordController.text.trim());
+        _usernameController.text.trim(),
+        _passwordController.text.trim(),
+        _rememberMe);
 
     if (result['success']) {
       ScaffoldMessenger.of(context)

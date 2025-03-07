@@ -73,7 +73,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
       _dotsAnimationController.stop();
 
       Navigator.pushReplacementNamed(
-          context, (token != null) ? '/home' : '/signin');
+          context, (token != null && token!.isNotEmpty) ? '/home' : '/signin');
     });
   }
 

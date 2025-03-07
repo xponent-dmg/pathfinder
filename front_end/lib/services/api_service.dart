@@ -1,9 +1,10 @@
 import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
+import '../utils/global.dart';
 
 class ApiService {
-  final String baseUrl = "http://192.168.228.242:3000"; //ip of my local device
+  final String baseUrl = "http://$ipaddr:3000"; //ip of wifi im connected to
   final TokenService _tokenService = TokenService();
 
 //register user
@@ -26,7 +27,7 @@ class ApiService {
 
 //user login
   Future<Map<String, dynamic>> userLogin(
-      String username, String password) async {
+      String username, String password, bool rememberMe) async {
     var url = Uri.parse("$baseUrl/api/auth/login-user");
     var response = await http.post(
       url,
@@ -49,8 +50,12 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        await _tokenService.saveToken(responseData['token']);
-        await _tokenService.saveUserRole('student');
+        token = responseData["token"];
+        role = "student";
+        if (rememberMe) {
+          await _tokenService.saveToken(responseData['token']);
+          await _tokenService.saveUserRole("student");
+        }
 
         result = {
           'success': true,
@@ -73,7 +78,7 @@ class ApiService {
 
 //clubLeader login
   Future<Map<String, dynamic>> clubLeaderLogin(
-      String username, String password) async {
+      String username, String password, bool rememberMe) async {
     var url = Uri.parse("$baseUrl/api/auth/login-clubleader");
     var response = await http.post(
       url,
@@ -96,9 +101,13 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
+        token = responseData['token'];
+        role = responseData['role'];
         // Store token and role
-        await _tokenService.saveToken(responseData['token']);
-        await _tokenService.saveUserRole('clubLeader');
+        if (rememberMe) {
+          await _tokenService.saveToken(responseData['token']);
+          await _tokenService.saveUserRole("clubLeader");
+        }
 
         result = {
           'success': true,

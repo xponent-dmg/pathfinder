@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
-import '../utils/global.dart';
+import 'package:path_finder/utils/global.dart';
 import '../widgets/custom_snackbar.dart';
 
 class SigninPage extends StatefulWidget {
@@ -23,18 +23,21 @@ class _SigninPageState extends State<SigninPage>
   bool _rememberMe = false;
   //authentication
   Future<void> userLogin() async {
-    final result = await apiService.userLogin(
-        _usernameController.text.trim(), _passwordController.text.trim());
+    final result = await apiService.userLogin(_usernameController.text.trim(),
+        _passwordController.text.trim(), _rememberMe);
 
     if (result['success']) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackbar(text: "Login Successful").build());
 
       // Navigate to home screen
       Future.delayed(Duration(seconds: 3), () {
+        if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       });
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(text: result['message'], color: Colors.red).build());
     }
@@ -286,6 +289,7 @@ class _SigninPageState extends State<SigninPage>
                                         GestureDetector(
                                           onTap: () {
                                             // Navigate to forgot password
+                                            print("IPV4 address is $ipaddr");
                                           },
                                           child: Text(
                                             'Forgot Password?',

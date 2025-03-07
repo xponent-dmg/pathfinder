@@ -63,11 +63,11 @@ router.post("/login-clubleader", async (req, res) => {
         clubName: clubLeader.clubName,
       },
       SECRET_KEY,
-      { expiresIn: "7h" }
+      { expiresIn: "7d" }
     );
 
     console.log("Generated Token:", token);
-    res.status(200).json({ token });
+    res.status(200).json({ token: token, role: "clubleader" });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ error: "Server error" });
@@ -99,7 +99,12 @@ router.post("/login-user", async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id, username: user.username, clubName: user.clubName },
+      {
+        id: user._id,
+        username: user.username,
+        clubName: user.clubName,
+        role: "student",
+      },
       SECRET_KEY,
       { expiresIn: "7d" }
     );

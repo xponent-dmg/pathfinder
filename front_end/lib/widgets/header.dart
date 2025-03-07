@@ -28,10 +28,10 @@ class _HeaderState extends State<Header> {
                 Navigator.of(context).pop();
                 _logoutService.logout(context);
               },
-              child: Text('Logout'),
               style: TextButton.styleFrom(
                 foregroundColor: Colors.red,
               ),
+              child: Text('Logout'),
             ),
           ],
         );
