@@ -11,7 +11,6 @@ import './utils/global.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   token = await TokenService().getToken();
-  ipaddr = "192.168.61.119";
   runApp(MyApp());
 }
 
