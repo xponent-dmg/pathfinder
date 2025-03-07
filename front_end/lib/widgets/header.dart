@@ -9,36 +9,6 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
-  final LogoutService _logoutService = LogoutService();
-
-  void _showLogoutConfirmation() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _logoutService.logout(context);
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red,
-              ),
-              child: Text('Logout'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -58,7 +28,7 @@ class _HeaderState extends State<Header> {
             )),
       ),
       leading: IconButton(
-        onPressed: _showLogoutConfirmation,
+        onPressed: () {},
         icon: Image.asset(
           "assets/menu-icon.png",
           width: 30,
@@ -67,7 +37,10 @@ class _HeaderState extends State<Header> {
       ),
       actions: [
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // Use the named route defined in main.dart
+              Navigator.of(context).pushNamed('/profile');
+            },
             icon: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.asset(

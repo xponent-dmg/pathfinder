@@ -8,29 +8,17 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        textTheme: TextTheme(
-          bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-          bodyMedium: TextStyle(fontSize: 16),
-          bodySmall: TextStyle(fontSize: 14),
-          titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+    // Remove the nested MaterialApp and use just a Scaffold
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          Header(),
+          SliverToBoxAdapter(
+            child: Today(),
+          ),
+        ],
       ),
-      title: 'My App',
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            Header(),
-            SliverToBoxAdapter(
-              child: Today(),
-            ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavbar(),
-      ),
+      bottomNavigationBar: BottomNavbar(),
     );
   }
 }

@@ -280,6 +280,11 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
                                         // Forgot password
                                         GestureDetector(
                                           onTap: () {
+                                            Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              '/home',
+                                              (route) => false,
+                                            );
                                             // Navigate to forgot password
                                           },
                                           child: Text(

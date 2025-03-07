@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
-import 'package:path_finder/utils/global.dart';
 import '../widgets/custom_snackbar.dart';
 
 class SigninPage extends StatefulWidget {
@@ -288,8 +287,7 @@ class _SigninPageState extends State<SigninPage>
                                         // Forgot password
                                         GestureDetector(
                                           onTap: () {
-                                            // Navigate to forgot password
-                                            print("IPV4 address is $ipaddr");
+                                            // navigate to forgot password
                                           },
                                           child: Text(
                                             'Forgot Password?',
