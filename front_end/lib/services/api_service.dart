@@ -5,7 +5,7 @@ import '../utils/global.dart';
 
 class ApiService {
   final String baseUrl =
-      "http://192.168.142.18:3000"; //ip of wifi im connected to
+      "https://pathfinder-production-aa04.up.railway.app"; //server on railway
   final TokenService _tokenService = TokenService();
 
 //register user
