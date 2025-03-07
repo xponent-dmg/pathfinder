@@ -8,6 +8,7 @@
     "mongoose": "^8.10.1"
   },
   "scripts": {
-    "seed": "node scripts/seedBuildings.js && node scripts/seedClubLeader.js"
+    "seed": "node ./scripts/seedBuildings.js && node ./scripts/seedClubLeader.js",
+    "start": "node ./app.js"
   }
 }
