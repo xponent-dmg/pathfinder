@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
@@ -130,23 +131,39 @@ class ApiService {
   }
 
   // Method to make authenticated requests
-  Future<http.Response> authenticatedGet(String endpoint) async {
-    final token = await _tokenService.getToken();
+  Future<Map<String, dynamic>> authenticatedGet(String endpoint) async {
+    // final token = await _tokenService.getToken();
     final url = Uri.parse('$baseUrl$endpoint');
 
-    return await http.get(
+    var res = await http.get(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
+    Map<String, dynamic> user = {
+      "status": false,
+      "name": "",
+      "username": "",
+      "message": "Error",
+    };
+
+    if (res.statusCode == 200) {
+      final responseData = json.decode(res.body);
+      user['status'] = true;
+      user["name"] = responseData["name"];
+      user["username"] = responseData["username"];
+    }
+
+    return user;
   }
 
   // Method to make authenticated POST requests
   Future<http.Response> authenticatedPost(
       String endpoint, Map<String, dynamic> body) async {
-    final token = await _tokenService.getToken();
+    // final token = await _tokenService.getToken();
     final url = Uri.parse('$baseUrl$endpoint');
 
     return await http.post(
