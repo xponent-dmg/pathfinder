@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/screens/club_leader.dart';
+import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/event_details_page.dart';
 import 'package:path_finder/screens/home_page.dart';
 import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
+import 'package:path_finder/screens/start_page.dart';
 import './services/token_service.dart';
 import './utils/global.dart';
 
@@ -25,13 +28,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/signin',
+      initialRoute: '/',
       routes: {
-        '/': (context) => const App(),
+        '/': (context) => const StartPage(),
         '/home': (context) => const App(),
         '/signin': (context) => const SigninPage(),
+        '/signup': (context) => const SignupPage(),
         '/profile': (context) => const ProfilePage(),
+        '/clubleader': (context) => const ClubLeaderSignin(),
         '/event_details': (context) => const EventDetailsPage(),
+        '/event_create': (context) => const EventCreatePage(),
       },
     );
   }

@@ -14,6 +14,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
     setState(() {
       _selectedIndex = index;
     });
+    if (_selectedIndex == 2) {
+      Navigator.pushNamed(context, '/event_create');
+    }
   }
 
   @override

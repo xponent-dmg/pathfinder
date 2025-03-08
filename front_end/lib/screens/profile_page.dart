@@ -167,6 +167,7 @@ class _ProfilePageState extends State<ProfilePage>
                         IconButton(
                           icon: Icon(Icons.edit, color: Colors.white),
                           onPressed: () {
+                            Navigator.pushNamed(context, '/event_create');
                             ScaffoldMessenger.of(context).showSnackBar(
                               CustomSnackbar(text: 'Edit profile').build(),
                             );
