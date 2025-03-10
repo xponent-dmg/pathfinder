@@ -7,13 +7,33 @@ class UserProvider with ChangeNotifier {
   String email = '';
   String createdAt = '';
   bool status = false;
+  String _role = '';
+  String _token = '';
+  String get role => _role;
+  String get token => _token;
+
+  void setRole(String t) {
+    _role = t;
+  }
+
+  void setToken(String t) {
+    _token = t;
+  }
+
+  void deleteRole() {
+    _role = '';
+  }
+
+  void deleteToken() {
+    _token = '';
+  }
 
   void getUserDet() async {
     Map<String, dynamic> user =
         await ApiService().authenticatedGet('/api/auth/user');
     name = user['name'];
     username = user['username'];
-    email = 'sample.mail@gmail.com';
+    email = user['email'];
     createdAt = user['createdAt'];
     status = user['status'];
     notifyListeners();

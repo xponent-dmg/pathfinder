@@ -4,7 +4,6 @@ import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/logout_service.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_snackbar.dart';
-// import '../services/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,11 +19,6 @@ class _ProfilePageState extends State<ProfilePage>
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
-  // Mock user data - in a real app, this would come from your user model or API
-  // String _name = "";
-  // String _username = "";
-  // String _email = "";
-  // String _joinDate = "";
   final int _pathsCompleted = 15;
   final int _eventsAttended = 7;
   final int _badgesEarned = 4;
@@ -66,9 +60,6 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
-    //get the user details
-    context.read<UserProvider>().getUserDet();
-
     // Set up animations
     _animationController = AnimationController(
       vsync: this,
@@ -234,29 +225,31 @@ class _ProfilePageState extends State<ProfilePage>
                           ),
                         ),
 
-                        //TODO: will implement this later
-                        // // Badge indicator for club leader
-                        // Positioned(
-                        //   bottom: 0,
-                        //   right: 0,
-                        //   child: Container(
-                        //     width: 35,
-                        //     height: 35,
-                        //     decoration: BoxDecoration(
-                        //       color: Colors.blue[700],
-                        //       shape: BoxShape.circle,
-                        //       border: Border.all(
-                        //         color: Colors.white,
-                        //         width: 2,
-                        //       ),
-                        //     ),
-                        //     child: Icon(
-                        //       Icons.verified,
-                        //       color: Colors.white,
-                        //       size: 20,
-                        //     ),
-                        //   ),
-                        // ),
+                        // Badge indicator for club leader
+                        Visibility(
+                          visible: userDet.role == "clubleader",
+                          child: Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              width: 35,
+                              height: 35,
+                              decoration: BoxDecoration(
+                                color: Colors.blue[700],
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.verified,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),

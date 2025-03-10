@@ -67,7 +67,7 @@ router.post("/login-clubleader", async (req, res) => {
     );
 
     console.log("Generated Token:", token);
-    res.status(200).json({ token: token, role: "clubleader" });
+    res.status(200).json({ token });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ error: "Server error" });

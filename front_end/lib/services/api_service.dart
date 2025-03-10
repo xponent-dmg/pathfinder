@@ -1,8 +1,7 @@
-// import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
+import 'package:path_finder/providers/user_provider.dart';
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
-import '../utils/global.dart';
 import 'package:intl/intl.dart';
 
 class ApiService {
@@ -54,17 +53,12 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        token = responseData["token"];
-        role = "student";
+        UserProvider().setToken(responseData['token']);
+        UserProvider().setRole("student");
+        UserProvider().getUserDet();
         if (rememberMe) {
-          await _tokenService.saveAllDetails(
-              username: username,
-              name: responseData['token']['name'] ?? "random",
-              email: responseData['token']['email'] ?? "random@gmail.com",
-              token: responseData['token'],
-              userRole: responseData["userRole"]);
+          await TokenService().saveToken(responseData['token']);
         }
-
         result = {
           'success': true,
           'message': 'Login successful',
@@ -109,8 +103,7 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        token = responseData['token'];
-        role = responseData['role'];
+        UserProvider().setToken(responseData['token']);
         // Store token and role
         if (rememberMe) {
           await _tokenService.saveAllDetails(
@@ -142,8 +135,8 @@ class ApiService {
 
   // Method to make authenticated requests
   Future<Map<String, dynamic>> authenticatedGet(String endpoint) async {
-    // final token = await _tokenService.getToken();
     final url = Uri.parse('$baseUrl$endpoint');
+    final token = UserProvider().token;
 
     var res = await http.get(
       url,
@@ -157,8 +150,9 @@ class ApiService {
       "status": false,
       "name": "",
       "username": "",
+      "email": "",
       "message": "Error",
-      "joinDate": "",
+      "createdAt": "",
     };
 
     if (res.statusCode == 200) {
@@ -166,8 +160,9 @@ class ApiService {
       user['status'] = true;
       user["name"] = responseData["name"];
       user["username"] = responseData["username"];
+      user["email"] = responseData["email"];
       DateTime parsedDate = DateTime.parse(responseData["createdAt"]);
-      user["joinDate"] = DateFormat("MMMM yyyy").format(parsedDate);
+      user["createdAt"] = DateFormat("MMMM yyyy").format(parsedDate);
     }
 
     return user;
@@ -176,7 +171,7 @@ class ApiService {
   // Method to make authenticated POST requests
   Future<http.Response> authenticatedPost(
       String endpoint, Map<String, dynamic> body) async {
-    // final token = await _tokenService.getToken();
+    final token = await _tokenService.getToken();
     final url = Uri.parse('$baseUrl$endpoint');
 
     return await http.post(

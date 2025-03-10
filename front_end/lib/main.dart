@@ -7,14 +7,10 @@ import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
 import 'package:path_finder/screens/start_page.dart';
-import './services/token_service.dart';
-import './utils/global.dart';
 import './providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  token = await TokenService().getToken();
+void main() {
   runApp(
     MultiProvider(
       providers: [

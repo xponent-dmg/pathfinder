@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../utils/global.dart';
+import 'package:path_finder/providers/user_provider.dart';
+import 'package:path_finder/services/token_service.dart';
+import 'package:provider/provider.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -21,10 +23,20 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
   late Animation<double> _logoOpacityAnimation; // Logo fade-in animation
   late Animation<double> _loadingAnimation; // Loading line progress animation
 
+  String? _token;
+
+  //get token from secure_storage
+  Future<void> getTokenSecure() async {
+    _token = await TokenService().getToken();
+  }
+
   @override
   void initState() {
     super.initState();
-
+    getTokenSecure();
+    if(_token != null && _token!.isNotEmpty){
+      context.read<UserProvider>().getUserDet();
+    }
     // LOGO ANIMATION: Set up the logo animation controller
     // This creates a pulsating effect with fade-in for the logo
     _logoAnimationController = AnimationController(
@@ -72,8 +84,8 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
       // Ensure we dispose controllers properly when navigating
       _dotsAnimationController.stop();
 
-      Navigator.pushReplacementNamed(
-          context, (token != null && token!.isNotEmpty) ? '/home' : '/signin');
+      Navigator.pushReplacementNamed(context,
+          (_token != null && _token!.isNotEmpty) ? '/home' : '/signin');
     });
   }
 

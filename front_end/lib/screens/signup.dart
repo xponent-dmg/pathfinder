@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
+import 'package:path_finder/widgets/input_field.dart';
 import '../widgets/custom_snackbar.dart';
 
 class SignupPage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _SignupPageState extends State<SignupPage>
   ApiService apiService = ApiService();
 
   bool _obscurePassword = true;
-  bool _agreeToTerms = false;
 
   //authentication
   void registerUser() async {
@@ -96,18 +96,12 @@ class _SignupPageState extends State<SignupPage>
   }
 
   void _handleSignup() {
-    if (_formKey.currentState!.validate() && _agreeToTerms) {
+    if (_formKey.currentState!.validate()) {
       // Process signup
       ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackbar(text: 'Creating your account...').build(),
       );
       registerUser();
-    } else if (!_agreeToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackbar(
-                text: 'Please agree to terms and conditions', color: Colors.red)
-            .build(),
-      );
     }
   }
 
@@ -183,6 +177,7 @@ class _SignupPageState extends State<SignupPage>
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               // App Logo with Hero animation
+                              SizedBox(height: 12),
                               Center(
                                 child: Hero(
                                   tag: 'appLogo',
@@ -217,7 +212,7 @@ class _SignupPageState extends State<SignupPage>
                                 child: Column(
                                   children: [
                                     // Name Field
-                                    _buildInputField(
+                                    InputField(
                                       controller: _nameController,
                                       label: "Full Name",
                                       icon: Icons.person_outline,
@@ -231,7 +226,7 @@ class _SignupPageState extends State<SignupPage>
                                     SizedBox(height: 16),
 
                                     // username field
-                                    _buildInputField(
+                                    InputField(
                                       controller: _usernameController,
                                       label: "Username",
                                       icon: Icons.person_3_rounded,
@@ -244,7 +239,7 @@ class _SignupPageState extends State<SignupPage>
                                       },
                                     ),
                                     SizedBox(height: 16),
-                                    _buildInputField(
+                                    InputField(
                                       controller: _emailController,
                                       label: "Email address",
                                       icon: Icons.email_outlined,
@@ -259,7 +254,7 @@ class _SignupPageState extends State<SignupPage>
                                     SizedBox(height: 16),
 
                                     // Password Field
-                                    _buildInputField(
+                                    InputField(
                                       controller: _passwordController,
                                       label: "Password",
                                       icon: Icons.lock_outline,
@@ -282,62 +277,7 @@ class _SignupPageState extends State<SignupPage>
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: 24),
-
-                                    // Terms and conditions checkbox
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          height: 24,
-                                          width: 24,
-                                          child: Checkbox(
-                                            value: _agreeToTerms,
-                                            activeColor: Colors.blue[700],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _agreeToTerms = value ?? false;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(width: 12),
-                                        Expanded(
-                                          child: RichText(
-                                            text: TextSpan(
-                                              text: 'I agree to the ',
-                                              style: TextStyle(
-                                                  color: Colors.black87),
-                                              children: [
-                                                TextSpan(
-                                                  text: 'Terms of Service',
-                                                  style: TextStyle(
-                                                    color: Colors.blue[700],
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: ' and ',
-                                                  style: TextStyle(
-                                                      color: Colors.black87),
-                                                ),
-                                                TextSpan(
-                                                  text: 'Privacy Policy',
-                                                  style: TextStyle(
-                                                    color: Colors.blue[700],
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 32),
+                                    SizedBox(height: 60),
 
                                     // Signup Button
                                     ElevatedButton(
@@ -407,47 +347,4 @@ class _SignupPageState extends State<SignupPage>
   }
 
   // Helper method to build consistent input fields
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
-    bool obscureText = false,
-    Widget? suffixIcon,
-    String? Function(String?)? validator,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(13),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.grey[600]),
-          prefixIcon: Icon(icon, color: Colors.blue[700]),
-          suffixIcon: suffixIcon,
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        validator: validator,
-      ),
-    );
-  }
 }

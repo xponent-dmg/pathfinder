@@ -27,11 +27,11 @@ class _SigninPageState extends State<SigninPage>
 
     if (result['success']) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(CustomSnackbar(text: "Login Successful").build());
 
-      // Navigate to home screen
-      Future.delayed(Duration(seconds: 3), () {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(CustomSnackbar(text: "Login Successful").build())
+          .closed
+          .then((_) {
         if (!mounted) return;
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       });
@@ -175,6 +175,7 @@ class _SigninPageState extends State<SigninPage>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              SizedBox(height: 12),
                               // App Logo with Hero animation
                               Center(
                                 child: Hero(
