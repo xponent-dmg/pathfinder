@@ -3,12 +3,16 @@ import 'package:path_finder/widgets/bottom_navbar.dart';
 import 'package:path_finder/widgets/header.dart';
 import 'package:path_finder/widgets/today.dart';
 
-class App extends StatelessWidget {
-  const App({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    // Remove the nested MaterialApp and use just a Scaffold
     return Scaffold(
       body: CustomScrollView(
         slivers: [

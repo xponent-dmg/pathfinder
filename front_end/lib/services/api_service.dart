@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
 import '../utils/global.dart';
+import 'package:intl/intl.dart';
 
 class ApiService {
   final String baseUrl =
@@ -148,6 +149,7 @@ class ApiService {
       "name": "",
       "username": "",
       "message": "Error",
+      "joinDate": "",
     };
 
     if (res.statusCode == 200) {
@@ -155,6 +157,8 @@ class ApiService {
       user['status'] = true;
       user["name"] = responseData["name"];
       user["username"] = responseData["username"];
+      DateTime parsedDate = DateTime.parse(responseData["createdAt"]);
+      user["joinDate"] = DateFormat("MMMM yyyy").format(parsedDate);
     }
 
     return user;

@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/app.dart';
 import 'package:path_finder/screens/club_leader.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/event_details_page.dart';
-import 'package:path_finder/screens/home_page.dart';
 import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
 import 'package:path_finder/screens/start_page.dart';
 import './services/token_service.dart';
 import './utils/global.dart';
+import './providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   token = await TokenService().getToken();
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

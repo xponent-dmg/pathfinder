@@ -68,7 +68,7 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     _loadingLineController.forward(); // Only run once (will not repeat)
 
     // Navigate to login page after delay
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 1), () {
       // Ensure we dispose controllers properly when navigating
       _dotsAnimationController.stop();
 

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/logout_service.dart';
+import 'package:provider/provider.dart';
 import '../widgets/custom_snackbar.dart';
+// import '../services/api_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,10 +21,10 @@ class _ProfilePageState extends State<ProfilePage>
   late Animation<Offset> _slideAnimation;
 
   // Mock user data - in a real app, this would come from your user model or API
-  final String _name = "Alex Johnson";
-  final String _username = "alexj";
-  final String _email = "alex.johnson@example.com";
-  final String _joinDate = "March 2023";
+  // String _name = "";
+  // String _username = "";
+  // String _email = "";
+  // String _joinDate = "";
   final int _pathsCompleted = 15;
   final int _eventsAttended = 7;
   final int _badgesEarned = 4;
@@ -63,6 +66,8 @@ class _ProfilePageState extends State<ProfilePage>
   @override
   void initState() {
     super.initState();
+    //get the user details
+    context.read<UserProvider>().getUserDet();
 
     // Set up animations
     _animationController = AnimationController(
@@ -103,6 +108,8 @@ class _ProfilePageState extends State<ProfilePage>
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ));
+
+    final userDet = context.watch<UserProvider>();
 
     return Scaffold(
       body: Stack(
@@ -167,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage>
                         IconButton(
                           icon: Icon(Icons.edit, color: Colors.white),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/event_create');
+                            // Navigator.pushNamed(context, '/event_create');
                             ScaffoldMessenger.of(context).showSnackBar(
                               CustomSnackbar(text: 'Edit profile').build(),
                             );
@@ -281,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage>
                           children: [
                             // User name and username
                             Text(
-                              _name,
+                              userDet.name,
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -290,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage>
                             ),
                             SizedBox(height: 4),
                             Text(
-                              "@$_username",
+                              "@${userDet.username}",
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black54,
@@ -331,10 +338,10 @@ class _ProfilePageState extends State<ProfilePage>
                             _buildSectionHeader("Account Information"),
                             SizedBox(height: 16),
                             _buildInfoItem(
-                                Icons.email_outlined, "Email", _email),
+                                Icons.email_outlined, "Email", userDet.email),
                             SizedBox(height: 14),
                             _buildInfoItem(Icons.calendar_today_outlined,
-                                "Joined", _joinDate),
+                                "Joined", userDet.createdAt),
 
                             SizedBox(height: 28),
                             Divider(
