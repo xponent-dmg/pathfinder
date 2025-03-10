@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/api_service.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -23,11 +24,9 @@ class _SigninPageState extends State<SigninPage>
   //authentication
   Future<void> userLogin() async {
     final result = await apiService.userLogin(_usernameController.text.trim(),
-        _passwordController.text.trim(), _rememberMe);
-
+        _passwordController.text.trim(), _rememberMe, context);
     if (result['success']) {
       if (!mounted) return;
-
       ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackbar(text: "Login Successful").build())
           .closed

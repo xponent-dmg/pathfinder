@@ -26,7 +26,9 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
     final result = await apiService.clubLeaderLogin(
         _usernameController.text.trim(),
         _passwordController.text.trim(),
-        _rememberMe);
+        _rememberMe,
+        context // Pass context to the API service
+        );
 
     if (result['success']) {
       ScaffoldMessenger.of(context)

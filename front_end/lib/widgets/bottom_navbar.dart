@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class BottomNavbar extends StatelessWidget {
-  final int currentIndex;
-  final Function(int) onTap;
+  int currentIndex;
+  // final Function(int) onTap;
 
-  const BottomNavbar({super.key, this.currentIndex = 0, required this.onTap});
+  BottomNavbar({super.key, this.currentIndex = 0});
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: currentIndex,
-      onTap: onTap,
+      onTap: (index) {
+        currentIndex = index;
+      },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.grey,

@@ -3,6 +3,8 @@ import 'package:path_finder/providers/user_provider.dart';
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 class ApiService {
   final String baseUrl =
@@ -30,7 +32,8 @@ class ApiService {
 
 //user login
   Future<Map<String, dynamic>> userLogin(
-      String username, String password, bool rememberMe) async {
+      String username, String password, bool rememberMe,
+      [BuildContext? context]) async {
     var url = Uri.parse("$baseUrl/api/auth/login-user");
     var response = await http.post(
       url,
@@ -53,16 +56,28 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        UserProvider().setToken(responseData['token']);
-        UserProvider().setRole("student");
-        UserProvider().getUserDet();
+        // Save token to secure storage if remember me is checked
         if (rememberMe) {
           await TokenService().saveToken(responseData['token']);
         }
+
+        // Store token in provider if context is available
+        if (context != null) {
+          // Use the provider through the context
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          userProvider.setToken(responseData['token']);
+          userProvider.setRole("student");
+
+          // Fetch user details right away
+          await userProvider.getUserDet();
+        }
+
         result = {
           'success': true,
           'message': 'Login successful',
-          'statusCode': response.statusCode
+          'statusCode': response.statusCode,
+          'token': responseData['token']
         };
       }
     } else {
@@ -80,7 +95,8 @@ class ApiService {
 
 //clubLeader login
   Future<Map<String, dynamic>> clubLeaderLogin(
-      String username, String password, bool rememberMe) async {
+      String username, String password, bool rememberMe,
+      [BuildContext? context]) async {
     var url = Uri.parse("$baseUrl/api/auth/login-clubleader");
     var response = await http.post(
       url,
@@ -103,21 +119,27 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        UserProvider().setToken(responseData['token']);
         // Store token and role
         if (rememberMe) {
-          await _tokenService.saveAllDetails(
-              username: username,
-              name: responseData['token']['name'] ?? "random",
-              email: responseData['token']['email'] ?? "random@gmail.com",
-              token: responseData['token'],
-              userRole: responseData["userRole"]);
+          await _tokenService.saveToken(responseData['token']);
+        }
+
+        // Store in provider if context is available
+        if (context != null) {
+          final userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          userProvider.setToken(responseData['token']);
+          userProvider.setRole("clubleader");
+
+          // Fetch user details right away
+          await userProvider.getUserDet();
         }
 
         result = {
           'success': true,
           'message': 'Login successful',
-          'statusCode': response.statusCode
+          'statusCode': response.statusCode,
+          'token': responseData['token']
         };
       }
     } else {
@@ -134,9 +156,14 @@ class ApiService {
   }
 
   // Method to make authenticated requests
-  Future<Map<String, dynamic>> authenticatedGet(String endpoint) async {
+  Future<Map<String, dynamic>> authenticatedGet(String endpoint,
+      [String? token]) async {
     final url = Uri.parse('$baseUrl$endpoint');
-    final token = UserProvider().token;
+
+    // If no token provided, try to get from secure storage
+    if (token == null || token.isEmpty) {
+      token = await _tokenService.getToken();
+    }
 
     var res = await http.get(
       url,
@@ -153,16 +180,21 @@ class ApiService {
       "email": "",
       "message": "Error",
       "createdAt": "",
+      "role": "",
     };
 
     if (res.statusCode == 200) {
       final responseData = json.decode(res.body);
       user['status'] = true;
-      user["name"] = responseData["name"];
-      user["username"] = responseData["username"];
-      user["email"] = responseData["email"];
-      DateTime parsedDate = DateTime.parse(responseData["createdAt"]);
-      user["createdAt"] = DateFormat("MMMM yyyy").format(parsedDate);
+      user["name"] = responseData["name"] ?? "";
+      user["username"] = responseData["username"] ?? "";
+      user["email"] = responseData["email"] ?? "";
+      user["role"] = responseData["role"] ?? "";
+
+      if (responseData["createdAt"] != null) {
+        DateTime parsedDate = DateTime.parse(responseData["createdAt"]);
+        user["createdAt"] = DateFormat("MMMM yyyy").format(parsedDate);
+      }
     }
 
     return user;

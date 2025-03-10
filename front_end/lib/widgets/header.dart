@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:path_finder/providers/user_provider.dart';
 
-class Header extends StatefulWidget {
+class Header extends StatelessWidget {
   const Header({super.key});
 
   @override
-  State<Header> createState() => _HeaderState();
-}
-
-class _HeaderState extends State<Header> {
-  @override
   Widget build(BuildContext context) {
+    // Get user data from provider directly inside the widget
+    final userProvider = context.watch<UserProvider>();
+
+    // Get the user's first name only (split by space and take first part)
+    final firstName = userProvider.name.isNotEmpty
+        ? userProvider.name.split(' ')[0]
+        : 'there';
+
+    // List<String> getGreeting(String name) {
+    //   var hour = DateTime.now().hour;
+    //   if (hour < 12) {
+    //     return ["Good morning, $name!", "Start your day with an event!"];
+    //   } else if (hour < 18) {
+    //     return ["Good afternoon, $name!", "Let's find something fun to do!"];
+    //   } else {
+    //     return ["Good evening, $name!", "Time to unwind with cool events."];
+    //   }
+    // }
+
     return SliverAppBar(
       pinned: true,
       expandedHeight: 280.0,
@@ -114,14 +130,15 @@ class _HeaderState extends State<Header> {
                 child: Row(
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              "Thursday, 27 Feb",
+                              "Hey $firstName",
                               style: TextStyle(
-                                fontSize: 22,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -131,7 +148,7 @@ class _HeaderState extends State<Header> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0, top: 4.0),
                             child: Text(
-                              "Chennai, TamilNadu",
+                              "Discover new events!",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
