@@ -12,7 +12,7 @@ class ApiService {
 
 //register user
   Future<http.Response> registerUser(
-      String name, String username, String password) async {
+      String name, String username, String email, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/register-user");
     var response = await http.post(
       url,
@@ -22,6 +22,7 @@ class ApiService {
       body: json.encode({
         "name": name,
         "username": username,
+        "email": email,
         "password": password,
       }),
     );
@@ -56,8 +57,12 @@ class ApiService {
         token = responseData["token"];
         role = "student";
         if (rememberMe) {
-          await _tokenService.saveToken(responseData['token']);
-          await _tokenService.saveUserRole("student");
+          await _tokenService.saveAllDetails(
+              username: username,
+              name: responseData['token']['name'] ?? "random",
+              email: responseData['token']['email'] ?? "random@gmail.com",
+              token: responseData['token'],
+              userRole: responseData["userRole"]);
         }
 
         result = {
@@ -108,8 +113,12 @@ class ApiService {
         role = responseData['role'];
         // Store token and role
         if (rememberMe) {
-          await _tokenService.saveToken(responseData['token']);
-          await _tokenService.saveUserRole("clubLeader");
+          await _tokenService.saveAllDetails(
+              username: username,
+              name: responseData['token']['name'] ?? "random",
+              email: responseData['token']['email'] ?? "random@gmail.com",
+              token: responseData['token'],
+              userRole: responseData["userRole"]);
         }
 
         result = {

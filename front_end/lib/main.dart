@@ -20,7 +20,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
-      child: const App(),
+      child: MyApp(),
     ),
   );
 }

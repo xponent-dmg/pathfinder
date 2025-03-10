@@ -10,8 +10,8 @@ const bcrypt = require("bcrypt");
 
 router.post("/register-user", async (req, res) => {
   try {
-    const { name, username, password } = req.body;
-    if (!name || !username || !password) {
+    const { name, username, email, password } = req.body;
+    if (!name || !username || !password || !email) {
       return res.status(400).json({ error: "Please provide all the details" });
     }
 
@@ -22,7 +22,7 @@ router.post("/register-user", async (req, res) => {
     }
 
     // Create a new normal user
-    const newUser = new User({ name, username, password });
+    const newUser = new User({ name, username, email, password });
     await newUser.save();
 
     res.status(201).json({ message: "User registration successful" });

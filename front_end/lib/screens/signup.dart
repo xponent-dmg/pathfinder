@@ -17,6 +17,7 @@ class _SignupPageState extends State<SignupPage>
   // Controllers
   final _nameController = TextEditingController();
   final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   ApiService apiService = ApiService();
 
@@ -25,8 +26,11 @@ class _SignupPageState extends State<SignupPage>
 
   //authentication
   void registerUser() async {
-    var response = await apiService.registerUser(_nameController.text.trim(),
-        _usernameController.text.trim(), _passwordController.text.trim());
+    var response = await apiService.registerUser(
+        _nameController.text.trim(),
+        _usernameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim());
     if (response.statusCode == 201) {
       var snackBar = ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(text: "Registered user successfully").build());
@@ -230,11 +234,24 @@ class _SignupPageState extends State<SignupPage>
                                     _buildInputField(
                                       controller: _usernameController,
                                       label: "Username",
-                                      icon: Icons.person_outlined,
+                                      icon: Icons.person_3_rounded,
                                       keyboardType: TextInputType.text,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your username';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 16),
+                                    _buildInputField(
+                                      controller: _emailController,
+                                      label: "Email address",
+                                      icon: Icons.email_outlined,
+                                      keyboardType: TextInputType.text,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter your email addresss';
                                         }
                                         return null;
                                       },

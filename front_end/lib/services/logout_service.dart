@@ -7,8 +7,7 @@ class LogoutService {
   Future<void> logout(BuildContext context) async {
     try {
       // Clear the stored token and role
-      await _tokenService.deleteToken();
-      await _tokenService.deleteUserRole();
+      await _tokenService.logout();
 
       // Navigate to the start page and clear the navigation stack
       Navigator.of(context)
