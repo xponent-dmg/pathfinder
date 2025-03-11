@@ -23,16 +23,27 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
   late Animation<double> _logoOpacityAnimation; // Logo fade-in animation
   late Animation<double> _loadingAnimation; // Loading line progress animation
 
-  final _token = UserProvider().token;
+  final TokenService _tokenService = TokenService();
+  bool _isCheckingToken = true;
 
   @override
   void initState() {
     super.initState();
-    // LOGO ANIMATION: Set up the logo animation controller
-    // This creates a pulsating effect with fade-in for the logo
+    // Set up animations
+    _setupAnimations();
+
+    // Start the animations
+    _logoAnimationController.forward();
+    _loadingLineController.forward();
+
+    // Check for token and navigate accordingly after a delay
+    _checkTokenAndNavigate();
+  }
+
+  void _setupAnimations() {
     _logoAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2000),
     );
 
     _logoSizeAnimation = Tween<double>(begin: 1.0, end: 1.2).animate(
@@ -45,39 +56,61 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     _logoOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _logoAnimationController,
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
       ),
     );
 
-    // LOADING LINE ANIMATION: Set up the loading animation controller
-    // This will animate just once to show progress and completion
     _loadingLineController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2), // Line completes in 4 seconds
+      duration: const Duration(seconds: 2),
     );
 
     _loadingAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(_loadingLineController);
 
-    // DOTS ANIMATION: Set up the dots animation controller
-    // This will continuously animate until page transition
     _dotsAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2), // Faster animation for dots
-    )..repeat(); // Repeat indefinitely
+      duration: const Duration(seconds: 2),
+    )..repeat();
+  }
 
-    // Start the animations
-    _logoAnimationController.forward();
-    _loadingLineController.forward(); // Only run once (will not repeat)
+  Future<void> _checkTokenAndNavigate() async {
+    // Wait a moment to show the splash screen
+    await Future.delayed(const Duration(seconds: 2));
 
-    // Navigate to login page after delay
-    Timer(Duration(seconds: 1), () {
-      // Ensure we dispose controllers properly when navigating
-      _dotsAnimationController.stop();
+    if (!mounted) return;
 
-      Navigator.pushReplacementNamed(
-          context, (_token.isNotEmpty) ? '/home' : '/signin');
-    });
+    try {
+      // Get the token from secure storage
+      final String? token = await _tokenService.getToken();
+
+      if (!mounted) return;
+
+      // Get UserProvider and update token
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      // If token exists and is not empty, set it in provider and navigate to home
+      if (token != null && token.isNotEmpty) {
+        await userProvider.setTokenAndGetUserDetails(token);
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // If no token, navigate to signin
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, '/signin');
+      }
+    } catch (e) {
+      print("Error during token check: $e");
+      if (!mounted) return;
+      // If there's an error, safely go to signin
+      Navigator.pushReplacementNamed(context, '/signin');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCheckingToken = false;
+        });
+      }
+    }
   }
 
   @override
@@ -218,35 +251,8 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
                   SizedBox(height: 24),
 
                   // Animated dots - continue animating until page transition
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(3, (index) {
-                      return AnimatedBuilder(
-                        animation: _dotsAnimationController,
-                        builder: (context, child) {
-                          final delay = index * 0.2;
-                          // Calculate animation value with delay for each dot
-                          final animationValue =
-                              (_dotsAnimationController.value + delay) % 1.0;
-                          // Dots grow and shrink based on animation value
-                          final size = 4.0 + 4.0 * animationValue;
-                          // Dots fade in and out based on animation value
-                          final opacity = 0.3 + 0.7 * animationValue;
+                  _buildAnimatedDots(),
 
-                          return Container(
-                            width: size,
-                            height: size,
-                            margin: EdgeInsets.symmetric(horizontal: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.blue[700]!
-                                  .withAlpha((opacity * 255).toInt()),
-                              shape: BoxShape.circle,
-                            ),
-                          );
-                        },
-                      );
-                    }),
-                  ),
                   SizedBox(height: 10),
                 ],
               ),
@@ -254,6 +260,34 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildAnimatedDots() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(3, (index) {
+        return AnimatedBuilder(
+          animation: _dotsAnimationController,
+          builder: (context, child) {
+            final delay = index * 0.2;
+            final animationValue =
+                (_dotsAnimationController.value + delay) % 1.0;
+            final size = 4.0 + 4.0 * animationValue;
+            final opacity = 0.3 + 0.7 * animationValue;
+
+            return Container(
+              width: size,
+              height: size,
+              margin: EdgeInsets.symmetric(horizontal: 4),
+              decoration: BoxDecoration(
+                color: Colors.blue[700]!.withAlpha((opacity * 255).toInt()),
+                shape: BoxShape.circle,
+              ),
+            );
+          },
+        );
+      }),
     );
   }
 }

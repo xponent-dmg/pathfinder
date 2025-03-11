@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/api_service.dart';
+import 'package:path_finder/widgets/auth_button.dart';
 import 'package:path_finder/widgets/input_field.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -280,26 +281,9 @@ class _SignupPageState extends State<SignupPage>
                                     SizedBox(height: 60),
 
                                     // Signup Button
-                                    ElevatedButton(
-                                      onPressed: _handleSignup,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blue[700],
-                                        foregroundColor: Colors.white,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 14, horizontal: 15),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      child: Text(
-                                        'Create Account',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                    AuthButton(
+                                      handleSignin: _handleSignup,
+                                      flag: false,
                                     ),
                                   ],
                                 ),
@@ -345,6 +329,4 @@ class _SignupPageState extends State<SignupPage>
       ),
     );
   }
-
-  // Helper method to build consistent input fields
 }

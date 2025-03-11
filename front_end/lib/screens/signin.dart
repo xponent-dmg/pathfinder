@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/api_service.dart';
+import 'package:path_finder/widgets/input_field.dart';
+import 'package:path_finder/widgets/auth_button.dart';
 import '../widgets/custom_snackbar.dart';
 
 class SigninPage extends StatefulWidget {
@@ -174,8 +175,8 @@ class _SigninPageState extends State<SigninPage>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              SizedBox(height: 12),
                               // App Logo with Hero animation
+                              SizedBox(height: 12),
                               Center(
                                 child: Hero(
                                   tag: 'appLogo',
@@ -210,7 +211,7 @@ class _SigninPageState extends State<SigninPage>
                                 child: Column(
                                   children: [
                                     // username Field
-                                    _buildInputField(
+                                    InputField(
                                       controller: _usernameController,
                                       label: "Username",
                                       icon: Icons.person_2,
@@ -225,7 +226,7 @@ class _SigninPageState extends State<SigninPage>
                                     SizedBox(height: 20),
 
                                     // Password Field
-                                    _buildInputField(
+                                    InputField(
                                       controller: _passwordController,
                                       label: "Password",
                                       icon: Icons.lock_outline,
@@ -302,26 +303,8 @@ class _SigninPageState extends State<SigninPage>
                                     SizedBox(height: 32),
 
                                     // Signin Button
-                                    ElevatedButton(
-                                      onPressed: _handleSignin,
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.blue[700],
-                                        foregroundColor: Colors.white,
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 25),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        elevation: 0,
-                                      ),
-                                      child: Text(
-                                        'Sign In',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
+                                    AuthButton(
+                                      handleSignin: _handleSignin,
                                     ),
                                   ],
                                 ),
@@ -417,48 +400,4 @@ class _SigninPageState extends State<SigninPage>
     );
   }
 
-  // Helper method to build consistent input fields
-  Widget _buildInputField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
-    bool obscureText = false,
-    Widget? suffixIcon,
-    String? Function(String?)? validator,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withAlpha(13),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.grey[600]),
-          prefixIcon: Icon(icon, color: Colors.blue[700]),
-          suffixIcon: suffixIcon,
-          filled: true,
-          fillColor: Colors.white,
-        ),
-        validator: validator,
-      ),
-    );
-  }
 }

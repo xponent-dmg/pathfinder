@@ -13,8 +13,8 @@ class UserProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMessage = '';
-  ApiService _apiService = ApiService();
-  TokenService _tokenService = TokenService();
+  final ApiService _apiService = ApiService();
+  final TokenService _tokenService = TokenService();
 
   String get role => _role;
   String get token => _token;
@@ -22,18 +22,36 @@ class UserProvider with ChangeNotifier {
   bool get hasError => _hasError;
   String get errorMessage => _errorMessage;
 
-  UserProvider() {
-    // Try to load token when provider is created
-    _loadTokenFromStorage();
+
+  // Load token and get user details in one function
+  Future<bool> setTokenAndGetUserDetails(String token) async {
+    _token = token;
+    notifyListeners();
+
+    try {
+      await getUserDet();
+      return true;
+    } catch (e) {
+      print("Error getting user details after setting token: $e");
+      return false;
+    }
   }
 
-  // Load token from secure storage when app starts
-  Future<void> _loadTokenFromStorage() async {
-    final storedToken = await _tokenService.getToken();
-    if (storedToken != null && storedToken.isNotEmpty) {
-      _token = storedToken;
-      // Get user details if we have a token
-      await getUserDet();
+  // Load token from secure storage when needed
+  Future<bool> loadTokenFromStorage() async {
+    try {
+      final storedToken = await _tokenService.getToken();
+      if (storedToken != null && storedToken.isNotEmpty) {
+        _token = storedToken;
+        notifyListeners();
+        // Get user details if we have a token
+        await getUserDet();
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("Error loading token from storage: $e");
+      return false;
     }
   }
 
@@ -63,6 +81,7 @@ class UserProvider with ChangeNotifier {
 
     try {
       _isLoading = true;
+      _hasError = false;
       notifyListeners();
 
       Map<String, dynamic> user =
@@ -79,7 +98,6 @@ class UserProvider with ChangeNotifier {
       }
 
       _isLoading = false;
-      _hasError = false;
       notifyListeners();
     } catch (e) {
       _isLoading = false;

@@ -56,28 +56,33 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        // Save token to secure storage if remember me is checked
-        if (rememberMe) {
-          await TokenService().saveToken(responseData['token']);
-        }
+        final String token = responseData['token'];
 
-        // Store token in provider if context is available
+        // Always save the token to UserProvider
         if (context != null) {
-          // Use the provider through the context
           final userProvider =
               Provider.of<UserProvider>(context, listen: false);
-          userProvider.setToken(responseData['token']);
+          userProvider.setToken(token);
           userProvider.setRole("student");
 
           // Fetch user details right away
           await userProvider.getUserDet();
         }
 
+        // Save token to secure storage if remember me is checked
+        if (rememberMe) {
+          await _tokenService.saveToken(token);
+          await _tokenService.saveRole("student");
+          print("Token saved to secure storage (Remember me: enabled)");
+        } else {
+          print("Remember me not checked, token only saved in memory");
+        }
+
         result = {
           'success': true,
           'message': 'Login successful',
           'statusCode': response.statusCode,
-          'token': responseData['token']
+          'token': token
         };
       }
     } else {
@@ -85,7 +90,6 @@ class ApiService {
         final errorData = json.decode(response.body);
         result['message'] = errorData['error'] ?? 'Network error';
       } catch (e) {
-        // If response body isn't valid JSON
         result['message'] = 'Network error';
       }
     }
@@ -119,27 +123,33 @@ class ApiService {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       if (responseData['token'] != null) {
-        // Store token and role
-        if (rememberMe) {
-          await _tokenService.saveToken(responseData['token']);
-        }
+        final String token = responseData['token'];
 
-        // Store in provider if context is available
+        // Always save to UserProvider
         if (context != null) {
           final userProvider =
               Provider.of<UserProvider>(context, listen: false);
-          userProvider.setToken(responseData['token']);
+          userProvider.setToken(token);
           userProvider.setRole("clubleader");
 
           // Fetch user details right away
           await userProvider.getUserDet();
         }
 
+        // Store token in secure storage if remember me is checked
+        if (rememberMe) {
+          await _tokenService.saveToken(token);
+          await _tokenService.saveRole("clubleader");
+          print("Token saved to secure storage (Remember me: enabled)");
+        } else {
+          print("Remember me not checked, token only saved in memory");
+        }
+
         result = {
           'success': true,
           'message': 'Login successful',
           'statusCode': response.statusCode,
-          'token': responseData['token']
+          'token': token
         };
       }
     } else {
@@ -147,7 +157,6 @@ class ApiService {
         final errorData = json.decode(response.body);
         result['message'] = errorData['error'] ?? 'Network error';
       } catch (e) {
-        // If response body isn't valid JSON
         result['message'] = 'Network error';
       }
     }
