@@ -13,8 +13,8 @@ class UserProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMessage = '';
-  final ApiService _apiService = ApiService();
-  final TokenService _tokenService = TokenService();
+  ApiService _apiService = ApiService();
+  TokenService _tokenService = TokenService();
 
   String get role => _role;
   String get token => _token;
