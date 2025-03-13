@@ -15,14 +15,14 @@ class BottomNavbar extends StatelessWidget {
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Colors.grey,
+      unselectedItemColor: Colors.blue,
       items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
+          icon: Icon(Icons.map_outlined),
           label: 'Explore',
         ),
         BottomNavigationBarItem(
@@ -30,7 +30,11 @@ class BottomNavbar extends StatelessWidget {
           label: 'Events',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.edit),
+          label: 'Create Event',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_3),
           label: 'Profile',
         ),
       ],
