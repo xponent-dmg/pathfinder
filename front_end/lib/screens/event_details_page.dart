@@ -265,7 +265,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                             SizedBox(height: 16),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(16),
-                              child: Container(
+                              child: SizedBox(
                                 height: 200,
                                 width: double.infinity,
                                 child: Stack(
@@ -289,7 +289,7 @@ class _EventDetailsPageState extends State<EventDetailsPage>
                                       child: Container(
                                         padding: EdgeInsets.symmetric(
                                             vertical: 10, horizontal: 16),
-                                        color: Colors.black.withOpacity(0.7),
+                                        color: Colors.black.withAlpha(87),
                                         child: Row(
                                           children: [
                                             Icon(
