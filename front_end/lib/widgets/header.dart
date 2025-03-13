@@ -1,31 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_finder/widgets/filter_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});
-
   @override
   Widget build(BuildContext context) {
-    // Get user data from provider directly inside the widget
-    final userProvider = context.watch<UserProvider>();
-
-    // Get the user's first name only (split by space and take first part)
-    final firstName = userProvider.name.isNotEmpty
-        ? userProvider.name.split(' ')[0]
-        : 'there';
-
-    // List<String> getGreeting(String name) {
-    //   var hour = DateTime.now().hour;
-    //   if (hour < 12) {
-    //     return ["Good morning, $name!", "Start your day with an event!"];
-    //   } else if (hour < 18) {
-    //     return ["Good afternoon, $name!", "Let's find something fun to do!"];
-    //   } else {
-    //     return ["Good evening, $name!", "Time to unwind with cool events."];
-    //   }
-    // }
-
     return SliverAppBar(
       pinned: true,
       expandedHeight: 280.0,
@@ -83,27 +65,57 @@ class Header extends StatelessWidget {
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(90),
         child: Container(
-          margin: EdgeInsets.only(bottom: 25, left: 20, right: 20),
-          padding: EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: Colors.white,
-          ),
-          child: TextField(
-            controller: TextEditingController(),
-            cursorColor: Colors.blue,
-            decoration: InputDecoration(
-              hintText: 'Search events...',
-              hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-              border: InputBorder.none,
-              alignLabelWithHint: true,
+            margin: EdgeInsets.only(bottom: 25, left: 20, right: 20),
+            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: Colors.white,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.search_rounded,
+                  size: 25,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: TextField(
+                    focusNode: FocusNode(),
+                    onTapOutside: (event) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    controller: TextEditingController(),
+                    cursorColor: Colors.blue,
+                    decoration: InputDecoration(
+                      hintText: 'Search events...',
+                      hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                      alignLabelWithHint: true,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => FilterOverlay());
+                    },
+                    icon: Icon(
+                      Icons.filter_alt,
+                      color: Colors.grey,
+                    ))
+              ],
+            )),
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -135,13 +147,14 @@ class Header extends StatelessWidget {
                         SizedBox(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              "Hey $firstName",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Consumer<UserProvider>(
+                                builder: (context, value, child) => Text(
+                                      "Hey ${value.name.split(" ")[0]}",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
                           ),
                         ),
                         SizedBox(
