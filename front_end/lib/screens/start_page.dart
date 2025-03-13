@@ -24,7 +24,6 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
   late Animation<double> _loadingAnimation; // Loading line progress animation
 
   final TokenService _tokenService = TokenService();
-  bool _isCheckingToken = true;
 
   @override
   void initState() {
@@ -107,7 +106,6 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     } finally {
       if (mounted) {
         setState(() {
-          _isCheckingToken = false;
         });
       }
     }
