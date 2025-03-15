@@ -105,15 +105,40 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) => FilterOverlay());
-                    },
-                    icon: Icon(
-                      Icons.filter_alt,
-                      color: Colors.grey,
-                    ))
+                  onPressed: () async {
+                    final filterResult = await showModalBottomSheet(
+                      isScrollControlled:
+                          true, // Makes the modal take up more space
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      context: context,
+                      builder: (context) => SizedBox(
+                        height: MediaQuery.of(context).size.height *
+                            0.75, // Take up 75% of screen height
+                        child: FilterOverlay(),
+                      ),
+                    );
+
+                    // Process filter results
+                    if (filterResult != null) {
+                      // You can implement filtering logic here or pass to a provider
+                      print('Filter applied: ${filterResult.toString()}');
+
+                      // Example: Extracting some values
+                      final categories =
+                          filterResult['categories'] as List<String>;
+                      final maxDistance = filterResult['maxDistance'] as double;
+
+                      // Add your search filtering logic based on these values
+                    }
+                  },
+                  icon: Icon(
+                    Icons.filter_alt,
+                    color: Colors.grey,
+                  ),
+                )
               ],
             )),
       ),

@@ -10,7 +10,7 @@ import 'package:path_finder/screens/start_page.dart';
 import './providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-void main(){
+void main() {
   runApp(
     MultiProvider(
       providers: [
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
         '/': (context) => const StartPage(),
         '/home': (context) => const HomePage(),
