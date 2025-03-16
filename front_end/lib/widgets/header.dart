@@ -7,24 +7,11 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get user data from provider directly inside the widget
+    
     final userProvider = context.watch<UserProvider>();
-
-    // Get the user's first name only (split by space and take first part)
     final firstName = userProvider.name.isNotEmpty
         ? userProvider.name.split(' ')[0]
         : 'there';
-
-    // List<String> getGreeting(String name) {
-    //   var hour = DateTime.now().hour;
-    //   if (hour < 12) {
-    //     return ["Good morning, $name!", "Start your day with an event!"];
-    //   } else if (hour < 18) {
-    //     return ["Good afternoon, $name!", "Let's find something fun to do!"];
-    //   } else {
-    //     return ["Good evening, $name!", "Time to unwind with cool events."];
-    //   }
-    // }
 
     return SliverAppBar(
       pinned: true,
