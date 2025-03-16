@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/widgets/filter_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 
 class Header extends StatelessWidget {
   const Header({super.key});
-
   @override
   Widget build(BuildContext context) {
-    
     final userProvider = context.watch<UserProvider>();
     final firstName = userProvider.name.isNotEmpty
         ? userProvider.name.split(' ')[0]
         : 'there';
-
     return SliverAppBar(
       pinned: true,
       expandedHeight: 280.0,
@@ -70,27 +68,79 @@ class Header extends StatelessWidget {
       bottom: PreferredSize(
         preferredSize: Size.fromHeight(90),
         child: Container(
-          margin: EdgeInsets.only(bottom: 25, left: 20, right: 20),
-          padding: EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-            color: Colors.white,
-          ),
-          child: TextField(
-            controller: TextEditingController(),
-            cursorColor: Colors.blue,
-            decoration: InputDecoration(
-              hintText: 'Search events...',
-              hintStyle: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-              border: InputBorder.none,
-              alignLabelWithHint: true,
+            margin: EdgeInsets.only(bottom: 25, left: 20, right: 20),
+            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: Colors.white,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  Icons.search_rounded,
+                  size: 25,
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: TextField(
+                    focusNode: FocusNode(),
+                    onTapOutside: (event) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    controller: TextEditingController(),
+                    cursorColor: Colors.blue,
+                    decoration: InputDecoration(
+                      hintText: 'Search events...',
+                      hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                      border: InputBorder.none,
+                      alignLabelWithHint: true,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    final filterResult = await showModalBottomSheet(
+                      isScrollControlled:
+                          true, // Makes the modal take up more space
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      context: context,
+                      builder: (context) => SizedBox(
+                        height: MediaQuery.of(context).size.height *
+                            0.75, // Take up 75% of screen height
+                        child: FilterOverlay(),
+                      ),
+                    );
+
+                    // Process filter results
+                    if (filterResult != null) {
+                      // You can implement filtering logic here or pass to a provider
+                      print('Filter applied: ${filterResult.toString()}');
+
+                      // Example: Extracting some values
+
+                      // Add your search filtering logic based on these values
+                    }
+                  },
+                  icon: Icon(
+                    Icons.filter_alt,
+                    color: Colors.grey,
+                  ),
+                )
+              ],
+            )),
       ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -122,13 +172,14 @@ class Header extends StatelessWidget {
                         SizedBox(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              "Hey $firstName",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: Consumer<UserProvider>(
+                                builder: (context, value, child) => Text(
+                                      "Hey $firstName",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )),
                           ),
                         ),
                         SizedBox(
