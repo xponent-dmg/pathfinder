@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class TodayCard extends StatelessWidget {
-  const TodayCard({super.key});
+  final String goto;
+  const TodayCard({super.key, this.goto = '/event_page'});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/event_details');
+        // Replace named route navigation with direct navigation
+        Navigator.pushNamed(context, '/event_page');
       },
       child: Stack(
         children: [

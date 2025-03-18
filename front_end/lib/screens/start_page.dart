@@ -6,7 +6,7 @@ import 'package:path_finder/services/token_service.dart';
 import 'package:provider/provider.dart';
 
 class StartPage extends StatefulWidget {
-  const StartPage({super.key});
+const StartPage({super.key});
 
   @override
   State<StartPage> createState() => _StartPageState();

@@ -113,11 +113,11 @@ class _FilterOverlayState extends State<FilterOverlay> {
 
                 const SizedBox(height: 24),
 
-                // // Event Type Section
-                // _buildSectionTitle("Event Type"),
-                // _buildEventTypeFilters(),
+                // Event Type Section
+                _buildSectionTitle("Event Type"),
+                _buildEventTypeFilters(),
 
-                // const SizedBox(height: 16),
+                const SizedBox(height: 16),
               ],
             ),
           ),

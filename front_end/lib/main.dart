@@ -7,6 +7,7 @@ import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
 import 'package:path_finder/screens/start_page.dart';
+import 'package:path_finder/widgets/event_page.dart';
 import './providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/home',
+      initialRoute: '/',
       routes: {
         '/': (context) => const StartPage(),
         '/home': (context) => const HomePage(),
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/clubleader': (context) => const ClubLeaderSignin(),
         '/event_details': (context) => const EventDetailsPage(),
+        '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
       },
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path_finder/widgets/filter_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
@@ -125,13 +124,6 @@ class Header extends StatelessWidget {
                     if (filterResult != null) {
                       // You can implement filtering logic here or pass to a provider
                       print('Filter applied: ${filterResult.toString()}');
-
-                      // Example: Extracting some values
-                      final categories =
-                          filterResult['categories'] as List<String>;
-                      final maxDistance = filterResult['maxDistance'] as double;
-
-                      // Add your search filtering logic based on these values
                     }
                   },
                   icon: Icon(
