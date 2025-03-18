@@ -10,6 +10,7 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
+  bool isFav = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +19,7 @@ class _EventPageState extends State<EventPage> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Background with blur effect
+          // Background with blur effect (lightened)
           Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -31,7 +32,8 @@ class _EventPageState extends State<EventPage> {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
               child: Container(
-                color: Colors.black.withAlpha(178),
+                color: Colors.white
+                    .withAlpha(230), // Changed to white with high opacity
               ),
             ),
           ),
@@ -44,7 +46,7 @@ class _EventPageState extends State<EventPage> {
                 children: [
                   // Event Image with bottom border radius
                   Stack(
-                    clipBehavior: Clip.none, // Allow content to overflow
+                    clipBehavior: Clip.none,
                     children: [
                       // Image container
                       SizedBox(
@@ -52,8 +54,8 @@ class _EventPageState extends State<EventPage> {
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
                           ),
                           child: Image.asset(
                             'assets/event-pic.jpg',
@@ -62,7 +64,7 @@ class _EventPageState extends State<EventPage> {
                         ),
                       ),
 
-                      // Event details card positioned to overlap
+                      // Event details card positioned to overlap (lightened)
                       Positioned(
                         bottom: -60,
                         left: 16,
@@ -71,11 +73,11 @@ class _EventPageState extends State<EventPage> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 16),
                           decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(204),
+                            color: Colors.white, // Changed to white background
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withAlpha(97),
+                                color: Colors.black.withAlpha(40),
                                 blurRadius: 15,
                                 offset: Offset(0, 5),
                               ),
@@ -87,7 +89,7 @@ class _EventPageState extends State<EventPage> {
                               Text(
                                 '2000s Hip Hop Night',
                                 style: GoogleFonts.poppins(
-                                  color: Colors.white,
+                                  color: Colors.black, // Changed to black
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -96,20 +98,26 @@ class _EventPageState extends State<EventPage> {
                               Row(
                                 children: [
                                   Icon(Icons.calendar_today,
-                                      color: Colors.white70, size: 16),
+                                      color: Colors.black54,
+                                      size: 16), // Changed to dark color
                                   SizedBox(width: 8),
                                   Text('29 Oct - 07:00 PM',
-                                      style: TextStyle(color: Colors.white70)),
+                                      style: TextStyle(
+                                          color: Colors
+                                              .black54)), // Changed to dark color
                                 ],
                               ),
                               SizedBox(height: 8),
                               Row(
                                 children: [
                                   Icon(Icons.location_on,
-                                      color: Colors.white70, size: 16),
+                                      color: Colors.black54,
+                                      size: 16), // Changed to dark color
                                   SizedBox(width: 8),
                                   Text('Brooklyn, New York',
-                                      style: TextStyle(color: Colors.white70)),
+                                      style: TextStyle(
+                                          color: Colors
+                                              .black54)), // Changed to dark color
                                 ],
                               ),
                             ],
@@ -122,15 +130,16 @@ class _EventPageState extends State<EventPage> {
                   // Space to accommodate the overlapping card
                   SizedBox(height: 70),
 
-                  // Profile section in a card with blurred background
+                  // Profile section in a card with blurred background (lightened)
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Colors.white.withAlpha(26),
+                      color: Colors.white
+                          .withAlpha(230), // Changed to light background
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withAlpha(66),
+                          color: Colors.black.withAlpha(30),
                           blurRadius: 10,
                         ),
                       ],
@@ -157,20 +166,22 @@ class _EventPageState extends State<EventPage> {
                                       'Zack Foster',
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: Colors.black, // Changed to black
                                         fontSize: 16,
                                       ),
                                     ),
                                     Text('Organizer',
-                                        style:
-                                            TextStyle(color: Colors.white70)),
+                                        style: TextStyle(
+                                            color: Colors
+                                                .black54)), // Changed to dark color
                                   ],
                                 ),
                               ),
                               ElevatedButton(
                                 onPressed: () {},
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: Colors.blue
+                                      .shade600, // Changed to blue to match theme
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -185,7 +196,7 @@ class _EventPageState extends State<EventPage> {
                     ),
                   ),
 
-                  // Event details section
+                  // Event details section (lightened)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
@@ -194,7 +205,7 @@ class _EventPageState extends State<EventPage> {
                         Text(
                           'About Event',
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: Colors.black, // Changed to black
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -203,7 +214,7 @@ class _EventPageState extends State<EventPage> {
                         Text(
                           'Join us for an unforgettable night of 2000s Hip Hop classics. Dance the night away as our DJs spin the best tracks from this iconic era. Featuring special performances and a vibrant atmosphere that will transport you back to the golden age of hip hop.',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Colors.black87, // Changed to dark color
                             fontSize: 14,
                             height: 1.5,
                           ),
@@ -214,7 +225,7 @@ class _EventPageState extends State<EventPage> {
 
                   SizedBox(height: 24),
 
-                  // Location section with map
+                  // Location section with map (lightened)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
@@ -223,7 +234,7 @@ class _EventPageState extends State<EventPage> {
                         Text(
                           'Location',
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: Colors.black, // Changed to black
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -244,7 +255,7 @@ class _EventPageState extends State<EventPage> {
                         Text(
                           'The Brooklyn Nightclub\n123 Main Street, Brooklyn, NY 11201',
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Colors.black87, // Changed to dark color
                             height: 1.5,
                           ),
                         ),
@@ -254,13 +265,14 @@ class _EventPageState extends State<EventPage> {
 
                   SizedBox(height: 30),
 
-                  // Buy ticket button
+                  // Buy ticket button (color updated)
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors
+                            .blue.shade600, // Changed to blue to match theme
                         foregroundColor: Colors.white,
                         padding:
                             EdgeInsets.symmetric(vertical: 16, horizontal: 60),
@@ -285,34 +297,44 @@ class _EventPageState extends State<EventPage> {
             ),
           ),
 
-          // Back button - placed at the top level of the stack for proper layering
+          // Back button (lightened)
           Positioned(
             top: 40,
             left: 16,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withAlpha(128),
+                color:
+                    Colors.white.withAlpha(200), // Changed to white background
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: Icon(Icons.arrow_back,
+                    color: Colors.black), // Changed icon to black
                 onPressed: () => Navigator.pop(context),
               ),
             ),
           ),
 
-          // Favorite button
+          // Favorite button (lightened)
           Positioned(
             top: 40,
             right: 16,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withAlpha(128),
+                color:
+                    Colors.white.withAlpha(200), // Changed to white background
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.favorite_border, color: Colors.white),
-                onPressed: () {},
+                icon: Icon(Icons.favorite_rounded,
+                    color: (!isFav)
+                        ? const Color.fromARGB(255, 89, 89, 89)
+                        : Colors.red), // Changed icon to black
+                onPressed: () {
+                  setState(() {
+                    isFav = !isFav;
+                  });
+                },
               ),
             ),
           ),

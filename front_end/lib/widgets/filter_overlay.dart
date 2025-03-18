@@ -20,6 +20,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
     'MG auditorium',
   ];
   String? _selectedLocation;
+  bool _isLocationDropdownOpen = false;
 
   // Date range selection
   DateTime? _startDate;
@@ -50,29 +51,47 @@ class _FilterOverlayState extends State<FilterOverlay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Header
+          // Header with enhanced styling
           Row(
             children: [
-              const Text(
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              const Spacer(),
+              Text(
                 "Filter Events",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  color: Colors.blue[800],
                 ),
               ),
               const Spacer(),
-              TextButton(
+              TextButton.icon(
                 onPressed: _resetFilters,
-                child: Text(
+                icon: Icon(Icons.refresh, color: Colors.red[700], size: 16),
+                label: Text(
                   "Reset",
                   style: TextStyle(
                     color: Colors.red[700],
@@ -83,7 +102,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
             ],
           ),
 
-          Divider(color: Colors.grey[300]),
+          Divider(color: Colors.grey[200], thickness: 1.5, height: 24),
 
           // Scrollable content
           Expanded(
@@ -100,7 +119,6 @@ class _FilterOverlayState extends State<FilterOverlay> {
                 _buildSectionTitle("Event Categories"),
                 _buildCategorySelector(),
 
-                // const SizedBox(height: 24),
                 // Date Range Section
                 _buildSectionTitle("Date Range"),
                 _buildDateRangeSelector(),
@@ -122,7 +140,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
             ),
           ),
 
-          // Apply Button
+          // Apply Button with enhanced styling
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -130,18 +148,26 @@ class _FilterOverlayState extends State<FilterOverlay> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[700],
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                elevation: 0,
+                elevation: 2,
               ),
-              child: const Text(
-                "Apply Filters",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.filter_alt, size: 18),
+                  SizedBox(width: 8),
+                  Text(
+                    "Apply Filters",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -152,43 +178,166 @@ class _FilterOverlayState extends State<FilterOverlay> {
   }
 
   Widget _buildLocationSelector() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          hint: const Text('Select location'),
-          value: _selectedLocation,
-          items: _locations.map((String location) {
-            return DropdownMenuItem<String>(
-              value: location,
-              child: Text(location),
-            );
-          }).toList(),
-          onChanged: (String? newValue) {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
             setState(() {
-              _selectedLocation = newValue;
+              _isLocationDropdownOpen = !_isLocationDropdownOpen;
             });
           },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[300]!),
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[50],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.location_on_rounded,
+                    color: Colors.blue[700],
+                    size: 16,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    _selectedLocation ?? 'Select location',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: _selectedLocation == null
+                          ? Colors.grey[600]
+                          : Colors.black87,
+                    ),
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: _isLocationDropdownOpen ? 0.5 : 0,
+                  duration: Duration(milliseconds: 200),
+                  child:
+                      Icon(Icons.keyboard_arrow_down, color: Colors.blue[700]),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+        if (_isLocationDropdownOpen)
+          AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            margin: EdgeInsets.only(top: 4),
+            constraints: BoxConstraints(maxHeight: 200),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey[300]!),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: _locations.length,
+                itemBuilder: (context, index) {
+                  final location = _locations[index];
+                  final isSelected = _selectedLocation == location;
+
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedLocation = location;
+                        _isLocationDropdownOpen = false;
+                      });
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Colors.blue.withOpacity(0.1)
+                            : Colors.transparent,
+                        border: Border(
+                          bottom: index < _locations.length - 1
+                              ? BorderSide(color: Colors.grey[200]!, width: 0.5)
+                              : BorderSide.none,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          isSelected
+                              ? Icon(Icons.check_circle,
+                                  color: Colors.blue[700], size: 18)
+                              : Icon(Icons.location_on_outlined,
+                                  color: Colors.grey[400], size: 18),
+                          SizedBox(width: 12),
+                          Text(
+                            location,
+                            style: TextStyle(
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                              color: isSelected
+                                  ? Colors.blue[700]
+                                  : Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+      ],
     );
   }
 
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.black87,
-        ),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 16,
+            decoration: BoxDecoration(
+              color: Colors.blue[700],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          SizedBox(width: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[800],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -207,26 +356,45 @@ class _FilterOverlayState extends State<FilterOverlay> {
     return GestureDetector(
       onTap: _showDateRangePicker,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[300]!),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.grey[50],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
-            SizedBox(width: 10),
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.blue[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                Icons.calendar_today_rounded,
+                color: Colors.blue[700],
+                size: 16,
+              ),
+            ),
+            SizedBox(width: 12),
             Expanded(
               child: Text(
                 dateRangeText,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: _startDate == null ? Colors.grey : Colors.black87,
+                  color: _startDate == null ? Colors.grey[600] : Colors.black87,
                 ),
               ),
             ),
-            Icon(Icons.calendar_month, color: Colors.blue[700]),
-            const SizedBox(width: 8),
+            Icon(Icons.arrow_forward_ios, color: Colors.blue[700], size: 14),
           ],
         ),
       ),
@@ -239,24 +407,36 @@ class _FilterOverlayState extends State<FilterOverlay> {
       builder: (BuildContext context) {
         return Dialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(24),
           ),
+          elevation: 5,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Select Date Range',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  children: [
+                    Icon(Icons.date_range, color: Colors.blue[700]),
+                    SizedBox(width: 10),
+                    Text(
+                      'Select Date Range',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[800],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                SizedBox(
+                const SizedBox(height: 20),
+                Container(
                   height: 400,
                   width: 360,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey[200]!),
+                  ),
                   child: SfDateRangePicker(
                     selectionMode: DateRangePickerSelectionMode.range,
                     initialSelectedRange: _startDate != null && _endDate != null
@@ -268,6 +448,12 @@ class _FilterOverlayState extends State<FilterOverlay> {
                     startRangeSelectionColor: Colors.blue[700],
                     endRangeSelectionColor: Colors.blue[700],
                     rangeSelectionColor: Colors.blue[100],
+                    headerStyle: DateRangePickerHeaderStyle(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue[800],
+                      ),
+                    ),
                     onSubmit: (value) {
                       if (value is PickerDateRange) {
                         setState(() {
@@ -310,7 +496,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
     final List<String> secondRowCategories = _categories.sublist(halfLength);
 
     return SizedBox(
-      height: 180, // Increased height to accommodate two rows
+      height: 180,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Column(
@@ -340,69 +526,88 @@ class _FilterOverlayState extends State<FilterOverlay> {
   Widget _buildCategoryCard(String category, IconData iconData) {
     final bool isSelected = _selectedCategories.contains(category);
 
+    // Define gradient colors based on selection state
+    List<Color> gradientColors = isSelected
+        ? [Colors.blue[700]!, Colors.blue[500]!]
+        : [Colors.white, Colors.white];
+
     return Container(
-      // width: 100,
       margin: EdgeInsets.only(right: 12),
-      child: Stack(
-        children: [
-          // The main card
-          Material(
-            color: isSelected ? Colors.blue[100] : Colors.grey[100],
-            borderRadius: BorderRadius.circular(12),
-            child: InkWell(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            setState(() {
+              if (isSelected) {
+                _selectedCategories.remove(category);
+              } else {
+                _selectedCategories.add(category);
+              }
+            });
+          },
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: gradientColors,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
               borderRadius: BorderRadius.circular(12),
-              onTap: () {
-                setState(() {
-                  if (isSelected) {
-                    _selectedCategories.remove(category);
-                  } else {
-                    _selectedCategories.add(category);
-                  }
-                });
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: isSelected ? Colors.blue[700]! : Colors.grey[300]!,
-                    width: 0,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 71, 72, 156),
-                        borderRadius: BorderRadius.circular(5),
+              boxShadow: isSelected
+                  ? [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: Offset(0, 3),
                       ),
-                      padding: EdgeInsets.all(7),
-                      child: Icon(
-                        iconData,
-                        size: 20,
-                        color: Colors.white,
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
                       ),
-                    ),
-                    SizedBox(width: 6),
-                    Text(
-                      category,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: isSelected ? Colors.blue[700] : Colors.black87,
-                        fontWeight:
-                            isSelected ? FontWeight.w500 : FontWeight.normal,
-                        fontSize: 13,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                    ),
-                  ],
-                ),
+                    ],
+              border: Border.all(
+                color: isSelected ? Colors.blue[700]! : Colors.grey[300]!,
+                width: isSelected ? 0 : 1,
               ),
             ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Colors.white
+                        : Color.fromARGB(255, 71, 72, 156),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Icon(
+                    iconData,
+                    size: 18,
+                    color: isSelected ? Colors.blue[700] : Colors.white,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Text(
+                  category,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black87,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -410,93 +615,123 @@ class _FilterOverlayState extends State<FilterOverlay> {
   Widget _buildPriceRangeSlider() {
     return Column(
       children: [
-        RangeSlider(
-          values: _priceRange,
-          min: 0,
-          max: 1000,
-          divisions: 20,
-          activeColor: Colors.blue[700],
-          inactiveColor: Colors.blue[100],
-          labels: RangeLabels(
-            "₹${_priceRange.start.toInt()}",
-            _priceRange.end >= 1000 ? "₹1000+" : "₹${_priceRange.end.toInt()}",
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+          decoration: BoxDecoration(
+            color: Colors.grey[50],
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.grey[200]!),
           ),
-          onChanged: (values) {
-            setState(() {
-              _priceRange = values;
-            });
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "₹0",
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
+          child: Column(
+            children: [
+              RangeSlider(
+                values: _priceRange,
+                min: 0,
+                max: 1000,
+                divisions: 20,
+                activeColor: Colors.blue[700],
+                inactiveColor: Colors.blue[100],
+                labels: RangeLabels(
+                  "₹${_priceRange.start.toInt()}",
+                  _priceRange.end >= 1000
+                      ? "₹1000+"
+                      : "₹${_priceRange.end.toInt()}",
+                ),
+                onChanged: (values) {
+                  setState(() {
+                    _priceRange = values;
+                  });
+                },
               ),
-            ),
-            Text(
-              "₹${_priceRange.start.toInt()} - ${_priceRange.end >= 1000 ? '1000+' : _priceRange.end.toInt()}",
-              style: TextStyle(
-                color: Colors.blue[700],
-                fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "₹0",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12,
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.blue[50],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        "₹${_priceRange.start.toInt()} - ${_priceRange.end >= 1000 ? '1000+' : _priceRange.end.toInt()}",
+                        style: TextStyle(
+                          color: Colors.blue[700],
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "₹1000+",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Text(
-              "₹1000+",
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
   }
 
   Widget _buildEventTypeFilters() {
-    return Column(
-      children: [
-        _buildSwitchTile(
-          title: "Free Events",
-          value: _showFreeEvents,
-          onChanged: (value) {
-            setState(() {
-              _showFreeEvents = value;
-            });
-          },
-        ),
-        _buildSwitchTile(
-          title: "Paid Events",
-          value: _showPaidEvents,
-          onChanged: (value) {
-            setState(() {
-              _showPaidEvents = value;
-            });
-          },
-        ),
-        _buildSwitchTile(
-          title: "Online Events",
-          value: _showOnlineEvents,
-          onChanged: (value) {
-            setState(() {
-              _showOnlineEvents = value;
-            });
-          },
-        ),
-        _buildSwitchTile(
-          title: "In-Person Events",
-          value: _showInPersonEvents,
-          onChanged: (value) {
-            setState(() {
-              _showInPersonEvents = value;
-            });
-          },
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        children: [
+          _buildSwitchTile(
+            title: "Free Events",
+            value: _showFreeEvents,
+            icon: Icons.money_off,
+            onChanged: (value) {
+              setState(() {
+                _showFreeEvents = value;
+              });
+            },
+          ),
+          Divider(height: 8, thickness: 0.5),
+          _buildSwitchTile(
+            title: "Paid Events",
+            value: _showPaidEvents,
+            icon: Icons.payments_outlined,
+            onChanged: (value) {
+              setState(() {
+                _showPaidEvents = value;
+              });
+            },
+          ),
+          Divider(height: 8, thickness: 0.5),
+          _buildSwitchTile(
+            title: "Online Events",
+            value: _showOnlineEvents,
+            icon: Icons.laptop,
+            onChanged: (value) {
+              setState(() {
+                _showOnlineEvents = value;
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -504,15 +739,27 @@ class _FilterOverlayState extends State<FilterOverlay> {
     required String title,
     required bool value,
     required Function(bool) onChanged,
+    IconData? icon,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 15),
+          Row(
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 18, color: Colors.blue[700]),
+                SizedBox(width: 8),
+              ],
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
           Switch(
             value: value,
@@ -536,6 +783,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
       _showPaidEvents = true;
       _showOnlineEvents = true;
       _showInPersonEvents = true;
+      _isLocationDropdownOpen = false;
     });
   }
 
@@ -559,7 +807,13 @@ class _FilterOverlayState extends State<FilterOverlay> {
     // Show a snackbar to confirm filters have been applied
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Filters applied'),
+        content: Row(
+          children: [
+            Icon(Icons.check_circle_outline, color: Colors.white),
+            SizedBox(width: 10),
+            Text('Filters applied successfully'),
+          ],
+        ),
         backgroundColor: Colors.blue[700],
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
