@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../widgets/custom_snackbar.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import '../widgets/bottom_navbar.dart';
 
 class EventCreatePage extends StatefulWidget {
   const EventCreatePage({super.key});
@@ -147,6 +148,11 @@ class _EventCreatePageState extends State<EventCreatePage> {
     }
   }
 
+  // Handle back button press
+  void _handleBack() {
+    Navigator.of(context).pop();
+  }
+
   String _formatDate(DateTime date) {
     return "${date.day}/${date.month}/${date.year}";
   }
@@ -178,6 +184,11 @@ class _EventCreatePageState extends State<EventCreatePage> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          onPressed: _handleBack,
+          tooltip: 'Back',
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -522,28 +533,60 @@ class _EventCreatePageState extends State<EventCreatePage> {
                 ),
                 SizedBox(height: 30),
 
-                // Create Event Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: ElevatedButton(
-                    onPressed: _handleCreateEvent,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                // Create Event Button and Cancel Button row
+                Row(
+                  children: [
+                    // Cancel button
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 54,
+                        child: OutlinedButton(
+                          onPressed: _handleBack,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.blue[700],
+                            side: BorderSide(color: Colors.blue[700]!),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      "Create Event",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(width: 16),
+                    // Create Event button
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        height: 54,
+                        child: ElevatedButton(
+                          onPressed: _handleCreateEvent,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[700],
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Create Event",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
                 SizedBox(height: 30),
               ],
@@ -551,6 +594,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavbar(selectedIndex: 2),
     );
   }
 }
