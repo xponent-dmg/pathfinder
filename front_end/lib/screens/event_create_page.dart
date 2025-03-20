@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import '../widgets/custom_snackbar.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import '../widgets/bottom_navbar.dart';
 
 class EventCreatePage extends StatefulWidget {
   const EventCreatePage({super.key});
@@ -142,7 +141,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
         // Navigate back after success
         Future.delayed(Duration(seconds: 1), () {
-          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/home');
         });
       });
     }
@@ -594,7 +593,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavbar(selectedIndex: 2),
     );
   }
 }

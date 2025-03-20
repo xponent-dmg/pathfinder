@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import '../widgets/bottom_navbar.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -187,6 +186,8 @@ class _SearchPageState extends State<SearchPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // Add this to resize when keyboard appears
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -199,6 +200,10 @@ class _SearchPageState extends State<SearchPage>
             fontSize: 24,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(70),
           child: Padding(
@@ -207,10 +212,10 @@ class _SearchPageState extends State<SearchPage>
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(18),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withAlpha(13),
                     blurRadius: 10,
                     offset: Offset(0, 5),
                   )
@@ -219,10 +224,12 @@ class _SearchPageState extends State<SearchPage>
               child: TextField(
                 controller: _searchController,
                 focusNode: _searchFocus,
+                autofocus: true,
                 decoration: InputDecoration(
-                  hintText: "Search events, clubs, workshops...",
-                  hintStyle: TextStyle(color: Colors.grey[500]),
-                  prefixIcon: Icon(Icons.search, color: Colors.blue[700]),
+                  hintText: "Search for events...",
+                  hintStyle: TextStyle(
+                      color: Colors.grey[500], fontWeight: FontWeight.w600),
+                  prefixIcon: Icon(Icons.search_rounded, color: Colors.grey),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
                           icon: Icon(Icons.clear, color: Colors.grey[600]),
@@ -255,149 +262,173 @@ class _SearchPageState extends State<SearchPage>
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Category filter chips
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              child: Row(
-                children: _categories.map((category) {
-                  final isSelected = category == _selectedCategory;
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: FilterChip(
-                      selected: isSelected,
-                      label: Text(category),
-                      labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight:
-                            isSelected ? FontWeight.w500 : FontWeight.normal,
-                      ),
-                      selectedColor: Colors.blue[700],
-                      backgroundColor: Colors.grey[100],
-                      onSelected: (selected) {
-                        _selectCategory(category);
-                      },
-                      elevation: isSelected ? 2 : 0,
-                      shadowColor: Colors.black.withOpacity(0.3),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                  );
-                }).toList(),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Category filter chips - Make more compact when keyboard is open
+            Container(
+              height: MediaQuery.of(context).viewInsets.bottom > 0 ? 50 : 60,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  child: Row(
+                    children: _categories.map((category) {
+                      final isSelected = category == _selectedCategory;
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: FilterChip(
+                          selected: isSelected,
+                          label: Text(category),
+                          labelStyle: TextStyle(
+                            color: isSelected ? Colors.white : Colors.black87,
+                            fontWeight: isSelected
+                                ? FontWeight.w500
+                                : FontWeight.normal,
+                            fontSize:
+                                MediaQuery.of(context).viewInsets.bottom > 0
+                                    ? 12
+                                    : 14,
+                          ),
+                          selectedColor: Colors.blue[700],
+                          backgroundColor: Colors.grey[100],
+                          onSelected: (selected) {
+                            _selectCategory(category);
+                          },
+                          elevation: isSelected ? 2 : 0,
+                          shadowColor: Colors.black.withAlpha(76),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          // Make chips smaller when keyboard is visible
+                          visualDensity:
+                              MediaQuery.of(context).viewInsets.bottom > 0
+                                  ? VisualDensity(horizontal: -1, vertical: -1)
+                                  : VisualDensity.standard,
+                          padding: MediaQuery.of(context).viewInsets.bottom > 0
+                              ? EdgeInsets.symmetric(horizontal: 8, vertical: 4)
+                              : null,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ),
             ),
-          ),
 
-          // Recent searches or results
-          Expanded(
-            child:
-                !_hasSearched ? _buildRecentSearches() : _buildSearchResults(),
-          ),
-        ],
+            // Recent searches or results - Use Flexible instead of Expanded for better adaptation
+            Flexible(
+              child: !_hasSearched
+                  ? _buildRecentSearches()
+                  : _buildSearchResults(),
+            ),
+          ],
+        ),
       ),
-      bottomNavigationBar: BottomNavbar(selectedIndex: 1),
     );
   }
 
-  // Build recent searches widget
+  // Build recent searches widget with scrollable content
   Widget _buildRecentSearches() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Recent Searches",
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Recent Searches",
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
             ),
-          ),
-          SizedBox(height: 16),
-          _recentSearches.isEmpty
-              ? Center(
-                  child: Text(
-                    "No recent searches",
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 16,
-                    ),
-                  ),
-                )
-              : Column(
-                  children: _recentSearches.map((search) {
-                    return ListTile(
-                      leading: Icon(Icons.history, color: Colors.grey[600]),
-                      title: Text(
-                        search,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black87,
-                        ),
+            SizedBox(height: 16),
+            _recentSearches.isEmpty
+                ? Center(
+                    child: Text(
+                      "No recent searches",
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
                       ),
-                      trailing: Icon(Icons.north_west,
-                          color: Colors.grey[600], size: 18),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                      dense: true,
-                      onTap: () => _selectRecentSearch(search),
-                    );
-                  }).toList(),
-                ),
-          SizedBox(height: 24),
-          Text(
-            "Popular Searches",
-            style: GoogleFonts.poppins(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-          SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              "Programming Club",
-              "Career Fair",
-              "Music Festival",
-              "Workshop",
-              "Sports Tournament"
-            ].map((item) {
-              return InkWell(
-                onTap: () => _selectRecentSearch(item),
-                borderRadius: BorderRadius.circular(50),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: Colors.grey[300]!),
+                    ),
+                  )
+                : Column(
+                    children: _recentSearches.map((search) {
+                      return ListTile(
+                        leading: Icon(Icons.history, color: Colors.grey[600]),
+                        title: Text(
+                          search,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        trailing: Icon(Icons.north_west,
+                            color: Colors.grey[600], size: 18),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        dense: true,
+                        onTap: () => _selectRecentSearch(search),
+                      );
+                    }).toList(),
                   ),
-                  child: Text(
-                    item,
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 14,
+            SizedBox(height: 24),
+            Text(
+              "Popular Searches",
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                "Programming Club",
+                "Career Fair",
+                "Music Festival",
+                "Workshop",
+                "Sports Tournament"
+              ].map((item) {
+                return InkWell(
+                  onTap: () => _selectRecentSearch(item),
+                  borderRadius: BorderRadius.circular(50),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
+                );
+              }).toList(),
+            ),
+            // Add extra space at bottom for keyboard
+            SizedBox(
+                height: MediaQuery.of(context).viewInsets.bottom > 0 ? 120 : 0),
+          ],
+        ),
       ),
     );
   }
 
-  // Build search results widget
+  // Build search results widget with scrollable content
   Widget _buildSearchResults() {
     if (_filteredResults.isEmpty) {
       return Center(
@@ -435,12 +466,16 @@ class _SearchPageState extends State<SearchPage>
       child: ListView.builder(
         padding: EdgeInsets.all(16),
         itemCount: _filteredResults.length,
+        // Add extra padding when keyboard is visible
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemBuilder: (context, index) {
           final result = _filteredResults[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: GestureDetector(
               onTap: () {
+                // Dismiss keyboard when tapping on a result
+                FocusScope.of(context).unfocus();
                 Navigator.pushNamed(context, '/event_page');
               },
               child: Container(

@@ -43,10 +43,10 @@ class _FilterOverlayState extends State<FilterOverlay> {
   RangeValues _priceRange = const RangeValues(0, 100);
 
   // Event type filter
-  bool _showFreeEvents = true;
-  bool _showPaidEvents = true;
-  bool _showOnlineEvents = true;
-  bool _showInPersonEvents = true;
+  bool _showFreeEvents = false;
+  bool _showPaidEvents = false;
+  bool _showOnlineEvents = false;
+  // bool _showInPersonEvents = true;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha(13),
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -154,20 +154,13 @@ class _FilterOverlayState extends State<FilterOverlay> {
                 ),
                 elevation: 2,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.filter_alt, size: 18),
-                  SizedBox(width: 8),
-                  Text(
-                    "Apply Filters",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ],
+              child: Text(
+                "Apply Filters",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
               ),
             ),
           ),
@@ -194,7 +187,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
               color: Colors.grey[50],
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
+                  color: Colors.black.withAlpha(8),
                   blurRadius: 4,
                   offset: Offset(0, 2),
                 ),
@@ -248,7 +241,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
               border: Border.all(color: Colors.grey[300]!),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha(13),
                   blurRadius: 10,
                   spreadRadius: 1,
                 ),
@@ -276,7 +269,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Colors.blue.withOpacity(0.1)
+                            ? Colors.blue.withAlpha(25)
                             : Colors.transparent,
                         border: Border(
                           bottom: index < _locations.length - 1
@@ -363,7 +356,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
           color: Colors.grey[50],
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withAlpha(8),
               blurRadius: 4,
               offset: Offset(0, 2),
             ),
@@ -559,14 +552,14 @@ class _FilterOverlayState extends State<FilterOverlay> {
               boxShadow: isSelected
                   ? [
                       BoxShadow(
-                        color: Colors.blue.withOpacity(0.3),
+                        color: Colors.blue.withAlpha(8),
                         blurRadius: 8,
                         offset: Offset(0, 3),
                       ),
                     ]
                   : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withAlpha(13),
                         blurRadius: 4,
                         offset: Offset(0, 2),
                       ),
@@ -779,10 +772,10 @@ class _FilterOverlayState extends State<FilterOverlay> {
       _endDate = null;
       _selectedCategories = [];
       _priceRange = const RangeValues(0, 100);
-      _showFreeEvents = true;
-      _showPaidEvents = true;
-      _showOnlineEvents = true;
-      _showInPersonEvents = true;
+      _showFreeEvents = false;
+      _showPaidEvents = false;
+      _showOnlineEvents = false;
+      // _showInPersonEvents = true;
       _isLocationDropdownOpen = false;
     });
   }
@@ -798,7 +791,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
       'showFreeEvents': _showFreeEvents,
       'showPaidEvents': _showPaidEvents,
       'showOnlineEvents': _showOnlineEvents,
-      'showInPersonEvents': _showInPersonEvents,
+      // 'showInPersonEvents': _showInPersonEvents,
     };
 
     // Close the bottom sheet and return the filter data

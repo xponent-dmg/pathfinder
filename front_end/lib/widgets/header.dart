@@ -70,68 +70,76 @@ class Header extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               color: Colors.white,
             ),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  Icons.search_rounded,
-                  size: 25,
-                  color: Colors.grey,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: TextField(
-                    focusNode: FocusNode(),
-                    onTapOutside: (event) {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    controller: TextEditingController(),
-                    cursorColor: Colors.blue,
-                    decoration: InputDecoration(
-                      hintText: 'Search events...',
-                      hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                      border: InputBorder.none,
-                      alignLabelWithHint: true,
+            child: Material(
+              color: Colors.white,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/search');
+                },
+                borderRadius: BorderRadius.circular(18),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 5,
                     ),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    final filterResult = await showModalBottomSheet(
-                      isScrollControlled:
-                          true, // Makes the modal take up more space
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(20)),
+                    Icon(
+                      Icons.search_rounded,
+                      size: 25,
+                      color: Colors.grey,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: IgnorePointer(
+                        child: TextField(
+                          focusNode: FocusNode(),
+                          onTapOutside: (event) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                          controller: TextEditingController(),
+                          cursorColor: Colors.blue,
+                          decoration: InputDecoration(
+                            hintText: 'Search for events...',
+                            hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                            border: InputBorder.none,
+                            alignLabelWithHint: true,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
-                      context: context,
-                      builder: (context) => SizedBox(
-                        height: MediaQuery.of(context).size.height *
-                            0.75, // Take up 75% of screen height
-                        child: FilterOverlay(),
-                      ),
-                    );
+                    ),
+                    IconButton(
+                      onPressed: () async {
+                        final filterResult = await showModalBottomSheet(
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          context: context,
+                          builder: (context) => SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.75,
+                            child: FilterOverlay(),
+                          ),
+                        );
 
-                    // Process filter results
-                    if (filterResult != null) {
-                      // You can implement filtering logic here or pass to a provider
-                      print('Filter applied: ${filterResult.toString()}');
-                    }
-                  },
-                  icon: Icon(
-                    Icons.filter_alt,
-                    color: Colors.grey,
-                  ),
-                )
-              ],
+                        // Process filter results
+                        if (filterResult != null) {
+                          print('Filter applied: ${filterResult.toString()}');
+                        }
+                      },
+                      icon: Icon(
+                        Icons.filter_alt,
+                        color: Colors.grey,
+                      ),
+                    )
+                  ],
+                ),
+              ),
             )),
       ),
       flexibleSpace: FlexibleSpaceBar(
@@ -166,7 +174,7 @@ class Header extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Consumer<UserProvider>(
                                 builder: (context, value, child) => Text(
-                                      "Hey ${value.name.split(" ")[0]}",
+                                      "Hey ${(value.name.split(" ")[0] != 'new') ? value.name.split(" ")[0] : "there"}",
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

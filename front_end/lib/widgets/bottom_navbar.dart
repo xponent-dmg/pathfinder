@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class BottomNavbar extends StatelessWidget {
   final int selectedIndex;
+  final Function(int)? onItemTapped;
 
-  const BottomNavbar({super.key, this.selectedIndex = 0});
+  const BottomNavbar({
+    super.key,
+    this.selectedIndex = 0,
+    this.onItemTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +24,7 @@ class BottomNavbar extends StatelessWidget {
       ),
       child: BottomNavigationBar(
         currentIndex: selectedIndex,
-        onTap: (index) {
-          if (index != selectedIndex) {
-            switch (index) {
-              case 0:
-                Navigator.pushReplacementNamed(context, '/home');
-                break;
-              case 1:
-                Navigator.pushReplacementNamed(context, '/search');
-                break;
-              case 2:
-                Navigator.pushReplacementNamed(context, '/event_create');
-                break;
-              case 3:
-                Navigator.pushReplacementNamed(context, '/profile');
-                break;
-            }
-          }
-        },
+        onTap: onItemTapped,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
         selectedItemColor: Colors.blue[700],
@@ -52,9 +40,9 @@ class BottomNavbar extends StatelessWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            activeIcon: Icon(Icons.search_rounded),
-            label: 'Search',
+            icon: Icon(Icons.explore_outlined),
+            activeIcon: Icon(Icons.explore),
+            label: 'Explore',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_circle_outline),
@@ -62,9 +50,9 @@ class BottomNavbar extends StatelessWidget {
             label: 'Create',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: 'Follow',
           ),
         ],
       ),
