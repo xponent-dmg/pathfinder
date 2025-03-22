@@ -3,9 +3,9 @@ import 'package:path_finder/services/api_service.dart';
 import 'package:path_finder/services/token_service.dart';
 
 class UserProvider with ChangeNotifier {
-  String name = '';
-  String username = '';
-  String email = '';
+  String name = 'new user';
+  String username = 'unregistered';
+  String email = 'sample@gmail.com';
   String createdAt = '';
   bool status = false;
   String _role = '';
@@ -21,7 +21,6 @@ class UserProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String get errorMessage => _errorMessage;
-
 
   // Load token and get user details in one function
   Future<bool> setTokenAndGetUserDetails(String token) async {

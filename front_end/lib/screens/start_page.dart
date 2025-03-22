@@ -73,42 +73,44 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
     )..repeat();
   }
 
+//TODO:uncommment this for authentication
+
   Future<void> _checkTokenAndNavigate() async {
     // Wait a moment to show the splash screen
     await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
+    Navigator.pushReplacementNamed(context, '/home');
 
-    try {
-      // Get the token from secure storage
-      final String? token = await _tokenService.getToken();
+    // try {
+    //   // Get the token from secure storage
+    //   final String? token = await _tokenService.getToken();
 
-      if (!mounted) return;
+    //   if (!mounted) return;
 
-      // Get UserProvider and update token
-      final userProvider = Provider.of<UserProvider>(context, listen: false);
+    //   // Get UserProvider and update token
+    //   final userProvider = Provider.of<UserProvider>(context, listen: false);
 
-      // If token exists and is not empty, set it in provider and navigate to home
-      if (token != null && token.isNotEmpty) {
-        await userProvider.setTokenAndGetUserDetails(token);
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        // If no token, navigate to signin
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, '/signin');
-      }
-    } catch (e) {
-      print("Error during token check: $e");
-      if (!mounted) return;
-      // If there's an error, safely go to signin
-      Navigator.pushReplacementNamed(context, '/signin');
-    } finally {
-      if (mounted) {
-        setState(() {
-        });
-      }
-    }
+    //   // If token exists and is not empty, set it in provider and navigate to home
+    //   if (token != null && token.isNotEmpty) {
+    //     await userProvider.setTokenAndGetUserDetails(token);
+    //     if (!mounted) return;
+    //     Navigator.pushReplacementNamed(context, '/home');
+    //   } else {
+    //     // If no token, navigate to signin
+    //     if (!mounted) return;
+    //     Navigator.pushReplacementNamed(context, '/signin');
+    //   }
+    // } catch (e) {
+    //   print("Error during token check: $e");
+    //   if (!mounted) return;
+    //   // If there's an error, safely go to signin
+    //   Navigator.pushReplacementNamed(context, '/signin');
+    // } finally {
+    //   if (mounted) {
+    //     setState(() {});
+    //   }
+    // }
   }
 
   @override

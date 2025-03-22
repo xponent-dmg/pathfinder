@@ -141,10 +141,15 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
         // Navigate back after success
         Future.delayed(Duration(seconds: 1), () {
-          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, '/home');
         });
       });
     }
+  }
+
+  // Handle back button press
+  void _handleBack() {
+    Navigator.of(context).pop();
   }
 
   String _formatDate(DateTime date) {
@@ -178,6 +183,11 @@ class _EventCreatePageState extends State<EventCreatePage> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_rounded),
+          onPressed: _handleBack,
+          tooltip: 'Back',
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -522,28 +532,60 @@ class _EventCreatePageState extends State<EventCreatePage> {
                 ),
                 SizedBox(height: 30),
 
-                // Create Event Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: ElevatedButton(
-                    onPressed: _handleCreateEvent,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[700],
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                // Create Event Button and Cancel Button row
+                Row(
+                  children: [
+                    // Cancel button
+                    Expanded(
+                      flex: 1,
+                      child: SizedBox(
+                        height: 54,
+                        child: OutlinedButton(
+                          onPressed: _handleBack,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.blue[700],
+                            side: BorderSide(color: Colors.blue[700]!),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      "Create Event",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(width: 16),
+                    // Create Event button
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        height: 54,
+                        child: ElevatedButton(
+                          onPressed: _handleCreateEvent,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[700],
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text(
+                            "Create Event",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
                 SizedBox(height: 30),
               ],
