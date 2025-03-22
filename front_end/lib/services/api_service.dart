@@ -7,8 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class ApiService {
-  final String baseUrl =
-      "https://pathfinder-production-aa04.up.railway.app"; //server on railway
+  final String baseUrl = "http://192.168.90.53:3000";
+  // "https://pathfinder-production-aa04.up.railway.app"; //server on railway
+
   final TokenService _tokenService = TokenService();
 
 //register user
