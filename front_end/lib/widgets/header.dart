@@ -179,7 +179,7 @@ class Header extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Consumer<UserProvider>(
                                 builder: (context, value, child) => Text(
-                                      "Hey ${(value.name.split(" ")[0] != 'new') ? value.name.split(" ")[0] : "there"}",
+                                      "Hey ${(firstName != 'new') ? firstName : "there"}",
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
