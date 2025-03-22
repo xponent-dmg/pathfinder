@@ -165,47 +165,53 @@ class Header extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
-                  children: [
+                    children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Consumer<UserProvider>(
-                                builder: (context, value, child) => Text(
-                                      "Hey $firstName",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )),
-                          ),
-                        ),
-                        SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-                            child: Text(
-                              "Discover new events!",
+                      SizedBox(
+                        child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Consumer<UserProvider>(
+                          builder: (context, value, child) => Text(
+                              "Hey $firstName",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               ),
-                            ),
+                            )),
+                        ),
+                      ),
+                      SizedBox(
+                        child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                        child: Text(
+                          "Discover new events!",
+                          style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                           ),
                         ),
+                        ),
+                      ),
                       ],
                     ),
                     Expanded(
                       child: Container(
-                        alignment: Alignment.centerRight,
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                        Navigator.of(context).pushNamed('/map');
+                        },
+                        borderRadius: BorderRadius.circular(15),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.asset(
-                            "assets/map-icon2.jpg",
-                            width: 80,
-                          ),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          "assets/map-icon2.jpg",
+                          width: 80,
                         ),
+                        ),
+                      ),
                       ),
                     ),
                   ],

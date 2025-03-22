@@ -22,7 +22,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavbar(),
+      bottomNavigationBar: BottomNavbar(
+        currentIndex: 1,
+      ),
     );
   }
 }
