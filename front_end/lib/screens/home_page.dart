@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/follow_page.dart';
+import 'package:path_finder/screens/map_screen.dart';
 import 'package:path_finder/widgets/header.dart';
 import 'package:path_finder/widgets/today.dart';
 import '../widgets/bottom_navbar.dart';
@@ -46,9 +47,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             // Explore page
-            Center(
-              child: Text("Explore Page"),
-            ),
+            MapScreen(),
             // Create Event page
             EventCreatePage(),
             // Follow page (previously search)

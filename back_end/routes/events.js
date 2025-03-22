@@ -166,14 +166,22 @@ router.get("/search", async (req, res) => {
 });
 
 //Get today's events
-router.get("/today", async (req, res) => {
+router.get("/today", async (_req, res) => {
   console.log("GET today's events request received");
-  try {
-    const now = new Date();
-    const endOfDay = new Date();
-    endOfDay.setUTCHours(18, 29, 59, 999);
 
-    console.log("Searching for events between:", now, "and", endOfDay);
+  try {
+    const now = new Date(); // Current UTC time
+
+    // Set endOfDay to 23:59:59.999 UTC (Midnight of the same day)
+    const endOfDay = new Date(now);
+    endOfDay.setUTCHours(23, 59, 59, 999);
+
+    console.log(
+      "Searching for events between:",
+      now.toISOString(),
+      "and",
+      endOfDay.toISOString()
+    );
 
     const events = await Event.find({
       startTime: { $gte: now, $lte: endOfDay },
