@@ -36,9 +36,9 @@ class _SignupPageState extends State<SignupPage>
       var snackBar = ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(text: "Registered user successfully").build());
       await snackBar.closed;
-      // Future.delayed(Duration(seconds: 1), () {
-      Navigator.pop(context);
-      // });
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(
               text: jsonDecode(response.body)["error"], color: Colors.red)

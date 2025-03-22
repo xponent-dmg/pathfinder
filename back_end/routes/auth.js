@@ -121,18 +121,20 @@ router.get("/user", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ").at(1);
     if (!token) {
-      res.status(401).json({ error: "Unauthorized, no token provided" });
+      return res.status(401).json({ error: "Unauthorized, no token provided" });
     }
+
     const decoded = jwt.verify(token, SECRET_KEY);
     const userId = decoded.id;
 
     const user = await User.findById(userId).select("-password");
     if (!user) {
-      res.status(404).json({ error: "user not found" });
+      return res.status(404).json({ error: "User not found" });
     }
-    res.status(200).json(user);
+
+    return res.status(200).json(user);
   } catch (e) {
-    res.status(500).json({ error: `Server error: ${e}` });
+    return res.status(500).json({ error: `Server error` });
   }
 });
 
