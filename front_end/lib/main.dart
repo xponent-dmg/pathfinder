@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/providers/theme_provider.dart';
 import 'package:path_finder/screens/club_leader.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/event_details_page.dart';
@@ -18,6 +19,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: MyApp(),
     ),
@@ -32,10 +34,19 @@ class MyApp extends StatelessWidget {
       title: 'PathFinder',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // brightness: Brightness.light,
         fontFamily: 'Poppins',
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      darkTheme: ThemeData(
+        // brightness: Brightness.dark,
+        fontFamily: 'Poppins',
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+
+      // themeMode: context.watch<ThemeProvider>().themeMode,
       initialRoute: '/',
       routes: {
         '/': (context) => const StartPage(),
@@ -47,7 +58,7 @@ class MyApp extends StatelessWidget {
         '/event_details': (context) => const EventDetailsPage(),
         '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
-        '/map': (context) => const MapScreen(), 
+        '/map': (context) => const MapScreen(),
         '/search': (context) => const SearchPage(),
       },
     );

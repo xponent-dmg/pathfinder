@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_finder/providers/theme_provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/logout_service.dart';
 import 'package:provider/provider.dart';
@@ -375,11 +376,10 @@ class _ProfilePageState extends State<ProfilePage>
                             _buildToggleSetting(
                               "Dark Mode",
                               "Use dark theme",
-                              _darkModeEnabled,
+                              context.watch<ThemeProvider>().themeMode ==
+                                  ThemeMode.dark,
                               (value) {
-                                setState(() {
-                                  _darkModeEnabled = value;
-                                });
+                                context.read<ThemeProvider>().toggleTheme();
                               },
                             ),
 
