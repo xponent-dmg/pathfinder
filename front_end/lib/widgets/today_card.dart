@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TodayCard extends StatelessWidget {
-  final String goto;
-  const TodayCard({super.key, this.goto = '/event_page'});
+  final Map<String, dynamic> event;
+  const TodayCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Replace named route navigation with direct navigation
         Navigator.pushNamed(context, '/event_page');
       },
       child: Stack(
@@ -34,7 +33,7 @@ class TodayCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "18:30",
+                        event["time"] ?? "time",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w400,
@@ -45,7 +44,7 @@ class TodayCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            "friday",
+                            event["day"] ?? "someday",
                             style: TextStyle(
                               color: Colors.grey[800],
                               fontSize: 12,
@@ -53,7 +52,8 @@ class TodayCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "july, 2019",
+                            // event["date"] ?? "00-00-00",
+                            event["clubName"] ?? "NaN",
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontSize: 12,
@@ -69,7 +69,8 @@ class TodayCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset("assets/event-pic.jpg"),
+                        child:
+                            Image.asset(event["pic"] ?? "assets/event-pic.jpg"),
                       ),
                     ],
                   ),
@@ -77,7 +78,7 @@ class TodayCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Rock Night",
+                      event["name"],
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 18,
@@ -89,7 +90,7 @@ class TodayCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "electrifying live performances, headbanging music, and an unforgettable rock atmosphere.",
+                      event["desc"],
                       style: TextStyle(
                         color: Colors.grey[700],
                         fontSize: 10,
@@ -114,7 +115,7 @@ class TodayCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.asset(
-                  "assets/profile-pic.jpg",
+                  event["profile-pic"] ?? "assets/profile-pic.jpg",
                   width: 40,
                 ),
               ))

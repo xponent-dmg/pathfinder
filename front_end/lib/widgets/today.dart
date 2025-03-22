@@ -1,8 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/services/api_services/events_api.dart';
 import 'package:path_finder/widgets/today_card.dart';
 
-class Today extends StatelessWidget {
+class Today extends StatefulWidget {
   const Today({super.key});
+
+  @override
+  State<Today> createState() => _TodayState();
+}
+
+class _TodayState extends State<Today> {
+  final EventsAPI eventsAPI = EventsAPI();
+  bool _isLoading = false;
+  List<Map<String, dynamic>> eventList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch events when widget initializes
+    getTodaysEvents();
+  }
+
+  Future<void> getTodaysEvents() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      var response = await eventsAPI.todaysEvents();
+      setState(() {
+        eventList = response;
+        _isLoading = false;
+      });
+      print("Successfully fetched ${eventList.length} events");
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      print("Error occurred while fetching events: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +68,63 @@ class Today extends StatelessWidget {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.more_horiz),
-                      color: Colors.grey[600],
+                    InkWell(
+                      onTap: () {
+                        // Show a loading indicator when tapped
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Refreshing events..."),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                        getTodaysEvents();
+                      },
+                      child: Icon(Icons.refresh, color: Colors.blue[700]),
                     )
                   ],
                 ),
                 SizedBox(height: 20),
                 SizedBox(
                   height: 330,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    itemBuilder: (context, index) => TodayCard(),
-                  ),
+                  child: _isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : eventList.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.event_busy,
+                                    size: 48,
+                                    color: Colors.grey[400],
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    "No events for today",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  SizedBox(height: 24),
+                                  TextButton.icon(
+                                    onPressed: getTodaysEvents,
+                                    icon: Icon(Icons.refresh),
+                                    label: Text("Refresh"),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.blue[700],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: eventList.length,
+                              itemBuilder: (context, index) => TodayCard(
+                                event: eventList[index],
+                              ),
+                            ),
                 ),
                 // Add more scrollable content
                 _buildScrollTestSection("Upcoming Events"),

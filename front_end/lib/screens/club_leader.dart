@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_service.dart';
+import 'package:path_finder/services/api_services/auth_api.dart';
 import 'package:path_finder/widgets/auth_button.dart';
 import 'package:path_finder/widgets/input_field.dart';
 import '../widgets/custom_snackbar.dart';

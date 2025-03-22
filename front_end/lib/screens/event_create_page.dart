@@ -183,11 +183,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded),
-          onPressed: _handleBack,
-          tooltip: 'Back',
-        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

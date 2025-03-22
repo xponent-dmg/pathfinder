@@ -32,7 +32,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _fetchBuildings() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.90.165:3000/api/buildings'),
+        Uri.parse('http://192.168.90.53:3000/api/buildings'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -112,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
             Center(
               child: Container(
                 padding: const EdgeInsets.all(16),
-                color: Colors.red.withOpacity(0.8),
+                color: Colors.red.withAlpha(204),
                 child: Text(
                   _errorMessage,
                   style: const TextStyle(color: Colors.white),
@@ -124,7 +124,8 @@ class _MapScreenState extends State<MapScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final controller = await _controller.future;
-          controller.animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
+          controller
+              .animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
         },
         child: const Icon(Icons.center_focus_strong),
       ),

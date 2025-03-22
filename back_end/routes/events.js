@@ -23,8 +23,7 @@ router.post("/create", auth, async (req, res) => {
     if (!building) {
       console.log("Building not found:", req.body.building);
       return res.status(400).send({
-        error:
-          "Invalid building name. Must be one of: AB1, AB2, AB3, Clock_Tower, MG",
+        error: "Invalid building name. Must be one of: AB1, AB2 or Library",
       });
     }
     console.log("Building found:", building.name, building._id);
@@ -37,7 +36,7 @@ router.post("/create", auth, async (req, res) => {
       information: req.body.information,
       roomno: req.body.roomno,
       categories: req.body.categories,
-      clubName: req.user.clubName,
+      clubName: req.body.clubName,
       createdBy: req.user.id,
     });
     console.log("Event object created:", event);
@@ -171,14 +170,13 @@ router.get("/today", async (req, res) => {
   console.log("GET today's events request received");
   try {
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const endOfDay = new Date(today);
-    endOfDay.setHours(23, 59, 59, 999);
+    const endOfDay = new Date();
+    endOfDay.setUTCHours(18, 29, 59, 999);
 
-    console.log("Searching for events between:", today, "and", endOfDay);
+    console.log("Searching for events between:", now, "and", endOfDay);
 
     const events = await Event.find({
-      startTime: { $gte: today, $lte: endOfDay },
+      startTime: { $gte: now, $lte: endOfDay },
     })
       .populate("building", "name")
       .populate("createdBy", "clubName -_id")

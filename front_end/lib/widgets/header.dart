@@ -115,7 +115,6 @@ class Header extends StatelessWidget {
                           textAlign: TextAlign.start,
                         ),
                       ),
-
                     ),
                     IconButton(
                       onPressed: () async {
@@ -170,7 +169,7 @@ class Header extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
-                    children: [
+                  children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -189,33 +188,35 @@ class Header extends StatelessWidget {
                         ),
                         SizedBox(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-                            child: Text(
-                              "Discover new events!",
-                              style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              ),
-                            )),
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, top: 4.0),
+                              child: Text(
+                                "Discover new events!",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              )),
                         ),
                       ],
                     ),
                     Expanded(
                       child: Container(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                        Navigator.of(context).pushNamed('/map');
-                        },
-                        borderRadius: BorderRadius.circular(15),
-                        child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Image.asset(
-                          "assets/map-icon2.jpg",
-                          width: 80,
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed('/map');
+                          },
+                          borderRadius: BorderRadius.circular(15),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Image.asset(
+                              "assets/map-icon2.jpg",
+                              width: 80,
+                            ),
+                          ),
                         ),
-                        ),
-                      ),
                       ),
                     ),
                   ],

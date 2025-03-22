@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_service.dart';
+import 'package:path_finder/services/api_services/auth_api.dart';
 import 'package:path_finder/services/token_service.dart';
 
 class UserProvider with ChangeNotifier {
