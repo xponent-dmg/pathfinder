@@ -7,6 +7,10 @@ class Header extends StatelessWidget {
   const Header({super.key});
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+    final firstName = userProvider.name.isNotEmpty
+        ? userProvider.name.split(' ')[0]
+        : 'there';
     return SliverAppBar(
       pinned: true,
       expandedHeight: 280.0,
@@ -111,6 +115,7 @@ class Header extends StatelessWidget {
                           textAlign: TextAlign.start,
                         ),
                       ),
+
                     ),
                     IconButton(
                       onPressed: () async {
@@ -165,7 +170,7 @@ class Header extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
-                  children: [
+                    children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,7 +179,7 @@ class Header extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Consumer<UserProvider>(
                                 builder: (context, value, child) => Text(
-                                      "Hey ${(value.name.split(" ")[0] != 'new') ? value.name.split(" ")[0] : "there"}",
+                                      "Hey ${(firstName != 'new') ? firstName : "there"}",
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
@@ -188,24 +193,29 @@ class Header extends StatelessWidget {
                             child: Text(
                               "Discover new events!",
                               style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                               ),
-                            ),
-                          ),
+                            )),
                         ),
                       ],
                     ),
                     Expanded(
                       child: Container(
-                        alignment: Alignment.centerRight,
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {
+                        Navigator.of(context).pushNamed('/map');
+                        },
+                        borderRadius: BorderRadius.circular(15),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Image.asset(
-                            "assets/map-icon2.jpg",
-                            width: 80,
-                          ),
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          "assets/map-icon2.jpg",
+                          width: 80,
                         ),
+                        ),
+                      ),
                       ),
                     ),
                   ],

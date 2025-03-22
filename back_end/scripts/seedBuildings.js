@@ -5,11 +5,27 @@ const Building = require("../models/BuildingModel");
 require("dotenv").config({ path: "./.env" });
 
 const buildings = [
-  { name: "AB1" },
-  { name: "AB2" },
-  { name: "AB3" },
-  { name: "Clock_Tower" },
-  { name: "MG" },
+  {
+    name: "AB1",
+    coordinates: {
+      lat: 12.84401131611071, // Replace with actual latitude
+      lng: 80.15341209566053, // Replace with actual longitude
+    },
+  },
+  {
+    name: "AB2",
+    coordinates: {
+      lat: 12.843038235689043, // Replace with actual latitude
+      lng: 80.15647208216727, // Replace with actual longitude
+    },
+  },
+  {
+    name: "Library",
+    coordinates: {
+      lat: 12.841177561644203, // Replace with actual latitude
+      lng: 80.15397562200542, // Replace with actual longitude
+    },
+  },
 ];
 
 async function seedBuildings() {

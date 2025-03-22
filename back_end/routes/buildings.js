@@ -6,7 +6,7 @@ const { auth } = require('../middleware/auth');
 // Get all buildings
 router.get('/', async (req, res) => {
   try {
-    const buildings = await Building.find().select('name');
+    const buildings = await Building.find().select('name coordinates');
     res.json(buildings);
   } catch (error) {
     console.error('Error fetching buildings:', error);

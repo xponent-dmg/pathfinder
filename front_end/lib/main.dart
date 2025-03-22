@@ -3,6 +3,7 @@ import 'package:path_finder/screens/club_leader.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/event_details_page.dart';
 import 'package:path_finder/screens/home_page.dart';
+import 'package:path_finder/screens/map_screen.dart';
 import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/search_page.dart';
 import 'package:path_finder/screens/signin.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/event_details': (context) => const EventDetailsPage(),
         '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
+        '/map': (context) => const MapScreen(), 
         '/search': (context) => const SearchPage(),
       },
     );
