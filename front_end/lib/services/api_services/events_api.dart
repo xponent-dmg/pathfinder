@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:path_finder/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import './auth_det.dart';
 
 class EventsAPI {
-  final String baseUrl = "http://192.168.90.53:3000";
+  final String baseUrl = AuthDet().baseUrl;
 
 //fetching today's events
   Future<List<Map<String, dynamic>>> todaysEvents() async {

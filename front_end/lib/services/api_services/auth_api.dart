@@ -1,5 +1,6 @@
 import "package:http/http.dart" as http;
 import 'package:path_finder/providers/user_provider.dart';
+import 'package:path_finder/services/api_services/auth_det.dart';
 import 'dart:convert';
 import 'package:path_finder/services/token_service.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class ApiService {
-  final String baseUrl = "http://192.168.90.53:3000";
+  final String baseUrl = AuthDet().baseUrl;
   // "https://pathfinder-production-aa04.up.railway.app"; //server on railway
 
   final TokenService _tokenService = TokenService();
