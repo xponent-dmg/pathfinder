@@ -12,6 +12,6 @@
   },
   "scripts": {
     "seed": "node scripts/seedBuildings.js && node scripts/seedClubLeader.js",
-    "start": "node ./app.js"
+    "start": "node app.js"
   }
 }
