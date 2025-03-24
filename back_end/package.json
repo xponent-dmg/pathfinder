@@ -7,10 +7,11 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "mongodb": "4.1",
     "mongoose": "^8.10.1"
   },
   "scripts": {
-    "seed": "node ./scripts/seedBuildings.js && node ./scripts/seedClubLeader.js",
-    "start": "node ./app.js"
+    "seed": "node scripts/seedBuildings.js && node scripts/seedClubLeader.js",
+    "start": "node app.js"
   }
 }
