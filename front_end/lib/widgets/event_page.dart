@@ -154,8 +154,8 @@ class _EventPageState extends State<EventPage> {
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage:
-                                    AssetImage('assets/profile-pic.jpg'),
+                                backgroundImage: AssetImage(
+                                    'assets/profile_pics/profile-pic.jpg'),
                               ),
                               SizedBox(width: 16),
                               Expanded(

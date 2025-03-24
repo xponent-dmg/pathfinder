@@ -209,7 +209,7 @@ class _ProfilePageState extends State<ProfilePage>
                               ),
                               child: ClipOval(
                                 child: Image.asset(
-                                  "assets/profile-pic.jpg",
+                                  "assets/profile_pics/profile-pic.jpg",
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
                                       CircleAvatar(

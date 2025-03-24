@@ -15,7 +15,7 @@ class _TodayState extends State<Today> {
   List<Map<String, dynamic>> eventList = [];
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     // Fetch events when widget initializes
     getTodaysEvents();

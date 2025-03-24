@@ -54,7 +54,7 @@ class Header extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
-                    "assets/profile-pic.jpg",
+                    "assets/profile_pics/profile-pic.jpg",
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,
