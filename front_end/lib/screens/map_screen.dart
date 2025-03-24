@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:path_finder/services/api_services/auth_det.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -16,8 +17,9 @@ class _MapScreenState extends State<MapScreen> {
   final Set<Marker> _markers = {};
   bool _isLoading = true;
   String _errorMessage = '';
+  final String baseUrl = AuthDet().baseUrl;
 
-  // Update to your campus center coordinates from seedLocations.js
+  // Update to your campus center coordinates
   static const CameraPosition _initialPosition = CameraPosition(
     target: LatLng(12.84401131611071, 80.15341209566053), // Center at AB1
     zoom: 17, // Set closer zoom for campus view
@@ -32,7 +34,7 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _fetchBuildings() async {
     try {
       final response = await http.get(
-        Uri.parse('http://192.168.90.53:3000/api/buildings'),
+        Uri.parse('$baseUrl/api/buildings'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -64,7 +66,10 @@ class _MapScreenState extends State<MapScreen> {
           ),
           infoWindow: InfoWindow(
             title: building['name'],
+            snippet: building['description'] ?? 'No description available',
           ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(
+              _getMarkerHue(building['type'] ?? 'academic')),
         );
         _markers.add(marker);
       }
@@ -72,63 +77,85 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  double _getMarkerHue(String type) {
+    switch (type.toLowerCase()) {
+      case 'academic':
+        return BitmapDescriptor.hueBlue;
+      case 'hostel':
+        return BitmapDescriptor.hueOrange;
+      case 'cafeteria':
+        return BitmapDescriptor.hueRed;
+      case 'sports':
+        return BitmapDescriptor.hueGreen;
+      default:
+        return BitmapDescriptor.hueViolet;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Campus Map'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _isLoading = true;
-                _markers.clear();
-                _errorMessage = '';
-              });
-              _fetchBuildings();
-            },
+    return Stack(
+      children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _initialPosition,
+          markers: _markers,
+          myLocationEnabled: true,
+          myLocationButtonEnabled:
+              false, // We'll handle this in the parent widget
+          zoomControlsEnabled: false,
+          compassEnabled: true,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+        if (_isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
           ),
-        ],
-      ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _initialPosition,
-            markers: _markers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            zoomControlsEnabled: false,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-          if (_errorMessage.isNotEmpty)
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                color: Colors.red.withAlpha(204),
-                child: Text(
-                  _errorMessage,
-                  style: const TextStyle(color: Colors.white),
-                ),
+        if (_errorMessage.isNotEmpty)
+          Positioned(
+            top: MediaQuery.of(context).padding.top + 70,
+            left: 20,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.withAlpha(224),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.white),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      _errorMessage,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                        _markers.clear();
+                        _errorMessage = '';
+                      });
+                      _fetchBuildings();
+                    },
+                  ),
+                ],
               ),
             ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final controller = await _controller.future;
-          controller
-              .animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
-        },
-        child: const Icon(Icons.center_focus_strong),
-      ),
+          ),
+      ],
     );
+  }
+
+  // Method that can be called from parent widget to center the map
+  Future<void> centerMap() async {
+    final controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
   }
 }

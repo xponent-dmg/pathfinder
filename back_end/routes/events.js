@@ -3,7 +3,7 @@ const router = express.Router();
 const Event = require("../models/EventModel");
 const Building = require("../models/BuildingModel");
 const ClubLeader = require("../models/ClubLeaderModel");
-const { auth } = require("../middleware/auth"); // Update to use the auth object
+const { auth } = require("../middleware/auth"); 
 
 //Creating the event
 router.post("/create", auth, async (req, res) => {
@@ -23,7 +23,8 @@ router.post("/create", auth, async (req, res) => {
     if (!building) {
       console.log("Building not found:", req.body.building);
       return res.status(400).send({
-        error: "Invalid building name. Must be one of: AB1, AB2 or Library",
+        error:
+          "Invalid building name. Must be one of: AB1, AB2, AB3, Clock_Tower, MG",
       });
     }
     console.log("Building found:", building.name, building._id);
@@ -36,7 +37,7 @@ router.post("/create", auth, async (req, res) => {
       information: req.body.information,
       roomno: req.body.roomno,
       categories: req.body.categories,
-      clubName: req.body.clubName,
+      clubName: req.user.clubName,
       createdBy: req.user.id,
     });
     console.log("Event object created:", event);
@@ -166,22 +167,15 @@ router.get("/search", async (req, res) => {
 });
 
 //Get today's events
-router.get("/today", async (_req, res) => {
+router.get("/today", async (req, res) => {
   console.log("GET today's events request received");
-
   try {
-    const now = new Date(); // Current UTC time
-
-    // Set endOfDay to 23:59:59.999 UTC (Midnight of the same day)
-    const endOfDay = new Date(now);
+    const now = new Date();
+    console.log(now.toLocaleDateString(), now.toLocaleTimeString());
+    const endOfDay = new Date();
     endOfDay.setUTCHours(23, 59, 59, 999);
 
-    console.log(
-      "Searching for events between:",
-      now.toISOString(),
-      "and",
-      endOfDay.toISOString()
-    );
+    console.log("Searching for events between:", now, "and", endOfDay);
 
     const events = await Event.find({
       startTime: { $gte: now, $lte: endOfDay },

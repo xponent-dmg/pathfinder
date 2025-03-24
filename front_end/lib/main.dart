@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/providers/theme_provider.dart';
 import 'package:path_finder/screens/club_leader.dart';
+import 'package:path_finder/screens/map_page.dart'; // Add this import
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/event_details_page.dart';
 import 'package:path_finder/screens/home_page.dart';
-import 'package:path_finder/screens/map_screen.dart';
 import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/search_page.dart';
 import 'package:path_finder/screens/signin.dart';
@@ -39,12 +39,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      darkTheme: ThemeData(
-        // brightness: Brightness.dark,
-        fontFamily: 'Poppins',
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      // darkTheme: ThemeData(
+      //   // brightness: Brightness.dark,
+      //   fontFamily: 'Poppins',
+      //   primarySwatch: Colors.blue,
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
 
       // themeMode: context.watch<ThemeProvider>().themeMode,
       initialRoute: '/',
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         '/event_details': (context) => const EventDetailsPage(),
         '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
-        '/map': (context) => const MapScreen(),
+        '/map': (context) => const MapPage(),
         '/search': (context) => const SearchPage(),
       },
     );

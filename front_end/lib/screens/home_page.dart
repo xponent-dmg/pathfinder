@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_finder/screens/map_page.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/follow_page.dart';
 import 'package:path_finder/screens/map_screen.dart';
@@ -47,7 +48,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             // Explore page
-            MapScreen(),
+            MapPage(),
             // Create Event page
             EventCreatePage(),
             // Follow page (previously search)
