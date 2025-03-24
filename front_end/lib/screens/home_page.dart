@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:path_finder/screens/map_page.dart';
 import 'package:path_finder/screens/event_create_page.dart';
 import 'package:path_finder/screens/follow_page.dart';
-import 'package:path_finder/screens/map_screen.dart';
 import 'package:path_finder/widgets/header.dart';
 import 'package:path_finder/widgets/today.dart';
 import '../widgets/bottom_navbar.dart';
@@ -38,7 +37,6 @@ class _HomePageState extends State<HomePage> {
         body: IndexedStack(
           index: _selectedIndex,
           children: [
-            // Home page
             CustomScrollView(
               slivers: [
                 const Header(),
@@ -47,6 +45,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            // RefreshIndicator(
+            //     child: CustomScrollView(
+            //       slivers: [
+            //         const Header(),
+            //         const SliverToBoxAdapter(
+            //           child: Today(),
+            //         ),
+            //       ],
+            //     ),
+            //     onRefresh: () {}),
+            // Home page
+
             // Explore page
             MapPage(),
             // Create Event page

@@ -38,7 +38,7 @@ class EventsAPI {
 
           // Use placeholder images if not available from API
           event["pic"] = "assets/event-pic.jpg";
-          event["profile-pic"] = "assets/profile-pic.jpg";
+          event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
 
           // Parse the date-time
           try {
@@ -69,10 +69,10 @@ class EventsAPI {
       // Return an empty list or some mock data as fallback
       return [
         {
-          "name": "Mock Event (API Error)",
+          "name": "Mock Event",
           "desc": "This is a mock event shown because there was an API error",
           "pic": "assets/event-pic.jpg",
-          "profile-pic": "assets/profile-pic.jpg",
+          "profile-pic": "assets/profile_pics/profile-pic.jpg",
           "time": "18:30",
           "day": "Today"
         }

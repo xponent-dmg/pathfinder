@@ -115,7 +115,7 @@ class TodayCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.asset(
-                  event["profile-pic"] ?? "assets/profile-pic.jpg",
+                  event["profile-pic"] ?? "assets/profile_pics/profile-pic.jpg",
                   width: 40,
                 ),
               ))

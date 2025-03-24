@@ -76,11 +76,8 @@ class _StartPageState extends State<StartPage> with TickerProviderStateMixin {
 //TODO:uncommment this for authentication
 
   Future<void> _checkTokenAndNavigate() async {
-    // Wait a moment to show the splash screen
-    await Future.delayed(const Duration(seconds: 2));
-
-    // if (!mounted) return;
-    // Navigator.pushReplacementNamed(context, '/home');
+    // // Wait a moment to show the splash screen
+    await Future.delayed(const Duration(seconds: 3));
 
     try {
       // Get the token from secure storage
