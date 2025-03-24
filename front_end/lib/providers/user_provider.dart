@@ -4,7 +4,8 @@ import 'package:path_finder/services/token_service.dart';
 
 class UserProvider with ChangeNotifier {
   String name = 'new user';
-  String username = 'unregistered';
+  String _username = 'unregistered';
+  String get username => _username;
   String email = 'sample@gmail.com';
   String createdAt = '';
   bool status = false;
@@ -88,7 +89,7 @@ class UserProvider with ChangeNotifier {
 
       // Update user details
       name = user['name'] ?? '';
-      username = user['username'] ?? '';
+      _username = user['username'] ?? '';
       email = user['email'] ?? '';
       createdAt = user['createdAt'] ?? '';
       status = user['status'] ?? false;
@@ -110,7 +111,7 @@ class UserProvider with ChangeNotifier {
   // Reset user data when logging out
   void clearUserData() {
     name = '';
-    username = '';
+    _username = '';
     email = '';
     createdAt = '';
     status = false;

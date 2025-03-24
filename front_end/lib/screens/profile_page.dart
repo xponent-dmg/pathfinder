@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:path_finder/providers/theme_provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 import 'package:path_finder/services/logout_service.dart';
+import 'package:path_finder/widgets/profile_picture_widget.dart';
 import 'package:provider/provider.dart';
 import '../widgets/custom_snackbar.dart';
 
@@ -207,21 +208,7 @@ class _ProfilePageState extends State<ProfilePage>
                                   ),
                                 ],
                               ),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  "assets/profile-pic.jpg",
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      CircleAvatar(
-                                    backgroundColor: Colors.blue[100],
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 60,
-                                      color: Colors.blue[700],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                              child: ProfilePictureWidget(),
                             ),
                           ),
                         ),
