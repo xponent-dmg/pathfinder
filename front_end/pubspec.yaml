@@ -13,11 +13,13 @@ dependencies:
   http: ^1.3.0
   flutter:
     sdk: flutter
-
+  image_picker: ^0.8.7+5
+  path_provider: ^2.0.15
+  geolocator: ^10.0.0 
+  shared_preferences: ^2.1.1
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   flutter_secure_storage: ^9.0.0
-  image_picker: ^1.1.2
   intl: ^0.20.2
   shimmer: ^3.0.0
   provider: ^6.1.2
@@ -50,6 +52,7 @@ flutter:
     - assets/profile_pics/
     - assets/fonts/
     - assets/logos/
+    - assets/map_style.json
 
   fonts:
     - family: Poppins
