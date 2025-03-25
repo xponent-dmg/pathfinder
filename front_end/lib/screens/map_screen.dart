@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path_finder/services/api_services/auth_det.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -19,16 +20,84 @@ class _MapScreenState extends State<MapScreen> {
   String _errorMessage = '';
   final String baseUrl = AuthDet().baseUrl;
 
-  // Update to your campus center coordinates
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(12.84401131611071, 80.15341209566053), // Center at AB1
-    zoom: 17, // Set closer zoom for campus view
+  // Default position (will be updated with user's location)
+  CameraPosition _initialPosition = const CameraPosition(
+    target: LatLng(0, 0), // Default to AB2 but will be changed
+    zoom: 18, // Updated from 20 to 18
   );
 
   @override
   void initState() {
     super.initState();
+    // Request location permissions immediately when screen loads
+    _requestLocationPermission();
+  }
+
+  // Separate method to request permissions
+  Future<void> _requestLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _errorMessage =
+            'Location services are disabled. Please enable GPS in settings.';
+      });
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _errorMessage = 'Location permissions are denied.';
+        });
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _errorMessage =
+            'Location permissions are permanently denied. Please enable in app settings.';
+      });
+      return;
+    }
+
+    // Once permission is granted, fetch location and buildings
+    _getUserLocation();
     _fetchBuildings();
+  }
+
+  // Get user location
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 15),
+      );
+
+      setState(() {
+        _initialPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 18, // Updated from 20 to 18
+        );
+      });
+
+      // Update camera position if map is already created
+      if (_controller.isCompleted) {
+        final GoogleMapController controller = await _controller.future;
+        controller
+            .animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error getting location: $e';
+      });
+    }
   }
 
   Future<void> _fetchBuildings() async {
@@ -102,11 +171,13 @@ class _MapScreenState extends State<MapScreen> {
           markers: _markers,
           myLocationEnabled: true,
           myLocationButtonEnabled:
-              false, // We'll handle this in the parent widget
+              false, // Disable default location button as we're using custom one
           zoomControlsEnabled: false,
           compassEnabled: true,
           onMapCreated: (GoogleMapController controller) {
             _controller.complete(controller);
+            // Attempt to get location again after map is created
+            _getUserLocation();
           },
         ),
         if (_isLoading)
@@ -149,13 +220,28 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ),
           ),
+        // Add a manual location button for testing
+        Positioned(
+          bottom: 30,
+          right: 16,
+          child: FloatingActionButton(
+            heroTag: "locateMe",
+            backgroundColor: Colors.white,
+            onPressed: () {
+              _getUserLocation();
+            },
+            child: Icon(
+              Icons.my_location,
+              color: Colors.blue[700],
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  // Method that can be called from parent widget to center the map
+  // Method that can be called from parent widget to center the map on user location
   Future<void> centerMap() async {
-    final controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
+    await _getUserLocation();
   }
 }

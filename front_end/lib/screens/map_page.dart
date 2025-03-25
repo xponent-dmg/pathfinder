@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path_finder/services/api_services/auth_det.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -43,23 +44,117 @@ class _MapPageState extends State<MapPage> {
 
   String _selectedCategory = 'All';
 
-  // Campus center coordinates
-  static const CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(12.84401131611071, 80.15341209566053), // Center at AB1
-    zoom: 17, // Set closer zoom for campus view
+  // Default position (will be updated with user's location when available)
+  CameraPosition _initialPosition = const CameraPosition(
+    target: LatLng(
+        12.84401131611071, 80.15341209566053), // Center at AB1 by default
+    zoom: 18,
   );
+
+  // Add this variable to control map style
+  String _mapStyle = '';
 
   @override
   void initState() {
     super.initState();
     _bottomSheetHeight = _initialBottomSheetHeight;
-    _fetchBuildings();
+
+    // Load custom map style that makes the blue dot more visible
+    rootBundle.loadString('assets/map_style.json').then((string) {
+      _mapStyle = string;
+    }).catchError((error) {
+      print("Error loading map style: $error");
+    });
+
+    // Request location permissions immediately when screen loads
+    _requestLocationPermission();
   }
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  // Separate method to request location permissions
+  Future<void> _requestLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      setState(() {
+        _errorMessage =
+            'Location services are disabled. Please enable GPS in settings.';
+      });
+      _fetchBuildings(); // Still fetch buildings even if location is unavailable
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        setState(() {
+          _errorMessage = 'Location permissions are denied.';
+        });
+        _fetchBuildings();
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _errorMessage =
+            'Location permissions are permanently denied. Please enable in app settings.';
+      });
+      _fetchBuildings();
+      return;
+    }
+
+    // Once permission is granted, fetch location and buildings
+    _getUserLocation();
+    _fetchBuildings();
+  }
+
+  // Get user location - enhanced version
+  Future<void> _getUserLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 15),
+      );
+
+      setState(() {
+        _initialPosition = CameraPosition(
+          target: LatLng(position.latitude, position.longitude),
+          zoom: 18,
+        );
+      });
+
+      // Update camera position if map is already created
+      if (_controller.isCompleted) {
+        final GoogleMapController controller = await _controller.future;
+
+        // Apply custom style if available
+        if (_mapStyle.isNotEmpty) {
+          controller.setMapStyle(_mapStyle);
+        }
+
+        // Animate to user location
+        controller
+            .animateCamera(CameraUpdate.newCameraPosition(_initialPosition));
+
+        // Additional call to show the blue dot
+        controller.animateCamera(CameraUpdate.newLatLng(
+            LatLng(position.latitude, position.longitude)));
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error getting location: $e';
+      });
+    }
   }
 
   Future<void> _fetchBuildings() async {
@@ -239,12 +334,20 @@ class _MapPageState extends State<MapPage> {
             mapType: MapType.normal,
             initialCameraPosition: _initialPosition,
             markers: _markers,
-            myLocationEnabled: true,
+            myLocationEnabled: true, // This should enable the blue dot
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
             compassEnabled: true,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
+
+              // Apply map style if available to enhance blue dot visibility
+              if (_mapStyle.isNotEmpty) {
+                controller.setMapStyle(_mapStyle);
+              }
+
+              // Try to get location again after map is created
+              _getUserLocation();
             },
             onTap: (LatLng position) {
               // Close location detail sheet when tapping on empty map area
@@ -339,6 +442,7 @@ class _MapPageState extends State<MapPage> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
+                                // ignore: deprecated_member_use
                                 color: Colors.black.withOpacity(0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
@@ -401,7 +505,7 @@ class _MapPageState extends State<MapPage> {
                           _markers.clear();
                           _errorMessage = '';
                         });
-                        _fetchBuildings();
+                        _requestLocationPermission(); // Try getting location permissions again
                       },
                     ),
                   ],
@@ -452,6 +556,7 @@ class _MapPageState extends State<MapPage> {
                     ),
                     boxShadow: [
                       BoxShadow(
+                        // ignore: deprecated_member_use
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, -2),
@@ -663,6 +768,27 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
             ),
+
+          // Add custom blue dot indicator if the built-in one doesn't show
+          Positioned(
+            bottom: 80,
+            right: 16,
+            child: FloatingActionButton.small(
+              heroTag: "toggleBlueDot",
+              backgroundColor: Colors.white,
+              onPressed: () {
+                // Force refresh of location and map
+                _getUserLocation();
+                setState(() {
+                  // Toggle blue dot visibility if needed
+                });
+              },
+              child: Icon(
+                Icons.gps_fixed,
+                color: Colors.blue[700],
+              ),
+            ),
+          ),
         ],
       ),
       // Only show floating action buttons when location details are not shown
@@ -687,10 +813,8 @@ class _MapPageState extends State<MapPage> {
                 const SizedBox(height: 16),
                 FloatingActionButton(
                   heroTag: 'myLocationButton',
-                  onPressed: () async {
-                    final controller = await _controller.future;
-                    controller.animateCamera(
-                        CameraUpdate.newLatLng(_initialPosition.target));
+                  onPressed: () {
+                    _getUserLocation(); // Use the user location function from map_screen
                   },
                   backgroundColor: Colors.white,
                   child: Icon(
