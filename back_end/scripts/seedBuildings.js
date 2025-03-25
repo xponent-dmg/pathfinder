@@ -31,7 +31,7 @@ const buildings = [
 async function seedBuildings() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to MongoDB");
+    console.log("Connected to MongoDB\n", process.env.MONGODB_URI);
 
     // Clear existing buildings
     await Building.deleteMany({});
