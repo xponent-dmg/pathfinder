@@ -129,7 +129,7 @@ class _MapPageState extends State<MapPage> {
       setState(() {
         _initialPosition = CameraPosition(
           target: LatLng(position.latitude, position.longitude),
-          zoom: 16,
+          zoom: 18,
         );
       });
 
