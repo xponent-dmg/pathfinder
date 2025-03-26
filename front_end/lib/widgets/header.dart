@@ -1,16 +1,57 @@
+import 'dart:io';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:path_finder/services/profile_picture_service.dart';
 import 'package:path_finder/widgets/filter_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 
-class Header extends StatelessWidget {
+class Header extends StatefulWidget {
   const Header({super.key});
+
+  @override
+  State<Header> createState() => _HeaderState();
+}
+
+class _HeaderState extends State<Header> {
+  File? _file;
+  // StreamSubscription? _profilePictureSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfilePicture();
+
+    // Subscribe to profile picture changes
+    // _profilePictureSubscription =
+    //     ProfilePictureService.profilePictureStream.listen((file) {
+    //   if (mounted) {
+    //     setState(() {
+    //       _file = file;
+    //     });
+    //   }
+    // });
+  }
+
+  @override
+  void dispose() {
+    // Cancel subscription when widget is disposed
+    // _profilePictureSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadProfilePicture() async {
+    File? tempFile = await ProfilePictureService.getProfilePicture();
+    if (mounted) {
+      setState(() {
+        _file = tempFile;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userProvider = context.watch<UserProvider>();
-    final firstName = userProvider.name.isNotEmpty
-        ? userProvider.name.split(' ')[0]
-        : 'there';
     return SliverAppBar(
       pinned: true,
       expandedHeight: 280.0,
@@ -46,19 +87,29 @@ class Header extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/profile');
+                  Navigator.of(context).pushNamed('/profile').then((_) {
+                    // Refresh profile picture when returning from profile page
+                    _loadProfilePicture();
+                  });
                 },
                 customBorder: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    "assets/profile_pics/profile-pic.jpg",
-                    width: 40,
-                    height: 40,
-                    fit: BoxFit.cover,
-                  ),
+                  child: (_file != null)
+                      ? Image.file(
+                          _file!,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          "assets/profile_pics/profile-pic.jpg",
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
@@ -178,7 +229,7 @@ class Header extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Consumer<UserProvider>(
                                 builder: (context, value, child) => Text(
-                                      "Hey ${(firstName != 'new') ? firstName : "there"}",
+                                      "Hey ${(value.name.split(" ")[0] != 'new') ? value.name.split(" ")[0] : "there"}",
                                       style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,

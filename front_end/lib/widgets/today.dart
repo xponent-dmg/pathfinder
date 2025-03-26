@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/events_api.dart';
+import 'package:path_finder/providers/event_provider.dart';
 import 'package:path_finder/widgets/today_card.dart';
+import 'package:provider/provider.dart';
 
 class Today extends StatefulWidget {
   const Today({super.key});
@@ -10,36 +11,36 @@ class Today extends StatefulWidget {
 }
 
 class _TodayState extends State<Today> {
-  final EventsAPI eventsAPI = EventsAPI();
-  bool _isLoading = false;
+  // final EventsService _eventsService = EventsService();
   List<Map<String, dynamic>> eventList = [];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     // Fetch events when widget initializes
-    getTodaysEvents();
+    // getTodaysEvents();
+    Future.microtask(() => context.read<EventProvider>().fetchTodaysEvents());
   }
 
-  Future<void> getTodaysEvents() async {
-    setState(() {
-      _isLoading = true;
-    });
+  // Future<void> getTodaysEvents() async {
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
 
-    try {
-      var response = await eventsAPI.todaysEvents();
-      setState(() {
-        eventList = response;
-        _isLoading = false;
-      });
-      print("Successfully fetched ${eventList.length} events");
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      print("Error occurred while fetching events: $e");
-    }
-  }
+  //   try {
+  //     var response = await EventsService.todaysEvents();
+  //     setState(() {
+  //       eventList = response;
+  //       _isLoading = false;
+  //     });
+  //     print("Successfully fetched ${eventList.length} events");
+  //   } catch (e) {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     print("Error occurred while fetching events: $e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,7 @@ class _TodayState extends State<Today> {
                             duration: Duration(seconds: 1),
                           ),
                         );
-                        getTodaysEvents();
+                        context.read<EventProvider>().fetchTodaysEvents();
                       },
                       child: Icon(Icons.refresh, color: Colors.blue[700]),
                     )
@@ -86,45 +87,43 @@ class _TodayState extends State<Today> {
                 SizedBox(height: 20),
                 SizedBox(
                   height: 330,
-                  child: _isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : eventList.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.event_busy,
-                                    size: 48,
-                                    color: Colors.grey[400],
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    "No events for today",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey[600],
+                  child: Consumer<EventProvider>(
+                      builder: (context, eventProvider, child) {
+                    return (eventProvider.isLoading)
+                        ? (eventProvider.eventList.isNotEmpty)
+                            ? ListView.builder(
+                                itemCount: eventProvider.eventList.length,
+                                itemBuilder: (context, index) {
+                                  final event = eventProvider.eventList[index];
+                                  return TodayCard(
+                                    event: event,
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.event_busy,
+                                      size: 48,
+                                      color: Colors.grey[400],
                                     ),
-                                  ),
-                                  SizedBox(height: 24),
-                                  TextButton.icon(
-                                    onPressed: getTodaysEvents,
-                                    icon: Icon(Icons.refresh),
-                                    label: Text("Refresh"),
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: Colors.blue[700],
+                                    SizedBox(height: 16),
+                                    Text(
+                                      "No events for today",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey[600],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: eventList.length,
-                              itemBuilder: (context, index) => TodayCard(
-                                event: eventList[index],
-                              ),
-                            ),
+                                  ],
+                                ),
+                              )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          );
+                  }),
                 ),
                 // Add more scrollable content
                 _buildScrollTestSection("Upcoming Events"),

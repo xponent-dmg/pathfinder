@@ -37,7 +37,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
   }
 
   void _showImageSourceActionSheet(BuildContext context) {
-    final username = context.read<UserProvider>().username;
+    final currTime = DateTime.now().toString();
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -51,7 +51,8 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                 onTap: () async {
                   Navigator.pop(context);
                   final image =
-                      await ProfilePictureService.pickImageFromGallery(username);
+                      await ProfilePictureService.pickImageFromGallery(
+                          currTime);
                   if (image != null && mounted) {
                     setState(() {
                       _profilePicture = image;
@@ -67,7 +68,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                 title: const Text('Take a Photo'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final image = await ProfilePictureService.takePhoto(username);
+                  final image = await ProfilePictureService.takePhoto(currTime);
                   if (image != null && mounted) {
                     setState(() {
                       _profilePicture = image;
@@ -101,7 +102,6 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
         );
       },
     );
-
   }
 
   @override
@@ -130,7 +130,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                       fit: BoxFit.cover,
                     )
                   : Image.asset(
-                      'assets/profile-pic.jpg', // Corrected path
+                      'assets/profile_pics/profile-pic.jpg',
                       width: widget.size,
                       height: widget.size,
                       fit: BoxFit.cover,

@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePictureService {
-  static const String _profilePicPathKey = 'front_end\\assets\\profile-pic.jpg';
+  static const String _profilePicPathKey = 'front_end/assets/profile-pic.jpg';
   static final ImagePicker _picker = ImagePicker();
 
   // Get profile picture - returns File if custom pic exists, null if using default
@@ -29,14 +29,14 @@ class ProfilePictureService {
   }
 
   // Pick image from gallery
-  static Future<File?> pickImageFromGallery(String username) async {
+  static Future<File?> pickImageFromGallery(String currTime) async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
     );
     if (image != null) {
       final savedImage =
-          await _saveImageToAppDirectory(File(image.path), username);
+          await _saveImageToAppDirectory(File(image.path), currTime);
       await _saveProfilePicturePath(savedImage.path);
       return savedImage;
     }
@@ -45,7 +45,7 @@ class ProfilePictureService {
   }
 
   // Take a photo with camera
-  static Future<File?> takePhoto(username) async {
+  static Future<File?> takePhoto(currTime) async {
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
@@ -53,7 +53,7 @@ class ProfilePictureService {
 
     if (photo != null) {
       final savedImage =
-          await _saveImageToAppDirectory(File(photo.path), username);
+          await _saveImageToAppDirectory(File(photo.path), currTime);
       await _saveProfilePicturePath(savedImage.path);
       return savedImage;
     }
@@ -63,11 +63,12 @@ class ProfilePictureService {
 
   // Save image to app's documents directory
   static Future<File> _saveImageToAppDirectory(
-      File image, String username) async {
+      File image, String currTime) async {
     final directory = await getApplicationDocumentsDirectory();
     final String path = directory.path;
-    final fileName = 'profile_$username.jpg';
-    final File newImage = await image.copy('$path/$fileName');
+    final fileName = 'profile_$currTime.jpg';
+    final finalPath = '$path/$fileName';
+    final File newImage = await image.copy(finalPath);
     return newImage;
   }
 

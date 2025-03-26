@@ -14,7 +14,7 @@ class EventCreatePage extends StatefulWidget {
 
 class _EventCreatePageState extends State<EventCreatePage> {
   final _formKey = GlobalKey<FormState>();
-  final EventsAPI _eventsAPI = EventsAPI();
+  final EventsService _EventsService = EventsService();
   bool _isLoading = false;
 
   // Controllers
@@ -143,7 +143,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
       try {
         // Call API to create event
-        Map<String, dynamic> result = await _eventsAPI.createEvent(
+        Map<String, dynamic> result = await _EventsService.createEvent(
           name: _eventNameController.text,
           details: _eventDetailsController.text,
           location: _eventLocationController.text,

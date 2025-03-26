@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_finder/providers/event_provider.dart';
 import 'dart:async';
+
+import 'package:path_finder/services/api_services/events_api.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -14,6 +18,7 @@ class _SearchPageState extends State<SearchPage>
   // Controllers and variables
   final TextEditingController _searchController = TextEditingController();
   final FocusNode _searchFocus = FocusNode();
+  final EventsService _eventsService = EventsService();
   bool _hasSearched = false;
   String _searchQuery = '';
   Timer? _debounce;
@@ -42,43 +47,47 @@ class _SearchPageState extends State<SearchPage>
   ];
 
   // Mock search results
-  final List<Map<String, dynamic>> _mockResults = [
-    {
-      'title': 'Tech Innovators Hackathon',
-      'type': 'Event',
-      'date': '20 Nov, 2023',
-      'image': 'assets/event-pic.jpg',
-      'location': 'University Center, Room 305'
-    },
-    {
-      'title': 'Photography Club Meet',
-      'type': 'Club',
-      'date': '15 Nov, 2023',
-      'image': 'assets/start-img.png',
-      'location': 'Arts Building, Studio 4'
-    },
-    {
-      'title': '2000s Hip Hop Night',
-      'type': 'Event',
-      'date': '29 Oct, 2023',
-      'image': 'assets/event-pic.jpg',
-      'location': 'Brooklyn, New York'
-    },
-    {
-      'title': 'Machine Learning Workshop',
-      'type': 'Workshop',
-      'date': '22 Nov, 2023',
-      'image': 'assets/start-img.png',
-      'location': 'Science Building, Lab 103'
-    },
-    {
-      'title': 'Career Networking Mixer',
-      'type': 'Networking',
-      'date': '18 Nov, 2023',
-      'image': 'assets/event-pic.jpg',
-      'location': 'Business Center, Main Hall'
-    },
+  List<Map<String, dynamic>> _results = [
+    // {
+    //   'title': 'Tech Innovators Hackathon',
+    //   'type': 'Event',
+    //   'date': '20 Nov, 2023',
+    //   'image': 'assets/event-pic.jpg',
+    //   'location': 'University Center, Room 305'
+    // },
+    // {
+    //   'title': 'Photography Club Meet',
+    //   'type': 'Club',
+    //   'date': '15 Nov, 2023',
+    //   'image': 'assets/start-img.png',
+    //   'location': 'Arts Building, Studio 4'
+    // },
+    // {
+    //   'title': '2000s Hip Hop Night',
+    //   'type': 'Event',
+    //   'date': '29 Oct, 2023',
+    //   'image': 'assets/event-pic.jpg',
+    //   'location': 'Brooklyn, New York'
+    // },
+    // {
+    //   'title': 'Machine Learning Workshop',
+    //   'type': 'Workshop',
+    //   'date': '22 Nov, 2023',
+    //   'image': 'assets/start-img.png',
+    //   'location': 'Science Building, Lab 103'
+    // },
+    // {
+    //   'title': 'Career Networking Mixer',
+    //   'type': 'Networking',
+    //   'date': '18 Nov, 2023',
+    //   'image': 'assets/event-pic.jpg',
+    //   'location': 'Business Center, Main Hall'
+    // },
   ];
+
+  Future<void> getAllEvents() async {
+    _results = await _eventsService.getAllEvents();
+  }
 
   List<Map<String, dynamic>> _filteredResults = [];
 
@@ -97,8 +106,10 @@ class _SearchPageState extends State<SearchPage>
     // Add listener to search controller
     _searchController.addListener(_onSearchChanged);
 
+    Future.microtask(() => context.read<EventProvider>().fetchAllEvents());
+
     // Initialize filtered results
-    _filteredResults = List.from(_mockResults);
+    // _filteredResults = List.from(_results);
   }
 
   @override
@@ -124,7 +135,7 @@ class _SearchPageState extends State<SearchPage>
         _animationController.forward(from: 0.0);
       } else {
         setState(() {
-          _filteredResults = List.from(_mockResults);
+          _filteredResults = List.from(_results);
         });
       }
     });
@@ -135,14 +146,14 @@ class _SearchPageState extends State<SearchPage>
     final query = _searchQuery.toLowerCase();
     setState(() {
       if (_selectedCategory == 'All') {
-        _filteredResults = _mockResults
+        _filteredResults = _results
             .where((result) =>
                 result['title'].toString().toLowerCase().contains(query) ||
                 result['type'].toString().toLowerCase().contains(query) ||
                 result['location'].toString().toLowerCase().contains(query))
             .toList();
       } else {
-        _filteredResults = _mockResults
+        _filteredResults = _results
             .where((result) =>
                 (result['title'].toString().toLowerCase().contains(query) ||
                     result['location']
@@ -168,7 +179,7 @@ class _SearchPageState extends State<SearchPage>
   void _clearSearch() {
     setState(() {
       _searchController.clear();
-      _filteredResults = List.from(_mockResults);
+      _filteredResults = List.from(_results);
     });
   }
 
@@ -325,6 +336,9 @@ class _SearchPageState extends State<SearchPage>
                   ? _buildRecentSearches()
                   : _buildSearchResults(),
             ),
+            // Flexible(
+            //   child: _buildSearchResults(),
+            // ),
           ],
         ),
       ),
@@ -462,135 +476,136 @@ class _SearchPageState extends State<SearchPage>
     }
 
     return FadeTransition(
-      opacity: _fadeAnimation,
-      child: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: _filteredResults.length,
-        // Add extra padding when keyboard is visible
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        itemBuilder: (context, index) {
-          final result = _filteredResults[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: GestureDetector(
-              onTap: () {
-                // Dismiss keyboard when tapping on a result
-                FocusScope.of(context).unfocus();
-                Navigator.pushNamed(context, '/event_page');
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(15),
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Image with event type badge
-                    Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(16),
-                          ),
-                          child: Image.asset(
-                            result['image'],
-                            height: 150,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
+        opacity: _fadeAnimation,
+        child: Consumer(builder: (context, eventProvider, child) {
+          return ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: _filteredResults.length,
+            // Add extra padding when keyboard is visible
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            itemBuilder: (context, index) {
+              final result = _filteredResults[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // Dismiss keyboard when tapping on a result
+                    FocusScope.of(context).unfocus();
+                    Navigator.pushNamed(context, '/event_page');
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(15),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
                         ),
-                        Positioned(
-                          top: 12,
-                          left: 12,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.blue[700],
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Text(
-                              result['type'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image with event type badge
+                        Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(16),
+                              ),
+                              child: Image.asset(
+                                result['image'],
+                                height: 150,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
                               ),
                             ),
+                            Positioned(
+                              top: 12,
+                              left: 12,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[700],
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  result['type'],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Content
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                result['title'],
+                                style: GoogleFonts.poppins(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today,
+                                    size: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    result['date'],
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  SizedBox(width: 16),
+                                  Icon(
+                                    Icons.location_on,
+                                    size: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                  SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      result['location'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 14,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-
-                    // Content
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            result['title'],
-                            style: GoogleFonts.poppins(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_today,
-                                size: 16,
-                                color: Colors.grey[600],
-                              ),
-                              SizedBox(width: 6),
-                              Text(
-                                result['date'],
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              SizedBox(width: 16),
-                              Icon(
-                                Icons.location_on,
-                                size: 16,
-                                color: Colors.grey[600],
-                              ),
-                              SizedBox(width: 6),
-                              Expanded(
-                                child: Text(
-                                  result['location'],
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 14,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           );
-        },
-      ),
-    );
+        }));
   }
 }

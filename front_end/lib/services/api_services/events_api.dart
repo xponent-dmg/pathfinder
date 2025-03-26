@@ -7,7 +7,7 @@ import 'package:path_finder/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import './auth_det.dart';
 
-class EventsAPI {
+class EventsService {
   final String baseUrl = AuthDet().baseUrl;
 
 //fetching today's events
@@ -164,6 +164,75 @@ class EventsAPI {
         'message': 'Exception occurred during event creation',
         'error': e.toString()
       };
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getAllEvents() async {
+    try {
+      var url = Uri.parse("$baseUrl/api/events/");
+      var response = await http.get(
+        url,
+        headers: {"Content-type": "application/json"},
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception("Failed to load events: ${response.statusCode}");
+      }
+
+      List<dynamic> jsonData = jsonDecode(response.body);
+      List<Map<String, dynamic>> eventList = [];
+
+      for (var elem in jsonData) {
+        if (elem is Map<String, dynamic>) {
+          // Create a new map for each event to avoid reference issues
+          Map<String, dynamic> event = {};
+
+          // Extract the required fields
+          event["name"] = elem["name"] ?? "NaN";
+          event["desc"] = elem["information"] ?? "No description available";
+          event["clubName"] = elem["clubName"] ?? "NaN";
+
+          // Use placeholder images if not available from API
+          event["pic"] = "assets/event-pic.jpg";
+          event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
+
+          // Parse the date-time
+          try {
+            if (elem["startTime"] != null) {
+              DateTime parsedDate = DateTime.parse(elem["startTime"]).toLocal();
+              event["time"] = DateFormat("HH:mm").format(parsedDate);
+              event["day"] = DateFormat("EEEE").format(parsedDate);
+            } else {
+              // Default values if startTime is missing
+              event["time"] = "TBD";
+              event["day"] = "Today";
+            }
+          } catch (e) {
+            print("Error parsing date: $e");
+            // Fallback values
+            event["time"] = "TBD";
+            event["day"] = "Today";
+          }
+
+          eventList.add(event);
+        }
+      }
+
+      print("Processed ${eventList.length} events from API");
+      return eventList;
+    } catch (e) {
+      print("API error: $e");
+      // Return an empty list or some mock data as fallback
+      return [
+        {
+          "name": "Mock Event",
+          "desc": "This is a mock event shown because there was an API error",
+          "pic": "assets/event-pic.jpg",
+          "profile-pic": "assets/profile_pics/profile-pic.jpg",
+          "time": "18:30",
+          "day": "Today"
+        }
+      ];
     }
   }
 }
