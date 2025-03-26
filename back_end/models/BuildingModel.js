@@ -49,7 +49,11 @@ const BuildingSchema = new mongoose.Schema(
         required: true,
       },
     },
-    category: { type: String, required: true },
+    category: {
+      type: String,
+      required: true,
+      enum: ["Others", "Academics", "Hostel", "Sports", "Eateries", "Shopping"],
+    },
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event" }],
   },
   {

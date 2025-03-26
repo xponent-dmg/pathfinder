@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -33,13 +34,12 @@ class _MapPageState extends State<MapPage> {
 
   final List<String> _categories = [
     'All',
-    'Academic',
-    'Hostels',
-    'Cafeteria',
+    'Academics',
+    'Hostel',
+    'Eateries',
     'Sports',
-    'Parking',
-    'ATMs',
-    'Auditorium'
+    'Shopping',
+    'Others'
   ];
 
   String _selectedCategory = 'All';
@@ -186,8 +186,7 @@ class _MapPageState extends State<MapPage> {
       for (var building in buildings) {
         // Skip if the category filter is active and this building doesn't match
         if (_selectedCategory != 'All' &&
-            building['type']?.toLowerCase() !=
-                _selectedCategory.toLowerCase()) {
+            building['category'] != _selectedCategory) {
           continue;
         }
 
@@ -197,11 +196,12 @@ class _MapPageState extends State<MapPage> {
             building['coordinates']['lat'],
             building['coordinates']['lng'],
           ),
+          tag: Tag(building['category']), // Use proper Tag with category
           infoWindow: InfoWindow(
             title: building['name'],
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(
-              _getMarkerHue(building['type'] ?? 'academic')),
+              _getMarkerHue(building['category'] ?? 'Others')),
           onTap: () {
             _onMarkerTapped(building);
           },
@@ -212,18 +212,22 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  double _getMarkerHue(String type) {
-    switch (type.toLowerCase()) {
-      case 'academic':
+  double _getMarkerHue(String category) {
+    switch (category) {
+      case 'Academics':
         return BitmapDescriptor.hueRed;
-      case 'hostel':
+      case 'Hostel':
         return BitmapDescriptor.hueYellow;
-      case 'cafeteria':
+      case 'Eateries':
         return BitmapDescriptor.hueOrange;
-      case 'sports':
+      case 'Sports':
         return BitmapDescriptor.hueGreen;
-      default:
+      case 'Shopping':
         return BitmapDescriptor.hueViolet;
+      case 'Others':
+        return BitmapDescriptor.hueBlue;
+      default:
+        return BitmapDescriptor.hueAzure;
     }
   }
 
@@ -442,7 +446,6 @@ class _MapPageState extends State<MapPage> {
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                // ignore: deprecated_member_use
                                 color: Colors.black.withOpacity(0.05),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
@@ -556,7 +559,6 @@ class _MapPageState extends State<MapPage> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        // ignore: deprecated_member_use
                         color: Colors.black.withOpacity(0.1),
                         blurRadius: 10,
                         offset: const Offset(0, -2),
@@ -586,18 +588,22 @@ class _MapPageState extends State<MapPage> {
                               backgroundColor: Colors.blue[100],
                               radius: 24,
                               child: Icon(
-                                _selectedLocation!['type']?.toLowerCase() ==
-                                        'academic'
+                                _selectedLocation!['category'] == 'Academics'
                                     ? Icons.school
-                                    : _selectedLocation!['type']
-                                                ?.toLowerCase() ==
-                                            'cafeteria'
+                                    : _selectedLocation!['category'] ==
+                                            'Eateries'
                                         ? Icons.restaurant
-                                        : _selectedLocation!['type']
-                                                    ?.toLowerCase() ==
-                                                'hostel'
+                                        : _selectedLocation!['category'] ==
+                                                'Hostel'
                                             ? Icons.hotel
-                                            : Icons.location_on,
+                                            : _selectedLocation!['category'] ==
+                                                    'Sports'
+                                                ? Icons.sports
+                                                : _selectedLocation![
+                                                            'category'] ==
+                                                        'Shopping'
+                                                    ? Icons.shopping_bag
+                                                    : Icons.location_on,
                                 color: Colors.blue[700],
                                 size: 26,
                               ),
@@ -615,10 +621,9 @@ class _MapPageState extends State<MapPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  if (_selectedLocation!['type'] != null)
+                                  if (_selectedLocation!['category'] != null)
                                     Text(
-                                      _capitalizeFirstLetter(
-                                          _selectedLocation!['type']),
+                                      _selectedLocation!['category'],
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey[600],
@@ -768,27 +773,6 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
             ),
-
-          // Add custom blue dot indicator if the built-in one doesn't show
-          Positioned(
-            bottom: 80,
-            right: 16,
-            child: FloatingActionButton.small(
-              heroTag: "toggleBlueDot",
-              backgroundColor: Colors.white,
-              onPressed: () {
-                // Force refresh of location and map
-                _getUserLocation();
-                setState(() {
-                  // Toggle blue dot visibility if needed
-                });
-              },
-              child: Icon(
-                Icons.gps_fixed,
-                color: Colors.blue[700],
-              ),
-            ),
-          ),
         ],
       ),
       // Only show floating action buttons when location details are not shown
@@ -806,18 +790,6 @@ class _MapPageState extends State<MapPage> {
                   },
                   backgroundColor: Colors.white,
                   child: Icon(
-                    Icons.center_focus_strong,
-                    color: Colors.blue[700],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FloatingActionButton(
-                  heroTag: 'myLocationButton',
-                  onPressed: () {
-                    _getUserLocation(); // Use the user location function from map_screen
-                  },
-                  backgroundColor: Colors.white,
-                  child: Icon(
                     Icons.my_location,
                     color: Colors.blue[700],
                   ),
@@ -827,8 +799,10 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  String _capitalizeFirstLetter(String text) {
-    if (text.isEmpty) return '';
-    return text[0].toUpperCase() + text.substring(1).toLowerCase();
-  }
+}
+
+class Tag {
+  final String name;
+
+  Tag(this.name);
 }
