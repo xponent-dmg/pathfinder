@@ -1,67 +1,80 @@
 import 'package:flutter/material.dart';
-import '../services/api_services/events_api.dart';
+import 'package:path_finder/services/api_services/events_api.dart';
 
-class EventProvider with ChangeNotifier {
+class EventProvider extends ChangeNotifier {
+  final EventsService _eventsService = EventsService();
+
   List<Map<String, dynamic>> _eventList = [];
   List<Map<String, dynamic>> _todaysEvents = [];
   bool _isLoading = false;
-  String? _errorMessage;
+  String? _error;
 
-  final EventsService _eventsService = EventsService();
-
-  // Getters
   List<Map<String, dynamic>> get eventList => _eventList;
   List<Map<String, dynamic>> get todaysEvents => _todaysEvents;
   bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
+  String? get error => _error;
 
-  // Fetch all events
   Future<void> fetchAllEvents() async {
     _isLoading = true;
-    _errorMessage = null;
+    _error = null;
     notifyListeners();
 
     try {
-      print("Fetching all events...");
-      final results = await _eventsService.getAllEvents();
-      _eventList = results;
-      print("Successfully fetched ${_eventList.length} events.");
-      if (_eventList.isEmpty) {
-        print("Warning: Fetched events list is empty");
-      } else {
-        print("First event: ${_eventList.first}");
-      }
-    } catch (error) {
-      _errorMessage = "Failed to load events: $error";
-      print("Error fetching events: $error");
-    } finally {
+      final events = await _eventsService.getAllEvents();
+      _eventList = events;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
       _isLoading = false;
       notifyListeners();
     }
   }
 
-  // Fetch today's events
   Future<void> fetchTodaysEvents() async {
     _isLoading = true;
-    _errorMessage = null;
+    _error = null;
     notifyListeners();
 
     try {
-      print("Fetching today's events...");
-      final results = await _eventsService.todaysEvents();
-      _todaysEvents = results;
-      print("Successfully fetched ${_todaysEvents.length} today's events.");
-      if (_todaysEvents.isEmpty) {
-        print("Warning: Today's events list is empty");
-      } else {
-        print("First today's event: ${_todaysEvents.first}");
+      final events = await _eventsService.getAllEvents();
+
+      // Filter events for today
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      _todaysEvents = events.where((event) {
+        // Parse the event date - assuming event_date is in ISO format
+        if (event['event_date'] == null) return false;
+
+        try {
+          final eventDate = DateTime.parse(event['event_date']);
+          final eventDateOnly =
+              DateTime(eventDate.year, eventDate.month, eventDate.day);
+          return eventDateOnly.isAtSameMomentAs(today);
+        } catch (e) {
+          print(
+              'Error parsing date for event: ${event['name']} - ${e.toString()}');
+          return false;
+        }
+      }).toList();
+
+      // If today's events are empty, just use some of the most recent events as placeholder
+      if (_todaysEvents.isEmpty && events.isNotEmpty) {
+        _todaysEvents = events.take(3).toList();
       }
-    } catch (error) {
-      _errorMessage = "Failed to load today's events: $error";
-      print("Error fetching today's events: $error");
-    } finally {
+
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void addEvent(Map<String, dynamic> event) {
+    _eventList.insert(0, event);
+    notifyListeners();
   }
 }

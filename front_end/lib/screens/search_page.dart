@@ -560,12 +560,19 @@ class _SearchPageState extends State<SearchPage>
                             borderRadius: BorderRadius.vertical(
                               top: Radius.circular(16),
                             ),
-                            child: Image.asset(
-                              result['pic'],
-                              height: 150,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                            child: (result['pic'] == null)
+                                ? Image.asset(
+                                    'assets/event-pic.jpg',
+                                    height: 150,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    result['pic'],
+                                    height: 150,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                           // Positioned(
                           //   top: 12,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_finder/providers/event_provider.dart';
+import 'package:provider/provider.dart';
 import '../widgets/custom_snackbar.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -14,7 +16,7 @@ class EventCreatePage extends StatefulWidget {
 
 class _EventCreatePageState extends State<EventCreatePage> {
   final _formKey = GlobalKey<FormState>();
-  final EventsService _EventsService = EventsService();
+  final EventsService _eventsService = EventsService();
   bool _isLoading = false;
 
   // Controllers
@@ -30,12 +32,22 @@ class _EventCreatePageState extends State<EventCreatePage> {
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
+  bool _mounted = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _mounted = true;
+  }
+
   @override
   void dispose() {
+    _mounted = false;
     _eventNameController.dispose();
     _eventDetailsController.dispose();
     _eventLocationController.dispose();
     _clubNameController.dispose();
+    _roomNoController.dispose();
     super.dispose();
   }
 
@@ -103,52 +115,60 @@ class _EventCreatePageState extends State<EventCreatePage> {
     if (_formKey.currentState!.validate()) {
       // Validate required fields
       if (_eventDate == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(
-            text: 'Please select an event date',
-            color: Colors.red,
-          ).build(),
-        );
+        if (_mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(
+              text: 'Please select an event date',
+              color: Colors.red,
+            ).build(),
+          );
+        }
         return;
       }
 
       if (_startTime == null || _endTime == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(
-            text: 'Please select start and end times',
-            color: Colors.red,
-          ).build(),
-        );
+        if (_mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(
+              text: 'Please select start and end times',
+              color: Colors.red,
+            ).build(),
+          );
+        }
         return;
       }
 
       if (_imageFile == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(
-            text: 'Please upload an event image',
-            color: Colors.red,
-          ).build(),
-        );
+        if (_mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(
+              text: 'Please upload an event image',
+              color: Colors.red,
+            ).build(),
+          );
+        }
         return;
       }
 
       // Show loading indicator
-      setState(() {
-        _isLoading = true;
-      });
+      if (_mounted) {
+        setState(() {
+          _isLoading = true;
+        });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackbar(text: 'Creating event...').build(),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackbar(text: 'Creating event...').build(),
+        );
+      }
 
       try {
+        print('Starting event creation process');
         // Call API to create event
-        Map<String, dynamic> result = await _EventsService.createEvent(
+        Map<String, dynamic> result = await _eventsService.createEvent(
           name: _eventNameController.text,
           details: _eventDetailsController.text,
           location: _eventLocationController.text,
           roomNo: _roomNoController.text,
-          clubName: _clubNameController.text,
           eventDate: _eventDate!,
           startTime: _formatTimeOfDay(_startTime!),
           endTime: _formatTimeOfDay(_endTime!),
@@ -156,12 +176,26 @@ class _EventCreatePageState extends State<EventCreatePage> {
           context: context,
         );
 
+        // Check if widget is still mounted before updating state
+        if (!_mounted) return;
+
         setState(() {
           _isLoading = false;
         });
 
         if (result['success']) {
-          // Event created successfully
+          // First update the provider
+          try {
+            await Provider.of<EventProvider>(context, listen: false)
+                .fetchAllEvents();
+            await Provider.of<EventProvider>(context, listen: false)
+                .fetchTodaysEvents();
+          } catch (e) {
+            print('Error refreshing events: $e');
+            // Continue anyway, as the event was created successfully
+          }
+
+          // Then show success message
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackbar(
               text: 'Event created successfully!',
@@ -169,30 +203,39 @@ class _EventCreatePageState extends State<EventCreatePage> {
             ).build(),
           );
 
-          // Navigate back after success
-          Future.delayed(Duration(seconds: 1), () {
-            Navigator.pushReplacementNamed(context, '/home');
-          });
+          // Navigate back safely with a slight delay
+          if (_mounted) {
+            Future.delayed(const Duration(milliseconds: 500), () {
+              if (_mounted && Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              }
+            });
+          }
         } else {
           // Error creating event
+          if (_mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackbar(
+                text: result['message'] ?? 'Error creating event',
+                color: Colors.red,
+              ).build(),
+            );
+          }
+        }
+      } catch (e) {
+        if (_mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+          print('Exception caught during event creation: $e');
+
           ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackbar(
-              text: result['message'] ?? 'Error creating event',
+              text: 'Error: ${e.toString()}',
               color: Colors.red,
             ).build(),
           );
         }
-      } catch (e) {
-        setState(() {
-          _isLoading = false;
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          CustomSnackbar(
-            text: 'Error: ${e.toString()}',
-            color: Colors.red,
-          ).build(),
-        );
       }
     }
   }
@@ -210,7 +253,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
   @override
   Widget build(BuildContext context) {
     // Set status bar to transparent with light icons
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     ));
@@ -519,39 +562,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
                       SizedBox(height: 20),
 
-                      // Club Name
-                      Text(
-                        "Club Name",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        controller: _clubNameController,
-                        decoration: InputDecoration(
-                          hintText: "Enter club name",
-                          fillColor: Colors.grey[100],
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 16,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'Please enter club name';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 20),
+                      // Club Name not needed
 
                       // Location
                       Row(
@@ -571,7 +582,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
                                 TextFormField(
                                   controller: _eventLocationController,
                                   decoration: InputDecoration(
-                                    hintText: "Enter the location",
                                     fillColor: Colors.grey[100],
                                     filled: true,
                                     border: OutlineInputBorder(
@@ -609,7 +619,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
                                 TextFormField(
                                   controller: _roomNoController,
                                   decoration: InputDecoration(
-                                    hintText: "Enter room no",
                                     fillColor: Colors.grey[100],
                                     filled: true,
                                     border: OutlineInputBorder(

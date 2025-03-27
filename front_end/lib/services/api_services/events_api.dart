@@ -7,6 +7,7 @@ import 'package:path_finder/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import './auth_det.dart';
 import 'dart:math';
+import '../supabase_service.dart';
 
 class EventsService {
   final String baseUrl = AuthDet().baseUrl;
@@ -38,13 +39,16 @@ class EventsService {
           // Create a new map for each event to avoid reference issues
           Map<String, dynamic> event = {};
 
-          // Extract the required fields
+          // Extract the required fields from MongoDB
           event["name"] = elem["name"] ?? "NaN";
           event["desc"] = elem["information"] ?? "No description available";
           event["clubName"] = elem["clubName"] ?? "NaN";
 
-          // Use placeholder images if not available from API
-          event["pic"] = "assets/event-pic.jpg";
+          // DEBUG: Image URL from Supabase
+          print(
+              "DEBUG: Processing image URL from Supabase: ${elem['imageUrl']}");
+          // Image data comes from Supabase
+          event["pic"] = elem['imageUrl']; // This URL is from Supabase
           event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
 
           // Parse the date-time
@@ -93,7 +97,6 @@ class EventsService {
     required String details,
     required String location,
     required String roomNo,
-    required String clubName,
     required DateTime eventDate,
     required String startTime,
     required String endTime,
@@ -101,7 +104,25 @@ class EventsService {
     BuildContext? context,
   }) async {
     final userProvider = context!.read<UserProvider>();
+    final supaBaseServ = SupabaseService();
+    String? imageUrl;
     try {
+      // DEBUG: Image upload to Supabase section
+      print("DEBUG: Starting image upload to Supabase");
+      if (imageFile != null) {
+        // SUPABASE: This is where we upload and get image from Supabase
+        imageUrl = await supaBaseServ.uploadEventPicture(imageFile, name);
+        print("DEBUG: Successfully uploaded image to Supabase: $imageUrl");
+
+        if (imageUrl == null) {
+          throw Exception("couldn't upload picture to supabase");
+        }
+      } else {
+        throw Exception("No image was provided");
+      }
+
+      // MONGODB: The rest of the data is sent to MongoDB Atlas
+      print("DEBUG: Preparing to send event data to MongoDB Atlas");
       var url = Uri.parse("$baseUrl/api/events/create");
 
       // Format date for API
@@ -116,19 +137,19 @@ class EventsService {
         'name': name,
         'information': details,
         'building': location,
+        'imageUrl': imageUrl, // This is the Supabase URL being sent to MongoDB
         'roomno': roomNo,
-        'clubName': clubName,
         'startTime': startDateTime,
         'endTime': endDateTime,
-        // Image will be handled separately in future updates
       };
+
+      print("DEBUG: Sending event data with Supabase imageUrl: $imageUrl");
 
       // Make POST request with JSON data
       var response = await http.post(
         url,
         headers: {
           "Content-Type": "application/json",
-          // Add authorization token if your API requires it
           "Authorization": "Bearer ${userProvider.token}"
         },
         body: json.encode(payload),
@@ -186,8 +207,7 @@ class EventsService {
       );
 
       print("Response status: ${response.statusCode}");
-      print(
-          "Response body: ${response.body.substring(0, min(100, response.body.length))}...");
+      print("Response body: ${response.body}...");
 
       if (response.statusCode != 200) {
         throw Exception("Failed to load events: ${response.statusCode}");
@@ -201,13 +221,16 @@ class EventsService {
           // Create a new map for each event to avoid reference issues
           Map<String, dynamic> event = {};
 
-          // Extract the required fields
+          // Extract the required fields from MongoDB
           event["name"] = elem["name"] ?? "NaN";
           event["desc"] = elem["information"] ?? "No description available";
           event["clubName"] = elem["clubName"] ?? "NaN";
 
-          // Use placeholder images if not available from API
-          event["pic"] = "assets/event-pic.jpg";
+          // DEBUG: Image URL should be from Supabase but is missing here
+          print("DEBUG: Image URL from event data: ${elem['imageUrl']} and");
+          // Image data should come from Supabase via MongoDB
+          event["pic"] = elem['imageUrl'] ??
+              "assets/event-pic.jpg"; // Should be Supabase URL
           event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
           event["location"] = elem['building']?['name'] ?? "Unknown";
 

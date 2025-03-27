@@ -64,92 +64,52 @@ class _TodayState extends State<Today> {
                 SizedBox(
                   height: 330,
                   child: Consumer<EventProvider>(
-                      builder: (context, eventProvider, child) {
-                    if (eventProvider.isLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (eventProvider.todaysEvents.isEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.event_busy,
-                              size: 48,
-                              color: Colors.grey[400],
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              "No events for today",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
+                    builder: (context, eventProvider, child) {
+                      if (eventProvider.isLoading) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (eventProvider.todaysEvents.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.event_busy,
+                                size: 48,
+                                color: Colors.grey[400],
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    } else {
-                      return ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: eventProvider.todaysEvents.length,
-                        itemBuilder: (context, index) {
-                          final event = eventProvider.todaysEvents[index];
-                          return TodayCard(
-                            event: event,
-                          );
-                        },
-                      );
-                    }
-                  }),
+                              SizedBox(height: 16),
+                              Text(
+                                "No events for today",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: eventProvider.todaysEvents.length,
+                          itemBuilder: (context, index) {
+                            final event = eventProvider.todaysEvents[index];
+                            return TodayCard(
+                              event: event,
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
-                // Add more scrollable content
-                _buildScrollTestSection("Upcoming Events"),
-                SizedBox(height: 20),
-                _buildScrollTestSection("Popular Destinations"),
-                SizedBox(height: 20),
-                _buildScrollTestSection("Recommended For You"),
-                SizedBox(height: 20),
-                _buildScrollTestSection("Previous Visits"),
               ],
             ),
           )
         ],
       ),
-    );
-  }
-
-  Widget _buildScrollTestSection(String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey[800],
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Center(
-            child: Text(
-              "Scroll Test Content for $title",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
