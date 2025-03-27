@@ -267,7 +267,7 @@ class _SearchPageState extends State<SearchPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Category filter chips - Make more compact when keyboard is open
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).viewInsets.bottom > 0 ? 50 : 60,
               child: Padding(
                 padding:

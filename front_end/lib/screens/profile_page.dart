@@ -27,7 +27,6 @@ class _ProfilePageState extends State<ProfilePage>
 
   bool _notificationsEnabled = true;
   bool _locationServicesEnabled = true;
-  bool _darkModeEnabled = false;
 
   final _logoutService = LogoutService();
 

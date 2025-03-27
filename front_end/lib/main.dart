@@ -5,6 +5,9 @@ import './providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  // Ensure Flutter binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  
   runApp(
     MultiProvider(
       providers: [
