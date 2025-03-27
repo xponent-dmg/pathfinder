@@ -6,7 +6,7 @@ const { auth } = require('../middleware/auth');
 // Get all buildings
 router.get('/', async (req, res) => {
   try {
-    const buildings = await Building.find().select('name coordinates');
+    const buildings = await Building.find().select('name coordinates category');
     res.json(buildings);
   } catch (error) {
     console.error('Error fetching buildings:', error);
@@ -34,5 +34,21 @@ router.get('/:name', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
+// Get buildings by category
+router.get('/category/:categoryName', async (req, res) => {
+  try {
+    const { categoryName } = req.params;
+    const buildings = await Building.find({ category: categoryName })
+      .select('name coordinates category');
+    
+    if (buildings.length === 0) {
+      return res.status(404).json({ message: 'No buildings found in this category' });
+    }
+    
+    res.json(buildings);
+  } catch (error) {
+    console.error('Error fetching buildings by category:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 module.exports = router;

@@ -32,14 +32,13 @@ class _MapPageState extends State<MapPage> {
   final double _initialBottomSheetHeight = 300.0; // Initial height
 
   final List<String> _categories = [
-    'All',
-    'Academic',
-    'Hostels',
-    'Cafeteria',
-    'Sports',
-    'Parking',
-    'ATMs',
-    'Auditorium'
+    "All",
+    "Academics",
+    "Hostel",
+    "Sports",
+    "Eateries",
+    "Shopping",
+    "Others",
   ];
 
   String _selectedCategory = 'All';
@@ -88,7 +87,7 @@ class _MapPageState extends State<MapPage> {
         _errorMessage =
             'Location services are disabled. Please enable GPS in settings.';
       });
-      _fetchBuildings(); // Still fetch buildings even if location is unavailable
+      _fetchBuildings('All'); // Still fetch buildings even if location is unavailable
       return;
     }
 
@@ -99,7 +98,7 @@ class _MapPageState extends State<MapPage> {
         setState(() {
           _errorMessage = 'Location permissions are denied.';
         });
-        _fetchBuildings();
+        _fetchBuildings('All');
         return;
       }
     }
@@ -109,13 +108,13 @@ class _MapPageState extends State<MapPage> {
         _errorMessage =
             'Location permissions are permanently denied. Please enable in app settings.';
       });
-      _fetchBuildings();
+      _fetchBuildings('All');
       return;
     }
 
     // Once permission is granted, fetch location and buildings
     _getUserLocation();
-    _fetchBuildings();
+    _fetchBuildings('All');
   }
 
   // Get user location - enhanced version
@@ -157,21 +156,40 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<void> _fetchBuildings() async {
+  Future<void> _fetchBuildings(String category) async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/buildings'),
-        headers: {'Content-Type': 'application/json'},
-      );
+      if(category=='All'){
+        final response = await http.get(
+          Uri.parse('$baseUrl/api/buildings/'),
+          headers: {'Content-Type': 'application/json'},
+        );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> buildings = jsonDecode(response.body);
-        _addMarkers(buildings);
-      } else {
-        setState(() {
-          _errorMessage = 'Failed to load buildings: ${response.statusCode}';
-          _isLoading = false;
-        });
+        if (response.statusCode == 200) {
+          final List<dynamic> buildings = jsonDecode(response.body);
+          _addMarkers(buildings);
+        } else {
+          setState(() {
+            _errorMessage = 'Failed to load buildings: ${response.statusCode}';
+            _isLoading = false;
+          });
+        }
+      }
+      else{
+        final response = await http.get(
+          Uri.parse('$baseUrl/api/buildings/category/$category'),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 200) {
+          final List<dynamic> buildings = jsonDecode(response.body);
+          _addMarkers(buildings);
+        } else {
+          setState(() {
+            _errorMessage = 'Failed to load buildings : ${response.statusCode}';
+            _isLoading = false;
+          });
+        }
+
       }
     } catch (e) {
       setState(() {
@@ -186,7 +204,7 @@ class _MapPageState extends State<MapPage> {
       for (var building in buildings) {
         // Skip if the category filter is active and this building doesn't match
         if (_selectedCategory != 'All' &&
-            building['type']?.toLowerCase() !=
+            building['category']?.toLowerCase() !=
                 _selectedCategory.toLowerCase()) {
           continue;
         }
@@ -201,7 +219,7 @@ class _MapPageState extends State<MapPage> {
             title: building['name'],
           ),
           icon: BitmapDescriptor.defaultMarkerWithHue(
-              _getMarkerHue(building['type'] ?? 'academic')),
+              _getMarkerHue(building['category'] ?? 'others')),
           onTap: () {
             _onMarkerTapped(building);
           },
@@ -214,14 +232,16 @@ class _MapPageState extends State<MapPage> {
 
   double _getMarkerHue(String type) {
     switch (type.toLowerCase()) {
-      case 'academic':
+      case 'academics':
         return BitmapDescriptor.hueRed;
       case 'hostel':
         return BitmapDescriptor.hueYellow;
-      case 'cafeteria':
-        return BitmapDescriptor.hueOrange;
       case 'sports':
         return BitmapDescriptor.hueGreen;
+      case 'eateries':
+        return BitmapDescriptor.hueCyan;
+      case 'shopping':
+        return BitmapDescriptor.hueMagenta;
       default:
         return BitmapDescriptor.hueViolet;
     }
@@ -237,47 +257,16 @@ class _MapPageState extends State<MapPage> {
     });
 
     // Fetch events for this location
-    _fetchLocationEvents(location['_id']);
+    _fetchLocationEvents(location['name']);
   }
 
   // Placeholder for API call to fetch location events
   Future<void> _fetchLocationEvents(String locationId) async {
     // Simulate API call with a delay
     await Future.delayed(Duration(milliseconds: 800));
-
-    // Mock data - would be replaced with an actual API response
-    setState(() {
-      _locationEvents = [
-        {
-          'id': '1',
-          'name': 'Tech Workshop',
-          'time': '10:00 AM - 12:00 PM',
-          'date': 'Today',
-          'clubName': 'Tech Club'
-        },
-        {
-          'id': '2',
-          'name': 'Guest Lecture',
-          'time': '2:00 PM - 3:30 PM',
-          'date': 'Today',
-          'clubName': 'CSE Department'
-        },
-        {
-          'id': '3',
-          'name': 'Coding Contest',
-          'time': '5:00 PM - 8:00 PM',
-          'date': 'Tomorrow',
-          'clubName': 'Coding Club'
-        },
-      ];
-      _loadingEvents = false;
-    });
-
-    // Actual API call would look something like this:
-    /*
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/api/events/location/$locationId'),
+        Uri.parse('$baseUrl/api/events/building/$locationId'),
         headers: {'Content-Type': 'application/json'},
       );
 
@@ -299,7 +288,6 @@ class _MapPageState extends State<MapPage> {
         _loadingEvents = false;
       });
     }
-    */
   }
 
   void _filterMarkersByCategory(String category) {
@@ -310,7 +298,7 @@ class _MapPageState extends State<MapPage> {
       _showLocationDetails = false;
     });
 
-    _fetchBuildings();
+    _fetchBuildings(category);
   }
 
   void _onViewEventButtonPressed(String eventId) {
@@ -585,19 +573,23 @@ class _MapPageState extends State<MapPage> {
                             CircleAvatar(
                               backgroundColor: Colors.blue[100],
                               radius: 24,
-                              child: Icon(
-                                _selectedLocation!['type']?.toLowerCase() ==
-                                        'academic'
-                                    ? Icons.school
-                                    : _selectedLocation!['type']
-                                                ?.toLowerCase() ==
-                                            'cafeteria'
+                                child: Icon(
+                                _selectedLocation!['category']?.toLowerCase() ==
+                                    'academics'
+                                  ? Icons.school
+                                  : _selectedLocation!['category']?.toLowerCase() ==
+                                      'hostel'
+                                    ? Icons.hotel
+                                    : _selectedLocation!['category']?.toLowerCase() ==
+                                        'sports'
+                                      ? Icons.sports_soccer
+                                      : _selectedLocation!['category']?.toLowerCase() ==
+                                          'eateries'
                                         ? Icons.restaurant
-                                        : _selectedLocation!['type']
-                                                    ?.toLowerCase() ==
-                                                'hostel'
-                                            ? Icons.hotel
-                                            : Icons.location_on,
+                                        : _selectedLocation!['category']?.toLowerCase() ==
+                                            'shopping'
+                                          ? Icons.shopping_cart
+                                          : Icons.place,
                                 color: Colors.blue[700],
                                 size: 26,
                               ),
@@ -638,20 +630,6 @@ class _MapPageState extends State<MapPage> {
                           ],
                         ),
                       ),
-
-                      // Description
-                      if (_selectedLocation!['description'] != null)
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            _selectedLocation!['description'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ),
-                      SizedBox(height: 10),
 
                       // Divider
                       Divider(
@@ -768,27 +746,6 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
             ),
-
-          // Add custom blue dot indicator if the built-in one doesn't show
-          Positioned(
-            bottom: 80,
-            right: 16,
-            child: FloatingActionButton.small(
-              heroTag: "toggleBlueDot",
-              backgroundColor: Colors.white,
-              onPressed: () {
-                // Force refresh of location and map
-                _getUserLocation();
-                setState(() {
-                  // Toggle blue dot visibility if needed
-                });
-              },
-              child: Icon(
-                Icons.gps_fixed,
-                color: Colors.blue[700],
-              ),
-            ),
-          ),
         ],
       ),
       // Only show floating action buttons when location details are not shown
