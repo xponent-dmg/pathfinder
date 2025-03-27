@@ -8,7 +8,7 @@ const EventSchema = new mongoose.Schema(
       ref: "Building",
       required: true,
     },
-    image: { type: String, required: true },
+    imageUrl: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     information: { type: String },
