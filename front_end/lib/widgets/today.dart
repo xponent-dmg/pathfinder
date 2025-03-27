@@ -11,36 +11,12 @@ class Today extends StatefulWidget {
 }
 
 class _TodayState extends State<Today> {
-  // final EventsService _eventsService = EventsService();
-  List<Map<String, dynamic>> eventList = [];
-
   @override
   void initState() {
     super.initState();
     // Fetch events when widget initializes
-    // getTodaysEvents();
     Future.microtask(() => context.read<EventProvider>().fetchTodaysEvents());
   }
-
-  // Future<void> getTodaysEvents() async {
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-
-  //   try {
-  //     var response = await EventsService.todaysEvents();
-  //     setState(() {
-  //       eventList = response;
-  //       _isLoading = false;
-  //     });
-  //     print("Successfully fetched ${eventList.length} events");
-  //   } catch (e) {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     print("Error occurred while fetching events: $e");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,40 +65,43 @@ class _TodayState extends State<Today> {
                   height: 330,
                   child: Consumer<EventProvider>(
                       builder: (context, eventProvider, child) {
-                    return (eventProvider.isLoading)
-                        ? (eventProvider.eventList.isNotEmpty)
-                            ? ListView.builder(
-                                itemCount: eventProvider.eventList.length,
-                                itemBuilder: (context, index) {
-                                  final event = eventProvider.eventList[index];
-                                  return TodayCard(
-                                    event: event,
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.event_busy,
-                                      size: 48,
-                                      color: Colors.grey[400],
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      "No events for today",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                        : Center(
-                            child: CircularProgressIndicator(),
+                    if (eventProvider.isLoading) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (eventProvider.todaysEvents.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.event_busy,
+                              size: 48,
+                              color: Colors.grey[400],
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              "No events for today",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: eventProvider.todaysEvents.length,
+                        itemBuilder: (context, index) {
+                          final event = eventProvider.todaysEvents[index];
+                          return TodayCard(
+                            event: event,
                           );
+                        },
+                      );
+                    }
                   }),
                 ),
                 // Add more scrollable content

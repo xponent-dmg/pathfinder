@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:path_finder/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import './auth_det.dart';
+import 'dart:math';
 
 class EventsService {
   final String baseUrl = AuthDet().baseUrl;
@@ -14,10 +15,16 @@ class EventsService {
   Future<List<Map<String, dynamic>>> todaysEvents() async {
     try {
       var url = Uri.parse("$baseUrl/api/events/today");
+      print("Fetching today's events from: $url");
+
       var response = await http.get(
         url,
         headers: {"Content-type": "application/json"},
       );
+
+      print("Response status: ${response.statusCode}");
+      print(
+          "Response body: ${response.body.substring(0, min(100, response.body.length))}...");
 
       if (response.statusCode != 200) {
         throw Exception("Failed to load events: ${response.statusCode}");
@@ -66,11 +73,11 @@ class EventsService {
       return eventList;
     } catch (e) {
       print("API error: $e");
-      // Return an empty list or some mock data as fallback
+      // For debugging, return a more descriptive mock event
       return [
         {
-          "name": "Mock Event",
-          "desc": "This is a mock event shown because there was an API error",
+          "name": "API Error Event",
+          "desc": "Error: $e",
           "pic": "assets/event-pic.jpg",
           "profile-pic": "assets/profile_pics/profile-pic.jpg",
           "time": "18:30",
@@ -167,13 +174,20 @@ class EventsService {
     }
   }
 
+//fetching all events
   Future<List<Map<String, dynamic>>> getAllEvents() async {
     try {
       var url = Uri.parse("$baseUrl/api/events/");
+      print("Fetching all events from: $url");
+
       var response = await http.get(
         url,
         headers: {"Content-type": "application/json"},
       );
+
+      print("Response status: ${response.statusCode}");
+      print(
+          "Response body: ${response.body.substring(0, min(100, response.body.length))}...");
 
       if (response.statusCode != 200) {
         throw Exception("Failed to load events: ${response.statusCode}");
@@ -195,22 +209,27 @@ class EventsService {
           // Use placeholder images if not available from API
           event["pic"] = "assets/event-pic.jpg";
           event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
+          event["location"] = elem['building']?['name'] ?? "Unknown";
 
           // Parse the date-time
           try {
             if (elem["startTime"] != null) {
               DateTime parsedDate = DateTime.parse(elem["startTime"]).toLocal();
               event["time"] = DateFormat("HH:mm").format(parsedDate);
+              event["date"] = DateFormat("MMMM d").format(parsedDate);
               event["day"] = DateFormat("EEEE").format(parsedDate);
             } else {
               // Default values if startTime is missing
               event["time"] = "TBD";
+              event["date"] = "Today";
               event["day"] = "Today";
             }
           } catch (e) {
             print("Error parsing date: $e");
             // Fallback values
             event["time"] = "TBD";
+            event["date"] = "Today";
+
             event["day"] = "Today";
           }
 
@@ -222,11 +241,11 @@ class EventsService {
       return eventList;
     } catch (e) {
       print("API error: $e");
-      // Return an empty list or some mock data as fallback
+      // For debugging, return a more descriptive mock event
       return [
         {
-          "name": "Mock Event",
-          "desc": "This is a mock event shown because there was an API error",
+          "name": "API Error Event",
+          "desc": "Error: $e",
           "pic": "assets/event-pic.jpg",
           "profile-pic": "assets/profile_pics/profile-pic.jpg",
           "time": "18:30",

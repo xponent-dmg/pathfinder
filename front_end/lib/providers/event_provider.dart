@@ -23,8 +23,14 @@ class EventProvider with ChangeNotifier {
 
     try {
       print("Fetching all events...");
-      _eventList = await _eventsService.getAllEvents();
+      final results = await _eventsService.getAllEvents();
+      _eventList = results;
       print("Successfully fetched ${_eventList.length} events.");
+      if (_eventList.isEmpty) {
+        print("Warning: Fetched events list is empty");
+      } else {
+        print("First event: ${_eventList.first}");
+      }
     } catch (error) {
       _errorMessage = "Failed to load events: $error";
       print("Error fetching events: $error");
@@ -42,8 +48,14 @@ class EventProvider with ChangeNotifier {
 
     try {
       print("Fetching today's events...");
-      _todaysEvents = await _eventsService.todaysEvents();
+      final results = await _eventsService.todaysEvents();
+      _todaysEvents = results;
       print("Successfully fetched ${_todaysEvents.length} today's events.");
+      if (_todaysEvents.isEmpty) {
+        print("Warning: Today's events list is empty");
+      } else {
+        print("First today's event: ${_todaysEvents.first}");
+      }
     } catch (error) {
       _errorMessage = "Failed to load today's events: $error";
       print("Error fetching today's events: $error");

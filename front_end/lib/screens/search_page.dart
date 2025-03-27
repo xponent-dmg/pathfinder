@@ -47,46 +47,46 @@ class _SearchPageState extends State<SearchPage>
   ];
 
   // Mock search results
-  List<Map<String, dynamic>> _results = [
-    // {
-    //   'title': 'Tech Innovators Hackathon',
-    //   'type': 'Event',
-    //   'date': '20 Nov, 2023',
-    //   'image': 'assets/event-pic.jpg',
-    //   'location': 'University Center, Room 305'
-    // },
-    // {
-    //   'title': 'Photography Club Meet',
-    //   'type': 'Club',
-    //   'date': '15 Nov, 2023',
-    //   'image': 'assets/start-img.png',
-    //   'location': 'Arts Building, Studio 4'
-    // },
-    // {
-    //   'title': '2000s Hip Hop Night',
-    //   'type': 'Event',
-    //   'date': '29 Oct, 2023',
-    //   'image': 'assets/event-pic.jpg',
-    //   'location': 'Brooklyn, New York'
-    // },
-    // {
-    //   'title': 'Machine Learning Workshop',
-    //   'type': 'Workshop',
-    //   'date': '22 Nov, 2023',
-    //   'image': 'assets/start-img.png',
-    //   'location': 'Science Building, Lab 103'
-    // },
-    // {
-    //   'title': 'Career Networking Mixer',
-    //   'type': 'Networking',
-    //   'date': '18 Nov, 2023',
-    //   'image': 'assets/event-pic.jpg',
-    //   'location': 'Business Center, Main Hall'
-    // },
-  ];
+  // final List<Map<String, dynamic>> _results = [
+  //   // {
+  //   //   'title': 'Tech Innovators Hackathon',
+  //   //   'type': 'Event',
+  //   //   'date': '20 Nov, 2023',
+  //   //   'image': 'assets/event-pic.jpg',
+  //   //   'location': 'University Center, Room 305'
+  //   // },
+  //   // {
+  //   //   'title': 'Photography Club Meet',
+  //   //   'type': 'Club',
+  //   //   'date': '15 Nov, 2023',
+  //   //   'image': 'assets/start-img.png',
+  //   //   'location': 'Arts Building, Studio 4'
+  //   // },
+  //   // {
+  //   //   'title': '2000s Hip Hop Night',
+  //   //   'type': 'Event',
+  //   //   'date': '29 Oct, 2023',
+  //   //   'image': 'assets/event-pic.jpg',
+  //   //   'location': 'Brooklyn, New York'
+  //   // },
+  //   // {
+  //   //   'title': 'Machine Learning Workshop',
+  //   //   'type': 'Workshop',
+  //   //   'date': '22 Nov, 2023',
+  //   //   'image': 'assets/start-img.png',
+  //   //   'location': 'Science Building, Lab 103'
+  //   // },
+  //   // {
+  //   //   'title': 'Career Networking Mixer',
+  //   //   'type': 'Networking',
+  //   //   'date': '18 Nov, 2023',
+  //   //   'image': 'assets/event-pic.jpg',
+  //   //   'location': 'Business Center, Main Hall'
+  //   // },
+  // ];
 
   Future<void> getAllEvents() async {
-    _results = await _eventsService.getAllEvents();
+    await _eventsService.getAllEvents();
   }
 
   List<Map<String, dynamic>> _filteredResults = [];
@@ -106,10 +106,14 @@ class _SearchPageState extends State<SearchPage>
     // Add listener to search controller
     _searchController.addListener(_onSearchChanged);
 
-    Future.microtask(() => context.read<EventProvider>().fetchAllEvents());
-
-    // Initialize filtered results
-    // _filteredResults = List.from(_results);
+    // Fetch events when page initializes and make sure loading state is handled
+    Future.microtask(() {
+      final provider = context.read<EventProvider>();
+      provider.fetchAllEvents();
+      // if (provider.eventList.isEmpty && !provider.isLoading) {
+      // provider.fetchAllEvents();
+      // }
+    });
   }
 
   @override
@@ -128,14 +132,14 @@ class _SearchPageState extends State<SearchPage>
     _debounce = Timer(const Duration(milliseconds: 500), () {
       if (_searchController.text.isNotEmpty) {
         setState(() {
-          _searchQuery = _searchController.text;
+          _searchQuery = _searchController.text.trim();
           _hasSearched = true;
           _filterResults();
         });
         _animationController.forward(from: 0.0);
       } else {
         setState(() {
-          _filteredResults = List.from(_results);
+          _filteredResults = List.from(context.read<EventProvider>().eventList);
         });
       }
     });
@@ -144,23 +148,22 @@ class _SearchPageState extends State<SearchPage>
   // Filter results based on search query and category
   void _filterResults() {
     final query = _searchQuery.toLowerCase();
+    final allEvents = context.read<EventProvider>().eventList;
     setState(() {
       if (_selectedCategory == 'All') {
-        _filteredResults = _results
+        _filteredResults = allEvents
             .where((result) =>
-                result['title'].toString().toLowerCase().contains(query) ||
-                result['type'].toString().toLowerCase().contains(query) ||
+                result['name'].toString().toLowerCase().contains(query) ||
                 result['location'].toString().toLowerCase().contains(query))
             .toList();
+        print("filtered events: ${_filteredResults.length}");
       } else {
-        _filteredResults = _results
-            .where((result) =>
-                (result['title'].toString().toLowerCase().contains(query) ||
-                    result['location']
-                        .toString()
-                        .toLowerCase()
-                        .contains(query)) &&
-                result['type'].toString() == _selectedCategory)
+        _filteredResults = allEvents
+            .where((result) => (result['name']
+                    .toString()
+                    .toLowerCase()
+                    .contains(query) ||
+                result['location'].toString().toLowerCase().contains(query)))
             .toList();
       }
     });
@@ -179,20 +182,20 @@ class _SearchPageState extends State<SearchPage>
   void _clearSearch() {
     setState(() {
       _searchController.clear();
-      _filteredResults = List.from(_results);
+      _filteredResults = List.from(context.read<EventProvider>().eventList);
     });
   }
 
   // Select a recent search
-  void _selectRecentSearch(String search) {
-    _searchController.text = search;
-    setState(() {
-      _searchQuery = search;
-      _hasSearched = true;
-      _filterResults();
-    });
-    _animationController.forward(from: 0.0);
-  }
+  // void _selectRecentSearch(String search) {
+  //   _searchController.text = search;
+  //   setState(() {
+  //     _searchQuery = search;
+  //     _hasSearched = true;
+  //     _filterResults();
+  //   });
+  //   _animationController.forward(from: 0.0);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +259,7 @@ class _SearchPageState extends State<SearchPage>
                 },
                 onSubmitted: (value) {
                   setState(() {
-                    _searchQuery = value;
+                    _searchQuery = value.trim();
                     _hasSearched = true;
                     if (!_recentSearches.contains(value) && value.isNotEmpty) {
                       _recentSearches.insert(0, value);
@@ -278,7 +281,7 @@ class _SearchPageState extends State<SearchPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Category filter chips - Make more compact when keyboard is open
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).viewInsets.bottom > 0 ? 50 : 60,
               child: Padding(
                 padding:
@@ -332,9 +335,7 @@ class _SearchPageState extends State<SearchPage>
 
             // Recent searches or results - Use Flexible instead of Expanded for better adaptation
             Flexible(
-              child: !_hasSearched
-                  ? _buildRecentSearches()
-                  : _buildSearchResults(),
+              child: _buildSearchResults(),
             ),
             // Flexible(
             //   child: _buildSearchResults(),
@@ -346,246 +347,298 @@ class _SearchPageState extends State<SearchPage>
   }
 
   // Build recent searches widget with scrollable content
-  Widget _buildRecentSearches() {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Recent Searches",
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 16),
-            _recentSearches.isEmpty
-                ? Center(
-                    child: Text(
-                      "No recent searches",
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 16,
-                      ),
-                    ),
-                  )
-                : Column(
-                    children: _recentSearches.map((search) {
-                      return ListTile(
-                        leading: Icon(Icons.history, color: Colors.grey[600]),
-                        title: Text(
-                          search,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        trailing: Icon(Icons.north_west,
-                            color: Colors.grey[600], size: 18),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                        dense: true,
-                        onTap: () => _selectRecentSearch(search),
-                      );
-                    }).toList(),
-                  ),
-            SizedBox(height: 24),
-            Text(
-              "Popular Searches",
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
-            ),
-            SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                "Programming Club",
-                "Career Fair",
-                "Music Festival",
-                "Workshop",
-                "Sports Tournament"
-              ].map((item) {
-                return InkWell(
-                  onTap: () => _selectRecentSearch(item),
-                  borderRadius: BorderRadius.circular(50),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: Colors.grey[300]!),
-                    ),
-                    child: Text(
-                      item,
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            // Add extra space at bottom for keyboard
-            SizedBox(
-                height: MediaQuery.of(context).viewInsets.bottom > 0 ? 120 : 0),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildRecentSearches() {
+  //   return SingleChildScrollView(
+  //     physics: BouncingScrollPhysics(),
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(16.0),
+  //       child: Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Text(
+  //             "Recent Searches",
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.w600,
+  //               color: Colors.black87,
+  //             ),
+  //           ),
+  //           SizedBox(height: 16),
+  //           _recentSearches.isEmpty
+  //               ? Center(
+  //                   child: Text(
+  //                     "No recent searches",
+  //                     style: TextStyle(
+  //                       color: Colors.grey[600],
+  //                       fontSize: 16,
+  //                     ),
+  //                   ),
+  //                 )
+  //               : Column(
+  //                   children: _recentSearches.map((search) {
+  //                     return ListTile(
+  //                       leading: Icon(Icons.history, color: Colors.grey[600]),
+  //                       title: Text(
+  //                         search,
+  //                         style: TextStyle(
+  //                           fontSize: 16,
+  //                           color: Colors.black87,
+  //                         ),
+  //                       ),
+  //                       trailing: Icon(Icons.north_west,
+  //                           color: Colors.grey[600], size: 18),
+  //                       contentPadding: EdgeInsets.symmetric(horizontal: 8),
+  //                       dense: true,
+  //                       onTap: () => _selectRecentSearch(search),
+  //                     );
+  //                   }).toList(),
+  //                 ),
+  //           SizedBox(height: 24),
+  //           Text(
+  //             "Popular Searches",
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 18,
+  //               fontWeight: FontWeight.w600,
+  //               color: Colors.black87,
+  //             ),
+  //           ),
+  //           SizedBox(height: 16),
+  //           Wrap(
+  //             spacing: 8,
+  //             runSpacing: 8,
+  //             children: [
+  //               "Programming Club",
+  //               "Career Fair",
+  //               "Music Festival",
+  //               "Workshop",
+  //               "Sports Tournament"
+  //             ].map((item) {
+  //               return InkWell(
+  //                 onTap: () => _selectRecentSearch(item),
+  //                 borderRadius: BorderRadius.circular(50),
+  //                 child: Container(
+  //                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.grey[100],
+  //                     borderRadius: BorderRadius.circular(50),
+  //                     border: Border.all(color: Colors.grey[300]!),
+  //                   ),
+  //                   child: Text(
+  //                     item,
+  //                     style: TextStyle(
+  //                       color: Colors.black87,
+  //                       fontSize: 14,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               );
+  //             }).toList(),
+  //           ),
+  //           // Add extra space at bottom for keyboard
+  //           SizedBox(
+  //               height: MediaQuery.of(context).viewInsets.bottom > 0 ? 120 : 0),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Build search results widget with scrollable content
   Widget _buildSearchResults() {
-    if (_filteredResults.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search_off,
-              size: 70,
-              color: Colors.grey[400],
-            ),
-            SizedBox(height: 16),
-            Text(
-              "No results found",
-              style: GoogleFonts.poppins(
-                fontSize: 18,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              "Try different keywords or filters",
-              style: TextStyle(
-                color: Colors.grey[500],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return FadeTransition(
-        opacity: _fadeAnimation,
-        child: Consumer(builder: (context, eventProvider, child) {
-          return ListView.builder(
-            padding: EdgeInsets.all(16),
-            itemCount: _filteredResults.length,
-            // Add extra padding when keyboard is visible
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            itemBuilder: (context, index) {
-              final result = _filteredResults[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: GestureDetector(
-                  onTap: () {
-                    // Dismiss keyboard when tapping on a result
-                    FocusScope.of(context).unfocus();
-                    Navigator.pushNamed(context, '/event_page');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(15),
-                          blurRadius: 10,
-                          offset: Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Image with event type badge
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(16),
-                              ),
-                              child: Image.asset(
-                                result['image'],
-                                height: 150,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Positioned(
-                              top: 12,
-                              left: 12,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[700],
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text(
-                                  result['type'],
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+      opacity: _fadeAnimation,
+      child: Consumer<EventProvider>(builder: (context, eventProvider, child) {
+        if (eventProvider.isLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-                        // Content
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                result['title'],
-                                style: GoogleFonts.poppins(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
+        if (eventProvider.eventList.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.event_busy,
+                  size: 70,
+                  color: Colors.grey[400],
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "No events available",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Try refreshing or check back later",
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => eventProvider.fetchAllEvents(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue[700],
+                  ),
+                  child: Text("Refresh"),
+                ),
+              ],
+            ),
+          );
+        }
+
+        if (_filteredResults.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.search_off,
+                  size: 70,
+                  color: Colors.grey[400],
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "No results found",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "Try different keywords or filters",
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.all(16),
+          itemCount: _filteredResults.length,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          itemBuilder: (context, index) {
+            final result = _filteredResults[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: GestureDetector(
+                onTap: () {
+                  // Dismiss keyboard when tapping on a result
+                  FocusScope.of(context).unfocus();
+                  Navigator.pushNamed(context, '/event_page');
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(15),
+                        blurRadius: 10,
+                        offset: Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Image with event type badge
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(16),
+                            ),
+                            child: Image.asset(
+                              result['pic'],
+                              height: 150,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          // Positioned(
+                          //   top: 12,
+                          //   left: 12,
+                          //   child: Container(
+                          //     padding: EdgeInsets.symmetric(
+                          //       horizontal: 10,
+                          //       vertical: 6,
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //       color: Colors.blue[700],
+                          //       borderRadius: BorderRadius.circular(30),
+                          //     ),
+                          //     child: Text(
+                          //       result['type'] ?? "type?",
+                          //       style: TextStyle(
+                          //         color: Colors.white,
+                          //         fontWeight: FontWeight.w500,
+                          //         fontSize: 12,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+
+                      // Content
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              result['name'],
+                              style: GoogleFonts.poppins(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
                               ),
-                              SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    size: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    result['date'],
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 14,
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Date section
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.calendar_today,
+                                      size: 16,
+                                      color: Colors.grey[600],
                                     ),
-                                  ),
-                                  SizedBox(width: 16),
-                                  Icon(
-                                    Icons.location_on,
-                                    size: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                  SizedBox(width: 6),
-                                  Expanded(
-                                    child: Text(
+                                    SizedBox(width: 6),
+                                    Text(
+                                      result['date'],
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                // Location section
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: 16,
+                                      color: Colors.grey[600],
+                                    ),
+                                    SizedBox(width: 6),
+                                    Text(
                                       result['location'],
                                       style: TextStyle(
                                         color: Colors.grey[700],
@@ -593,19 +646,21 @@ class _SearchPageState extends State<SearchPage>
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            },
-          );
-        }));
+              ),
+            );
+          },
+        );
+      }),
+    );
   }
 }
