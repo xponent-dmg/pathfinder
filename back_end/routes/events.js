@@ -3,7 +3,7 @@ const router = express.Router();
 const Event = require("../models/EventModel");
 const Building = require("../models/BuildingModel");
 const ClubLeader = require("../models/ClubLeaderModel");
-const { auth } = require("../middleware/auth"); 
+const { auth } = require("../middleware/auth");
 
 //Creating the event
 router.post("/create", auth, async (req, res) => {
@@ -32,6 +32,7 @@ router.post("/create", auth, async (req, res) => {
     const event = new Event({
       name: req.body.name,
       building: building._id,
+      imageUrl: req.body.imageUrl,
       startTime: req.body.startTime,
       endTime: req.body.endTime,
       information: req.body.information,
