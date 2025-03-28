@@ -13,6 +13,7 @@ const EventSchema = new mongoose.Schema(
     information: { type: String },
     price: { type: Number, required: true },
     isOnline: { type: Boolean, default: false },
+    isMandatory: { type: Boolean, default: false },
     roomno: { type: String },
     categories: [{ type: String }],
     clubName: { type: String, required: true },
