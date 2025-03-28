@@ -73,94 +73,170 @@ router.post("/create", auth, async (req, res) => {
   }
 });
 
-//Getting the event
-router.get("/", async (req, res) => {
-  console.log("GET all events request received");
-  try {
-    const now = new Date();
-    console.log("Current time:", now);
-    const events = await Event.find({ endTime: { $gt: now } })
-      .populate("building", "name") // Fetch building name
-      .populate("createdBy", "clubName -_id") // Fetch clubName, hide _id
-      .sort("startTime");
-    console.log(`Found ${events.length} future events`);
-    res.json(events);
-  } catch (error) {
-    console.error("Error fetching events:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// // Getting the event
+// router.get("/", async (req, res) => {
+//   console.log("GET all events request received");
+//   try {
+//     const now = new Date();
+//     console.log("Current time:", now);
+//     const events = await Event.find({ endTime: { $gt: now } })
+//       .populate("building", "name") // Fetch building name
+//       .populate("createdBy", "clubName -_id") // Fetch clubName, hide _id
+//       .sort("startTime");
+//     console.log(`Found ${events.length} future events`);
+//     res.json(events);
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-//Get details wrt building name
-router.get("/building/:buildingName", async (req, res) => {
-  console.log("GET events by building:", req.params.buildingName);
-  try {
-    const now = new Date();
-    const building = await Building.findOne({ name: req.params.buildingName });
-    if (!building) {
-      console.log("Building not found:", req.params.buildingName);
-      return res.status(404).json({ error: "Building not found" });
-    }
-    console.log("Building found with ID:", building._id);
-    const events = await Event.find({
-      building: building._id,
-      endTime: { $gt: now },
-    })
-      .populate("building", "name")
-      .sort("startTime");
-    console.log(
-      `Found ${events.length} future events for building ${req.params.buildingName}`
-    );
-    res.json(events);
-  } catch (error) {
-    console.error("Error fetching events by building:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// //Get details wrt building name
+// router.get("/building/:buildingName", async (req, res) => {
+//   console.log("GET events by building:", req.params.buildingName);
+//   try {
+//     const now = new Date();
+//     const building = await Building.findOne({ name: req.params.buildingName });
+//     if (!building) {
+//       console.log("Building not found:", req.params.buildingName);
+//       return res.status(404).json({ error: "Building not found" });
+//     }
+//     console.log("Building found with ID:", building._id);
+//     const events = await Event.find({
+//       building: building._id,
+//       endTime: { $gt: now },
+//     })
+//       .populate("building", "name")
+//       .sort("startTime");
+//     console.log(
+//       `Found ${events.length} future events for building ${req.params.buildingName}`
+//     );
+//     res.json(events);
+//   } catch (error) {
+//     console.error("Error fetching events by building:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-//Get details wrt category
-router.get("/category/:category", async (req, res) => {
-  console.log("GET events by category:", req.params.category);
-  try {
-    const now = new Date();
-    const events = await Event.find({
-      categories: req.params.category,
-      endTime: { $gt: now },
-    })
-      .populate("building", "name")
-      .sort("startTime");
-    console.log(
-      `Found ${events.length} future events for category ${req.params.category}`
-    );
-    res.json(events);
-  } catch (error) {
-    console.error("Error fetching events by category:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+// //Get details wrt category
+// router.get("/category/:category", async (req, res) => {
+//   console.log("GET events by category:", req.params.category);
+//   try {
+//     const now = new Date();
+//     const events = await Event.find({
+//       categories: req.params.category,
+//       endTime: { $gt: now },
+//     })
+//       .populate("building", "name")
+//       .sort("startTime");
+//     console.log(
+//       `Found ${events.length} future events for category ${req.params.category}`
+//     );
+//     res.json(events);
+//   } catch (error) {
+//     console.error("Error fetching events by category:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
 //To search for elements
+// router.get("/search", async (req, res) => {
+//   console.log("Search request received with query:", req.query.q);
+//   try {
+//     const now = new Date();
+//     const searchTerm = req.query.q || "";
+//     console.log("Searching for term:", searchTerm);
+//     const events = await Event.find({
+//       //Any and all of the following
+//       $or: [
+//         { name: { $regex: searchTerm, $options: "i" } }, //search wrt building name
+//         { categories: { $regex: searchTerm, $options: "i" } }, //search wrt categories
+//         { clubName: { $regex: searchTerm, $options: "i" } }, //search wrt clubName
+//       ],
+//       endTime: { $gt: now },
+//     })
+//       .populate("building", "name")
+//       .sort("startTime");
+//     console.log(
+//       `Found ${events.length} matching events for search term "${searchTerm}"`
+//     );
+//     res.send(events);
+//   } catch (error) {
+//     console.error("Error searching events:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
 router.get("/search", async (req, res) => {
-  console.log("Search request received with query:", req.query.q);
+  console.log("Search request received with query:", req.query);
+
   try {
     const now = new Date();
     const searchTerm = req.query.q || "";
-    console.log("Searching for term:", searchTerm);
-    const events = await Event.find({
-      //Any and all of the following
-      $or: [
-        { name: { $regex: searchTerm, $options: "i" } }, //search wrt building name
-        { categories: { $regex: searchTerm, $options: "i" } }, //search wrt categories
-        { clubName: { $regex: searchTerm, $options: "i" } }, //search wrt clubName
-      ],
-      endTime: { $gt: now },
-    })
+    let filters = { endTime: { $gt: now } }; // Ensures only upcoming events
+
+    // General search by name, category, or club name
+    if (searchTerm) {
+      filters.$or = [
+        { name: { $regex: searchTerm, $options: "i" } },
+        { categories: { $regex: searchTerm, $options: "i" } },
+        { clubName: { $regex: searchTerm, $options: "i" } },
+      ];
+    }
+
+    // Category filter
+    if (req.query.category) {
+      filters.categories = { $regex: req.query.category, $options: "i" };
+    }
+
+    // Club Name filter
+    if (req.query.clubName) {
+      filters.clubName = { $regex: req.query.clubName, $options: "i" };
+    }
+
+    // Building filter
+    if (req.query.building) {
+      const building = await Building.findOne({ name: req.query.building });
+      if (!building) {
+        console.log("Building not found:", req.query.building);
+        return res.status(404).json({ error: "Building not found" });
+      }
+      filters.building = building._id;
+    }
+
+    // Price Range Filter
+    if (req.query.minPrice || req.query.maxPrice) {
+      filters.price = {};
+      if (req.query.minPrice)
+        filters.price.$gte = parseFloat(req.query.minPrice);
+      if (req.query.maxPrice)
+        filters.price.$lte = parseFloat(req.query.maxPrice);
+    }
+
+    // Date Range Filter
+    if (req.query.startDate || req.query.endDate) {
+      filters.startTime = {};
+      if (req.query.startDate)
+        filters.startTime.$gte = new Date(req.query.startDate);
+      if (req.query.endDate)
+        filters.startTime.$lte = new Date(req.query.endDate);
+    }
+
+    console.log("Applying filters:", filters);
+
+    const events = await Event.find(filters)
       .populate("building", "name")
+      .populate("createdBy", "clubName -_id")
       .sort("startTime");
-    console.log(
-      `Found ${events.length} matching events for search term "${searchTerm}"`
-    );
-    res.send(events);
+
+    if (events.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No events found matching the criteria." });
+    }
+
+    console.log(`Found ${events.length} matching events`);
+    res.json(events);
   } catch (error) {
     console.error("Error searching events:", error);
     res.status(500).json({ error: "Internal Server Error" });
