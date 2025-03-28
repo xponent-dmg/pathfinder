@@ -263,7 +263,11 @@ class _HeaderState extends State<Header> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: Image.asset(
-                              "assets/map-icon2.jpg",
+                              // "assets/map-icon2.jpg",
+                              // "assets/map.png",
+                              // "assets/maps.png",
+                              // "assets/pin.png",
+                              "assets/apple_maps.webp",
                               width: 80,
                             ),
                           ),

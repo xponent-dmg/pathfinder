@@ -205,11 +205,9 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
           // Navigate back safely with a slight delay
           if (_mounted) {
-            Future.delayed(const Duration(milliseconds: 500), () {
-              if (_mounted && Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              }
-            });
+            if (Navigator.canPop(context)) {
+              Navigator.of(context).pop();
+            }
           }
         } else {
           // Error creating event

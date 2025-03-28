@@ -39,7 +39,6 @@ class App extends StatelessWidget {
         '/signup': (context) => const SignupPage(),
         '/profile': (context) => const ProfilePage(),
         '/clubleader': (context) => const ClubLeaderSignin(),
-        // '/event_details': (context) => const EventDetailsPage(),
         '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
         '/map': (context) => const MapPage(),

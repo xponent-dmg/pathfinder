@@ -8,7 +8,7 @@ class TodayCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/event_page');
+        Navigator.pushNamed(context, '/event_page', arguments: event);
       },
       child: Stack(
         children: [

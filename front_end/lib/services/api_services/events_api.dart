@@ -43,6 +43,7 @@ class EventsService {
           event["name"] = elem["name"] ?? "NaN";
           event["desc"] = elem["information"] ?? "No description available";
           event["clubName"] = elem["clubName"] ?? "NaN";
+          event["roomno"] = elem["roomno"] ?? "000";
 
           // DEBUG: Image URL from Supabase
           print(

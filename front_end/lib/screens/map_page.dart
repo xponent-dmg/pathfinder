@@ -41,7 +41,7 @@ class _MapPageState extends State<MapPage> {
     "Others",
   ];
 
-  String _selectedCategory = 'All';
+  String _selectedCategory = 'Academics';
 
   // Default position (will be updated with user's location when available)
   CameraPosition _initialPosition = const CameraPosition(
@@ -87,7 +87,8 @@ class _MapPageState extends State<MapPage> {
         _errorMessage =
             'Location services are disabled. Please enable GPS in settings.';
       });
-      _fetchBuildings('All'); // Still fetch buildings even if location is unavailable
+      _fetchBuildings(
+          'All'); // Still fetch buildings even if location is unavailable
       return;
     }
 
@@ -158,7 +159,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> _fetchBuildings(String category) async {
     try {
-      if(category=='All'){
+      if (category == 'All') {
         final response = await http.get(
           Uri.parse('$baseUrl/api/buildings/'),
           headers: {'Content-Type': 'application/json'},
@@ -173,8 +174,7 @@ class _MapPageState extends State<MapPage> {
             _isLoading = false;
           });
         }
-      }
-      else{
+      } else {
         final response = await http.get(
           Uri.parse('$baseUrl/api/buildings/category/$category'),
           headers: {'Content-Type': 'application/json'},
@@ -189,7 +189,6 @@ class _MapPageState extends State<MapPage> {
             _isLoading = false;
           });
         }
-
       }
     } catch (e) {
       setState(() {
@@ -273,7 +272,8 @@ class _MapPageState extends State<MapPage> {
       if (response.statusCode == 200) {
         final List<dynamic> events = jsonDecode(response.body);
         setState(() {
-          _locationEvents = events.map((e) => e as Map<String, dynamic>).toList();
+          _locationEvents =
+              events.map((e) => e as Map<String, dynamic>).toList();
           _loadingEvents = false;
         });
       } else {
@@ -573,23 +573,27 @@ class _MapPageState extends State<MapPage> {
                             CircleAvatar(
                               backgroundColor: Colors.blue[100],
                               radius: 24,
-                                child: Icon(
+                              child: Icon(
                                 _selectedLocation!['category']?.toLowerCase() ==
-                                    'academics'
-                                  ? Icons.school
-                                  : _selectedLocation!['category']?.toLowerCase() ==
-                                      'hostel'
-                                    ? Icons.hotel
-                                    : _selectedLocation!['category']?.toLowerCase() ==
-                                        'sports'
-                                      ? Icons.sports_soccer
-                                      : _selectedLocation!['category']?.toLowerCase() ==
-                                          'eateries'
-                                        ? Icons.restaurant
-                                        : _selectedLocation!['category']?.toLowerCase() ==
-                                            'shopping'
-                                          ? Icons.shopping_cart
-                                          : Icons.place,
+                                        'academics'
+                                    ? Icons.school
+                                    : _selectedLocation!['category']
+                                                ?.toLowerCase() ==
+                                            'hostel'
+                                        ? Icons.hotel
+                                        : _selectedLocation!['category']
+                                                    ?.toLowerCase() ==
+                                                'sports'
+                                            ? Icons.sports_soccer
+                                            : _selectedLocation!['category']
+                                                        ?.toLowerCase() ==
+                                                    'eateries'
+                                                ? Icons.restaurant
+                                                : _selectedLocation!['category']
+                                                            ?.toLowerCase() ==
+                                                        'shopping'
+                                                    ? Icons.shopping_cart
+                                                    : Icons.place,
                                 color: Colors.blue[700],
                                 size: 26,
                               ),

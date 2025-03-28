@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_finder/providers/event_provider.dart';
+import 'package:path_finder/screens/search_screen.dart';
 import 'dart:async';
 
 import 'package:path_finder/services/api_services/events_api.dart';
@@ -45,45 +46,6 @@ class _SearchPageState extends State<SearchPage>
     'Music Festival',
     'AI Workshop'
   ];
-
-  // Mock search results
-  // final List<Map<String, dynamic>> _results = [
-  //   // {
-  //   //   'title': 'Tech Innovators Hackathon',
-  //   //   'type': 'Event',
-  //   //   'date': '20 Nov, 2023',
-  //   //   'image': 'assets/event-pic.jpg',
-  //   //   'location': 'University Center, Room 305'
-  //   // },
-  //   // {
-  //   //   'title': 'Photography Club Meet',
-  //   //   'type': 'Club',
-  //   //   'date': '15 Nov, 2023',
-  //   //   'image': 'assets/start-img.png',
-  //   //   'location': 'Arts Building, Studio 4'
-  //   // },
-  //   // {
-  //   //   'title': '2000s Hip Hop Night',
-  //   //   'type': 'Event',
-  //   //   'date': '29 Oct, 2023',
-  //   //   'image': 'assets/event-pic.jpg',
-  //   //   'location': 'Brooklyn, New York'
-  //   // },
-  //   // {
-  //   //   'title': 'Machine Learning Workshop',
-  //   //   'type': 'Workshop',
-  //   //   'date': '22 Nov, 2023',
-  //   //   'image': 'assets/start-img.png',
-  //   //   'location': 'Science Building, Lab 103'
-  //   // },
-  //   // {
-  //   //   'title': 'Career Networking Mixer',
-  //   //   'type': 'Networking',
-  //   //   'date': '18 Nov, 2023',
-  //   //   'image': 'assets/event-pic.jpg',
-  //   //   'location': 'Business Center, Main Hall'
-  //   // },
-  // ];
 
   Future<void> getAllEvents() async {
     await _eventsService.getAllEvents();
@@ -335,7 +297,10 @@ class _SearchPageState extends State<SearchPage>
 
             // Recent searches or results - Use Flexible instead of Expanded for better adaptation
             Flexible(
-              child: _buildSearchResults(),
+              child: SearchScreen(
+                fadeAnimation: _fadeAnimation,
+                filteredResults: _filteredResults,
+              ),
             ),
             // Flexible(
             //   child: _buildSearchResults(),
@@ -442,232 +407,4 @@ class _SearchPageState extends State<SearchPage>
   //     ),
   //   );
   // }
-
-  // Build search results widget with scrollable content
-  Widget _buildSearchResults() {
-    return FadeTransition(
-      opacity: _fadeAnimation,
-      child: Consumer<EventProvider>(builder: (context, eventProvider, child) {
-        if (eventProvider.isLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        if (eventProvider.eventList.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.event_busy,
-                  size: 70,
-                  color: Colors.grey[400],
-                ),
-                SizedBox(height: 16),
-                Text(
-                  "No events available",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "Try refreshing or check back later",
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => eventProvider.fetchAllEvents(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
-                  ),
-                  child: Text("Refresh"),
-                ),
-              ],
-            ),
-          );
-        }
-
-        if (_filteredResults.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.search_off,
-                  size: 70,
-                  color: Colors.grey[400],
-                ),
-                SizedBox(height: 16),
-                Text(
-                  "No results found",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "Try different keywords or filters",
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: _filteredResults.length,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          itemBuilder: (context, index) {
-            final result = _filteredResults[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: GestureDetector(
-                onTap: () {
-                  // Dismiss keyboard when tapping on a result
-                  FocusScope.of(context).unfocus();
-                  Navigator.pushNamed(context, '/event_page');
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(15),
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Image with event type badge
-                      Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(16),
-                            ),
-                            child: (result['pic'] == null)
-                                ? Image.asset(
-                                    'assets/event-pic.jpg',
-                                    height: 150,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.network(
-                                    result['pic'],
-                                    height: 150,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                          ),
-                          // Positioned(
-                          //   top: 12,
-                          //   left: 12,
-                          //   child: Container(
-                          //     padding: EdgeInsets.symmetric(
-                          //       horizontal: 10,
-                          //       vertical: 6,
-                          //     ),
-                          //     decoration: BoxDecoration(
-                          //       color: Colors.blue[700],
-                          //       borderRadius: BorderRadius.circular(30),
-                          //     ),
-                          //     child: Text(
-                          //       result['type'] ?? "type?",
-                          //       style: TextStyle(
-                          //         color: Colors.white,
-                          //         fontWeight: FontWeight.w500,
-                          //         fontSize: 12,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
-
-                      // Content
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              result['name'],
-                              style: GoogleFonts.poppins(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Date section
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today,
-                                      size: 16,
-                                      color: Colors.grey[600],
-                                    ),
-                                    SizedBox(width: 6),
-                                    Text(
-                                      result['date'],
-                                      style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                // Location section
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on,
-                                      size: 16,
-                                      color: Colors.grey[600],
-                                    ),
-                                    SizedBox(width: 6),
-                                    Text(
-                                      result['location'],
-                                      style: TextStyle(
-                                        color: Colors.grey[700],
-                                        fontSize: 14,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      }),
-    );
-  }
 }

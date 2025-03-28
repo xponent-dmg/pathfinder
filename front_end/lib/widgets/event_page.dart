@@ -13,6 +13,8 @@ class _EventPageState extends State<EventPage> {
   bool isFav = false;
   @override
   Widget build(BuildContext context) {
+    final event =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       // Using transparent scaffold to maintain the design
       backgroundColor: Colors.transparent,
@@ -25,7 +27,7 @@ class _EventPageState extends State<EventPage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/event-pic.jpg'),
+                image: NetworkImage(event['pic']),
                 fit: BoxFit.cover,
               ),
             ),
@@ -57,8 +59,8 @@ class _EventPageState extends State<EventPage> {
                             bottomLeft: Radius.circular(15),
                             bottomRight: Radius.circular(15),
                           ),
-                          child: Image.asset(
-                            'assets/event-pic.jpg',
+                          child: Image.network(
+                            event['pic'],
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -87,7 +89,7 @@ class _EventPageState extends State<EventPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '2000s Hip Hop Night',
+                                event['name'],
                                 style: GoogleFonts.poppins(
                                   color: Colors.black, // Changed to black
                                   fontSize: 22,
@@ -101,7 +103,7 @@ class _EventPageState extends State<EventPage> {
                                       color: Colors.black54,
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
-                                  Text('29 Oct - 07:00 PM',
+                                  Text("${event['date']} - ${event['time']}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -114,7 +116,8 @@ class _EventPageState extends State<EventPage> {
                                       color: Colors.black54,
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
-                                  Text('Brooklyn, New York',
+                                  Text(
+                                      "${event['location']}, ${event['roomno']}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -170,7 +173,7 @@ class _EventPageState extends State<EventPage> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    Text('Organizer',
+                                    Text(event['clubName'],
                                         style: TextStyle(
                                             color: Colors
                                                 .black54)), // Changed to dark color
@@ -212,7 +215,7 @@ class _EventPageState extends State<EventPage> {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          'Join us for an unforgettable night of 2000s Hip Hop classics. Dance the night away as our DJs spin the best tracks from this iconic era. Featuring special performances and a vibrant atmosphere that will transport you back to the golden age of hip hop.',
+                          event['desc'],
                           style: TextStyle(
                             color: Colors.black87, // Changed to dark color
                             fontSize: 14,
