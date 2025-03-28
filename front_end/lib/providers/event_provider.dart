@@ -6,11 +6,13 @@ class EventProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> _eventList = [];
   List<Map<String, dynamic>> _todaysEvents = [];
+  List<Map<String, dynamic>> _filteredEvents = [];
   bool _isLoading = false;
   String? _error;
 
   List<Map<String, dynamic>> get eventList => _eventList;
   List<Map<String, dynamic>> get todaysEvents => _todaysEvents;
+  List<Map<String, dynamic>> get filteredEvents => _filteredEvents;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -22,6 +24,7 @@ class EventProvider extends ChangeNotifier {
     try {
       final events = await _eventsService.getAllEvents();
       _eventList = events;
+      _filteredEvents = events; // Initialize filtered events with all events
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -31,13 +34,283 @@ class EventProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> searchAndFilterEvents({
+    String? query,
+    String? category,
+    String? clubName,
+    String? location,
+    double? minPrice,
+    double? maxPrice,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isMandatory,
+    bool? isOnline,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    print('DEBUG: Starting searchAndFilterEvents with parameters:');
+    print('DEBUG: query=$query, category=$category, clubName=$clubName');
+    print('DEBUG: location=$location, price range=$minPrice-$maxPrice');
+    print(
+        'DEBUG: date range=${startDate?.toIso8601String()}-${endDate?.toIso8601String()}');
+    print('DEBUG: isMandatory=$isMandatory, isOnline=$isOnline');
+
+    try {
+      final events = await _eventsService.getAllEvents(
+        query: query,
+        category: category,
+        clubName: clubName,
+        location: location,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        startDate: startDate,
+        endDate: endDate,
+        isMandatory: isMandatory,
+        isOnline: isOnline,
+      );
+
+      print(
+          'DEBUG: searchAndFilterEvents received ${events.length} events from API');
+      _filteredEvents = events;
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      print('DEBUG: ERROR in searchAndFilterEvents: $e');
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Apply filters locally if data is already loaded
+  void applyLocalFilters({
+    String? query,
+    String? category,
+    List<String>? categories,
+    String? clubName,
+    String? location,
+    double? minPrice,
+    double? maxPrice,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isMandatory,
+    bool? isOnline,
+  }) {
+    print('DEBUG: Starting applyLocalFilters with parameters:');
+    print('DEBUG: query=$query, category=$category');
+    print('DEBUG: categories=$categories, clubName=$clubName');
+    print('DEBUG: location=$location, price range=$minPrice-$maxPrice');
+    print(
+        'DEBUG: date range=${startDate?.toIso8601String()}-${endDate?.toIso8601String()}');
+    print('DEBUG: isMandatory=$isMandatory, isOnline=$isOnline');
+
+    if (_eventList.isEmpty) {
+      print('DEBUG: Event list is empty, cannot apply filters');
+      return;
+    }
+
+    print('DEBUG: Filtering ${_eventList.length} events');
+
+    _filteredEvents = _eventList.where((event) {
+      bool matchesFilters = true;
+
+      print('DEBUG: ----------');
+      print('DEBUG: Filtering event: ${event['name']}');
+      print(
+          'DEBUG: Event details: location=${event['location']}, roomno=${event['roomno']}');
+      print(
+          'DEBUG: Event category=${event['category']}, mandatory=${event['isMandatory']}, online=${event['isOnline']}');
+      print('DEBUG: Event date=${event['event_date']}');
+
+      // Text search across name and description
+      if (query != null && query.isNotEmpty) {
+        final lowercaseQuery = query.toLowerCase();
+        final nameMatches =
+            event['name']?.toString().toLowerCase().contains(lowercaseQuery) ??
+                false;
+        final descMatches =
+            event['desc']?.toString().toLowerCase().contains(lowercaseQuery) ??
+                false;
+
+        print(
+            'DEBUG: Query filter: "$query" - name matches: $nameMatches, desc matches: $descMatches');
+
+        if (!nameMatches && !descMatches) {
+          matchesFilters = false;
+          print('DEBUG: Query filter FAILED');
+        }
+      }
+
+      // Single category filter
+      if (category != null && category.isNotEmpty) {
+        final eventCategory = event['category']?.toString().toLowerCase() ?? '';
+        final matches = eventCategory == category.toLowerCase();
+
+        print(
+            'DEBUG: Category filter: "$category" vs "$eventCategory" - matches: $matches');
+
+        if (!matches) {
+          matchesFilters = false;
+          print('DEBUG: Category filter FAILED');
+        }
+      }
+
+      // Multiple categories filter (any match)
+      if (categories != null && categories.isNotEmpty) {
+        final eventCategory = event['category']?.toString().toLowerCase() ?? '';
+        final categoryMatches = categories.any(
+          (cat) => cat.toLowerCase() == eventCategory,
+        );
+
+        print(
+            'DEBUG: Categories filter: $categories vs "$eventCategory" - matches: $categoryMatches');
+
+        if (!categoryMatches) {
+          matchesFilters = false;
+          print('DEBUG: Categories filter FAILED');
+        }
+      }
+
+      // Club name filter
+      if (clubName != null && clubName.isNotEmpty) {
+        final eventClubName = event['clubName']?.toString().toLowerCase() ?? '';
+        final matches = eventClubName.contains(clubName.toLowerCase());
+
+        print(
+            'DEBUG: Club name filter: "$clubName" vs "$eventClubName" - matches: $matches');
+
+        if (!matches) {
+          matchesFilters = false;
+          print('DEBUG: Club name filter FAILED');
+        }
+      }
+
+      // Location filter
+      if (location != null && location.isNotEmpty) {
+        final eventLocation = event['location']?.toString().toLowerCase() ?? '';
+        final roomNo = event['roomno']?.toString().toLowerCase() ?? '';
+        final matches = eventLocation.contains(location.toLowerCase()) ||
+            roomNo.contains(location.toLowerCase());
+
+        print(
+            'DEBUG: Location filter: "$location" vs loc:"$eventLocation"/room:"$roomNo" - matches: $matches');
+
+        if (!matches) {
+          matchesFilters = false;
+          print('DEBUG: Location filter FAILED');
+        }
+      }
+
+      // Price range filter
+      if (minPrice != null || maxPrice != null) {
+        final eventPrice =
+            double.tryParse(event['price']?.toString() ?? '0') ?? 0;
+        bool priceMatches = true;
+
+        print('DEBUG: Price filter: $minPrice-$maxPrice vs $eventPrice');
+
+        if (minPrice != null && eventPrice < minPrice) {
+          priceMatches = false;
+          print('DEBUG: Min price filter FAILED');
+        }
+
+        if (maxPrice != null && eventPrice > maxPrice) {
+          priceMatches = false;
+          print('DEBUG: Max price filter FAILED');
+        }
+
+        if (!priceMatches) {
+          matchesFilters = false;
+        }
+      }
+
+      // Date range filter
+      if (startDate != null || endDate != null) {
+        try {
+          final eventDateStr = event['event_date'];
+          print('DEBUG: Date filter: $startDate-$endDate vs $eventDateStr');
+
+          if (eventDateStr != null) {
+            final eventDate = DateTime.parse(eventDateStr);
+            bool dateMatches = true;
+
+            if (startDate != null && eventDate.isBefore(startDate)) {
+              dateMatches = false;
+              print('DEBUG: Start date filter FAILED');
+            }
+
+            if (endDate != null) {
+              final adjustedEndDate = endDate.add(const Duration(days: 1));
+              if (eventDate.isAfter(adjustedEndDate)) {
+                dateMatches = false;
+                print('DEBUG: End date filter FAILED');
+              }
+            }
+
+            if (!dateMatches) {
+              matchesFilters = false;
+            }
+          } else {
+            // If no date is available and filter is set, don't include
+            if (startDate != null || endDate != null) {
+              matchesFilters = false;
+              print('DEBUG: Date filter FAILED (event has no date)');
+            }
+          }
+        } catch (e) {
+          // If date parsing fails, don't include in results when filtering by date
+          if (startDate != null || endDate != null) {
+            matchesFilters = false;
+            print('DEBUG: Date filter FAILED (parsing error: $e)');
+          }
+        }
+      }
+
+      // Mandatory events filter
+      if (isMandatory != null) {
+        final isEventMandatory = event['isMandatory'] ?? false;
+        final matches = isMandatory == isEventMandatory;
+
+        print(
+            'DEBUG: Mandatory filter: $isMandatory vs $isEventMandatory - matches: $matches');
+
+        if (!matches) {
+          matchesFilters = false;
+          print('DEBUG: Mandatory filter FAILED');
+        }
+      }
+
+      // Online events filter
+      if (isOnline != null) {
+        final isEventOnline = event['isOnline'] ?? false;
+        final matches = isOnline == isEventOnline;
+
+        print(
+            'DEBUG: Online filter: $isOnline vs $isEventOnline - matches: $matches');
+
+        if (!matches) {
+          matchesFilters = false;
+          print('DEBUG: Online filter FAILED');
+        }
+      }
+
+      print('DEBUG: Event final match result: $matchesFilters');
+      return matchesFilters;
+    }).toList();
+
+    print('DEBUG: Filtered results count: ${_filteredEvents.length}');
+    notifyListeners();
+  }
+
   Future<void> fetchTodaysEvents() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final events = await _eventsService.getAllEvents();
+      final events = await _eventsService.todaysEvents();
 
       // Filter events for today
       final now = DateTime.now();
@@ -75,6 +348,22 @@ class EventProvider extends ChangeNotifier {
 
   void addEvent(Map<String, dynamic> event) {
     _eventList.insert(0, event);
+    notifyListeners();
+  }
+
+  // Get events by location
+  List<Map<String, dynamic>> getEventsByLocation(String locationName) {
+    return _eventList.where((event) {
+      return (event['location']?.toString().toLowerCase() ==
+              locationName.toLowerCase()) ||
+          (event['roomNo']?.toString().toLowerCase() ==
+              locationName.toLowerCase());
+    }).toList();
+  }
+
+  // Reset filters
+  void resetFilters() {
+    _filteredEvents = _eventList;
     notifyListeners();
   }
 }

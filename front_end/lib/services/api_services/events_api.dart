@@ -196,81 +196,195 @@ class EventsService {
     }
   }
 
-//fetching all events
-  Future<List<Map<String, dynamic>>> getAllEvents() async {
+//fetching all events with filtering capabilities
+  Future<List<Map<String, dynamic>>> getAllEvents({
+    String? query,
+    String? category,
+    String? clubName,
+    String? location,
+    double? minPrice,
+    double? maxPrice,
+    DateTime? startDate,
+    DateTime? endDate,
+    bool? isMandatory,
+    bool? isOnline,
+  }) async {
     try {
-      var url = Uri.parse("$baseUrl/api/events/");
-      print("Fetching all events from: $url");
+      // Create query parameters map
+      Map<String, String> queryParams = {};
+
+      print('DEBUG: API: Building query parameters for getAllEvents');
+
+      // Add filter parameters if they exist
+      if (query != null && query.isNotEmpty) {
+        queryParams['q'] = query;
+        print('DEBUG: API: Adding query param: q=$query');
+      }
+
+      if (category != null && category.isNotEmpty) {
+        queryParams['category'] = category;
+        print('DEBUG: API: Adding query param: category=$category');
+      }
+
+      if (clubName != null && clubName.isNotEmpty) {
+        queryParams['clubName'] = clubName;
+        print('DEBUG: API: Adding query param: clubName=$clubName');
+      }
+
+      if (location != null && location.isNotEmpty) {
+        queryParams['location'] = location;
+        print('DEBUG: API: Adding query param: location=$location');
+      }
+
+      if (minPrice != null) {
+        queryParams['minPrice'] = minPrice.toString();
+        print('DEBUG: API: Adding query param: minPrice=$minPrice');
+      }
+
+      if (maxPrice != null) {
+        queryParams['maxPrice'] = maxPrice.toString();
+        print('DEBUG: API: Adding query param: maxPrice=$maxPrice');
+      }
+
+      if (isMandatory != null) {
+        queryParams['isMandatory'] = isMandatory.toString();
+        print('DEBUG: API: Adding query param: isMandatory=$isMandatory');
+      }
+
+      if (isOnline != null) {
+        queryParams['isOnline'] = isOnline.toString();
+        print('DEBUG: API: Adding query param: isOnline=$isOnline');
+      }
+
+      // Format dates for API if present
+      if (startDate != null) {
+        final formattedStartDate = DateFormat('yyyy-MM-dd').format(startDate);
+        queryParams['startDate'] = formattedStartDate;
+        print('DEBUG: API: Adding query param: startDate=$formattedStartDate');
+      }
+
+      if (endDate != null) {
+        final formattedEndDate = DateFormat('yyyy-MM-dd').format(endDate);
+        queryParams['endDate'] = formattedEndDate;
+        print('DEBUG: API: Adding query param: endDate=$formattedEndDate');
+      }
+
+      // Build URL with query parameters
+      var uri = Uri.parse("$baseUrl/api/events/search").replace(
+        queryParameters: queryParams.isEmpty ? null : queryParams,
+      );
+
+      print("DEBUG: API: Fetching events with filters from: $uri");
 
       var response = await http.get(
-        url,
+        uri,
         headers: {"Content-type": "application/json"},
       );
 
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}...");
+      print("DEBUG: API: Response status: ${response.statusCode}");
+
+      // Print truncated response body for debugging
+      if (response.body.length > 200) {
+        print(
+            "DEBUG: API: Response body preview: ${response.body.substring(0, 200)}...");
+      } else {
+        print("DEBUG: API: Response body: ${response.body}");
+      }
 
       if (response.statusCode != 200) {
+        print(
+            "DEBUG: API: Error response: ${response.statusCode} - ${response.body}");
         throw Exception("Failed to load events: ${response.statusCode}");
       }
 
       List<dynamic> jsonData = jsonDecode(response.body);
+      print("DEBUG: API: Parsed ${jsonData.length} events from JSON response");
+
       List<Map<String, dynamic>> eventList = [];
 
       for (var elem in jsonData) {
         if (elem is Map<String, dynamic>) {
-          // Create a new map for each event to avoid reference issues
-          Map<String, dynamic> event = {};
-
-          // Extract the required fields from MongoDB
-          event["name"] = elem["name"] ?? "NaN";
-          event["desc"] = elem["information"] ?? "No description available";
-          event["clubName"] = elem["clubName"] ?? "NaN";
-
-          // DEBUG: Image URL should be from Supabase but is missing here
-          print("DEBUG: Image URL from event data: ${elem['imageUrl']} and");
-          // Image data should come from Supabase via MongoDB
-          event["pic"] = elem['imageUrl'] ??
-              "assets/event-pic.jpg"; // Should be Supabase URL
-          event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
-          event["location"] = elem['building']?['name'] ?? "Unknown";
-
-          // Parse the date-time
           try {
-            if (elem["startTime"] != null) {
-              DateTime parsedDate = DateTime.parse(elem["startTime"]).toLocal();
-              event["time"] = DateFormat("HH:mm").format(parsedDate);
-              event["date"] = DateFormat("MMMM d").format(parsedDate);
-              event["day"] = DateFormat("EEEE").format(parsedDate);
+            print("DEBUG: API: Processing event: ${elem['name']}");
+
+            // Create a new map for each event to avoid reference issues
+            Map<String, dynamic> event = {};
+
+            // Extract the required fields from MongoDB
+            event["name"] = elem["name"] ?? "NaN";
+            event["desc"] = elem["information"] ?? "No description available";
+            event["clubName"] = elem["clubName"] ?? "NaN";
+
+            // Image data should come from Supabase via MongoDB
+            event["pic"] = elem['imageUrl'];
+            event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
+
+            // Location info
+            if (elem['building'] is Map) {
+              event["location"] = elem['building']['name'];
+              print("DEBUG: API: Event location: ${event['location']}");
             } else {
-              // Default values if startTime is missing
+              event["location"] = "unknown";
+              print("DEBUG: API: Event has no building information");
+            }
+
+            event['roomno'] = elem['roomno'] ?? "NaN";
+            print("DEBUG: API: Event roomno: ${event['roomno']}");
+
+            // Add additional filter-related fields
+            event['isMandatory'] = elem['isMandatory'] ?? false;
+            event['isOnline'] = elem['isOnline'] ?? false;
+            event['price'] = elem['price'] ?? 0;
+            event['category'] = elem['category'];
+
+            print(
+                "DEBUG: API: Event attributes - mandatory: ${event['isMandatory']}, online: ${event['isOnline']}, price: ${event['price']}, category: ${event['category']}");
+
+            // Parse the date-time
+            try {
+              if (elem["startTime"] != null) {
+                DateTime parsedDate =
+                    DateTime.parse(elem["startTime"]).toLocal();
+                event["time"] = DateFormat("HH:mm").format(parsedDate);
+                event["date"] = DateFormat("MMMM d").format(parsedDate);
+                event["day"] = DateFormat("EEEE").format(parsedDate);
+                // Store original date for filtering
+                event["event_date"] = elem["startTime"];
+
+                print(
+                    "DEBUG: API: Event date parsed - date: ${event['date']}, time: ${event['time']}, day: ${event['day']}");
+              } else {
+                // Default values if startTime is missing
+                event["time"] = "TBD";
+                event["date"] = "Today";
+                event["day"] = "Today";
+                print("DEBUG: API: Event has no start time, using defaults");
+              }
+            } catch (e) {
+              print("DEBUG: API: Error parsing date: $e");
+              // Fallback values
               event["time"] = "TBD";
               event["date"] = "Today";
               event["day"] = "Today";
             }
+
+            eventList.add(event);
           } catch (e) {
-            print("Error parsing date: $e");
-            // Fallback values
-            event["time"] = "TBD";
-            event["date"] = "Today";
-
-            event["day"] = "Today";
+            print("DEBUG: API: Error processing event: $e");
           }
-
-          eventList.add(event);
         }
       }
 
-      print("Processed ${eventList.length} events from API");
+      print("DEBUG: API: Processed ${eventList.length} events from API");
       return eventList;
     } catch (e) {
-      print("API error: $e");
+      print("DEBUG: API: Error in getAllEvents: $e");
       // For debugging, return a more descriptive mock event
       return [
         {
           "name": "API Error Event",
           "desc": "Error: $e",
-          "pic": "assets/event-pic.jpg",
+          "pic": null,
           "profile-pic": "assets/profile_pics/profile-pic.jpg",
           "time": "18:30",
           "day": "Today"

@@ -80,7 +80,7 @@ class SearchCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    event['name'],
+                    event['name'] ?? "no name",
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -101,7 +101,7 @@ class SearchCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            event['date'],
+                            event['date'] ?? "no date",
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontSize: 14,
@@ -120,7 +120,7 @@ class SearchCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            event['location'],
+                            event['location'] ?? "unknown",
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontSize: 14,

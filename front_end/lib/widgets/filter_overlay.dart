@@ -1,7 +1,9 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_finder/providers/event_provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:provider/provider.dart';
 
 class FilterOverlay extends StatefulWidget {
   const FilterOverlay({super.key});
@@ -11,16 +13,51 @@ class FilterOverlay extends StatefulWidget {
 }
 
 class _FilterOverlayState extends State<FilterOverlay> {
-  // Location selection
-  final List<String> _locations = [
-    'AB1',
-    'AB2',
-    'AB3',
-    'Clock Court',
-    'MG auditorium',
-  ];
+  // Location selection - organized into group categories
+  final Map<String, List<String>> _locationGroups = {
+    'Academic Buildings': [
+      "AB1",
+      "AB2",
+      "AB3",
+      "AB4",
+      "Delta Block",
+      "Library",
+    ],
+    'Auditoriums': [
+      "MBA Amphitheater",
+      "MG Auditorium",
+    ],
+    'Administrative': [
+      "Admin Block",
+      "Clock Tower",
+    ],
+    'Common Areas': [
+      "Gazebo",
+      "North Square",
+    ],
+    'Sports Facilities': [
+      "Cricket Ground",
+      "Football Ground",
+      "Basketball Court",
+      "Tennis Court",
+      "Swimming Pool",
+    ],
+  };
+
   String? _selectedLocation;
   bool _isLocationDropdownOpen = false;
+
+  // Keep track of which group dropdowns are expanded
+  final Map<String, bool> _expandedGroups = {};
+
+  // Flattened locations list
+  // List<String> get _locations {
+  //   List<String> allLocations = [];
+  //   _locationGroups.forEach((key, locations) {
+  //     allLocations.addAll(locations);
+  //   });
+  //   return allLocations;
+  // }
 
   // Date range selection
   DateTime? _startDate;
@@ -43,10 +80,17 @@ class _FilterOverlayState extends State<FilterOverlay> {
   RangeValues _priceRange = const RangeValues(0, 100);
 
   // Event type filter
-  bool _showFreeEvents = false;
-  bool _showPaidEvents = false;
+  bool _showMandatoryEvents = false;
   bool _showOnlineEvents = false;
-  // bool _showInPersonEvents = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize all groups as collapsed
+    _locationGroups.keys.forEach((group) {
+      _expandedGroups[group] = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,15 +114,6 @@ class _FilterOverlayState extends State<FilterOverlay> {
           // Header with enhanced styling
           Row(
             children: [
-              Container(
-                width: 40,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              const Spacer(),
               Text(
                 "Filter Events",
                 style: TextStyle(
@@ -88,10 +123,9 @@ class _FilterOverlayState extends State<FilterOverlay> {
                 ),
               ),
               const Spacer(),
-              TextButton.icon(
+              TextButton(
                 onPressed: _resetFilters,
-                icon: Icon(Icons.refresh, color: Colors.red[700], size: 16),
-                label: Text(
+                child: Text(
                   "Reset",
                   style: TextStyle(
                     color: Colors.red[700],
@@ -234,7 +268,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
           AnimatedContainer(
             duration: Duration(milliseconds: 200),
             margin: EdgeInsets.only(top: 4),
-            constraints: BoxConstraints(maxHeight: 200),
+            constraints: BoxConstraints(maxHeight: 227),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
@@ -247,65 +281,185 @@ class _FilterOverlayState extends State<FilterOverlay> {
                 ),
               ],
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: _locations.length,
-                itemBuilder: (context, index) {
-                  final location = _locations[index];
-                  final isSelected = _selectedLocation == location;
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: _locationGroups.length,
+              itemBuilder: (context, index) {
+                final groupName = _locationGroups.keys.elementAt(index);
+                final locationsList = _locationGroups[groupName]!;
+                final isExpanded = _expandedGroups[groupName] ?? false;
 
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedLocation = location;
-                        _isLocationDropdownOpen = false;
-                      });
-                    },
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Colors.blue.withAlpha(25)
-                            : Colors.transparent,
-                        border: Border(
-                          bottom: index < _locations.length - 1
-                              ? BorderSide(color: Colors.grey[200]!, width: 0.5)
-                              : BorderSide.none,
+                return Column(
+                  children: [
+                    // Group header as dropdown toggle
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _expandedGroups[groupName] = !isExpanded;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: (index == 0)
+                              ? BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10))
+                              : index == _locationGroups.length - 1
+                                  ? BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10))
+                                  : BorderRadius.zero,
+                          border: Border(
+                            bottom:
+                                BorderSide(color: Colors.grey[200]!, width: 1),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _getIconForGroup(groupName),
+                              size: 18,
+                              color: Colors.blue[700],
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                groupName,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.blue[800],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.blue[100],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                '${locationsList.length}',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.blue[900],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            AnimatedRotation(
+                              turns: isExpanded ? 0.5 : 0,
+                              duration: Duration(milliseconds: 200),
+                              child: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.blue[700],
+                                size: 18,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          isSelected
-                              ? Icon(Icons.check_circle,
-                                  color: Colors.blue[700], size: 18)
-                              : Icon(Icons.location_on_outlined,
-                                  color: Colors.grey[400], size: 18),
-                          SizedBox(width: 12),
-                          Text(
-                            location,
-                            style: TextStyle(
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
-                              color: isSelected
-                                  ? Colors.blue[700]
-                                  : Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  );
-                },
-              ),
+
+                    // Expandable group content
+                    AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      height: isExpanded ? locationsList.length * 48.0 : 0,
+                      curve: Curves.easeInOut,
+                      child: isExpanded
+                          ? ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemCount: locationsList.length,
+                              itemBuilder: (context, locationIndex) {
+                                final location = locationsList[locationIndex];
+                                final isSelected =
+                                    _selectedLocation == location;
+
+                                return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedLocation = location;
+                                      _isLocationDropdownOpen = false;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        left: 44,
+                                        right: 16,
+                                        top: 12,
+                                        bottom: 12),
+                                    decoration: BoxDecoration(
+                                      color: isSelected
+                                          ? Colors.blue.withAlpha(25)
+                                          : Colors.transparent,
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.grey[200]!,
+                                            width: 0.5),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        isSelected
+                                            ? Icon(Icons.check_circle,
+                                                color: Colors.blue[700],
+                                                size: 18)
+                                            : Icon(Icons.location_on_outlined,
+                                                color: Colors.grey[400],
+                                                size: 18),
+                                        SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            location,
+                                            style: TextStyle(
+                                              fontWeight: isSelected
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w400,
+                                              color: isSelected
+                                                  ? Colors.blue[700]
+                                                  : Colors.black87,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : SizedBox.shrink(),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
       ],
     );
+  }
+
+  IconData _getIconForGroup(String groupName) {
+    switch (groupName) {
+      case 'Academic Buildings':
+        return Icons.school;
+      case 'Auditoriums':
+        return Icons.theater_comedy;
+      case 'Administrative':
+        return Icons.business;
+      case 'Common Areas':
+        return Icons.public;
+      case 'Sports Facilities':
+        return Icons.sports;
+      default:
+        return Icons.place;
+    }
   }
 
   Widget _buildSectionTitle(String title) {
@@ -333,6 +487,24 @@ class _FilterOverlayState extends State<FilterOverlay> {
         ],
       ),
     );
+  }
+
+  void _resetFilters() {
+    setState(() {
+      _selectedLocation = null;
+      _startDate = null;
+      _endDate = null;
+      _selectedCategories = [];
+      _priceRange = const RangeValues(0, 100);
+      _showMandatoryEvents = false;
+      _showOnlineEvents = false;
+      _isLocationDropdownOpen = false;
+
+      // Reset expanded groups
+      _locationGroups.keys.forEach((group) {
+        _expandedGroups[group] = false;
+      });
+    });
   }
 
   Widget _buildDateRangeSelector() {
@@ -468,6 +640,81 @@ class _FilterOverlayState extends State<FilterOverlay> {
         );
       },
     );
+  }
+
+  void _applyFilters() {
+    print('DEBUG: FILTER: Starting _applyFilters in FilterOverlay');
+
+    // Create a filter map with the parameters for our event provider
+    final filterData = {
+      'location': _selectedLocation,
+      'startDate': _startDate,
+      'endDate': _endDate,
+      'categories': _selectedCategories,
+      'priceRange': _priceRange,
+      'isMandatory': _showMandatoryEvents,
+      'isOnline': _showOnlineEvents,
+    };
+
+    print('DEBUG: FILTER: Filter data: $filterData');
+
+    // Get the min/max price from the range
+    final minPrice = _priceRange.start;
+    final maxPrice = _priceRange.end >= 1000 ? null : _priceRange.end;
+
+    print('DEBUG: FILTER: Price range: $minPrice-$maxPrice');
+    print('DEBUG: FILTER: Selected location: $_selectedLocation');
+    print('DEBUG: FILTER: Selected categories: $_selectedCategories');
+    print('DEBUG: FILTER: Date range: $_startDate to $_endDate');
+    print(
+        'DEBUG: FILTER: Mandatory: $_showMandatoryEvents, Online: $_showOnlineEvents');
+
+    // Apply filters using the provider
+    try {
+      print('DEBUG: FILTER: Accessing event provider to apply filters');
+      final eventProvider = Provider.of<EventProvider>(context, listen: false);
+      print('DEBUG: FILTER: Provider accessed successfully');
+
+      eventProvider.applyLocalFilters(
+        location: _selectedLocation,
+        categories: _selectedCategories.isNotEmpty ? _selectedCategories : null,
+        startDate: _startDate,
+        endDate: _endDate,
+        minPrice: minPrice.toDouble(),
+        maxPrice: maxPrice?.toDouble(),
+        isMandatory: _showMandatoryEvents ? true : null,
+        isOnline: _showOnlineEvents ? true : null,
+      );
+
+      print('DEBUG: FILTER: Filters applied successfully');
+    } catch (e) {
+      print('DEBUG: FILTER: Error applying filters: $e');
+    }
+
+    // Close the bottom sheet and return the filter data
+    print('DEBUG: FILTER: Closing filter overlay');
+    Navigator.pop(context, filterData);
+
+    // Show a snackbar to confirm filters have been applied
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.check_circle_outline, color: Colors.white),
+            SizedBox(width: 10),
+            Text('Filters applied successfully'),
+          ],
+        ),
+        backgroundColor: Colors.blue[700],
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+
+    print('DEBUG: FILTER: Filter process completed');
   }
 
   Widget _buildCategorySelector() {
@@ -692,34 +939,23 @@ class _FilterOverlayState extends State<FilterOverlay> {
       child: Column(
         children: [
           _buildSwitchTile(
-            title: "Free Events",
-            value: _showFreeEvents,
-            icon: Icons.money_off,
-            onChanged: (value) {
-              setState(() {
-                _showFreeEvents = value;
-              });
-            },
-          ),
-          Divider(height: 8, thickness: 0.5),
-          _buildSwitchTile(
-            title: "Paid Events",
-            value: _showPaidEvents,
-            icon: Icons.payments_outlined,
-            onChanged: (value) {
-              setState(() {
-                _showPaidEvents = value;
-              });
-            },
-          ),
-          Divider(height: 8, thickness: 0.5),
-          _buildSwitchTile(
             title: "Online Events",
             value: _showOnlineEvents,
             icon: Icons.laptop,
             onChanged: (value) {
               setState(() {
                 _showOnlineEvents = value;
+              });
+            },
+          ),
+          Divider(height: 8, thickness: 0.5),
+          _buildSwitchTile(
+            title: "Mandatory Events",
+            value: _showMandatoryEvents,
+            icon: Icons.notification_important,
+            onChanged: (value) {
+              setState(() {
+                _showMandatoryEvents = value;
               });
             },
           ),
@@ -761,58 +997,6 @@ class _FilterOverlayState extends State<FilterOverlay> {
             activeTrackColor: Colors.blue[200],
           ),
         ],
-      ),
-    );
-  }
-
-  void _resetFilters() {
-    setState(() {
-      _selectedLocation = null;
-      _startDate = null;
-      _endDate = null;
-      _selectedCategories = [];
-      _priceRange = const RangeValues(0, 100);
-      _showFreeEvents = false;
-      _showPaidEvents = false;
-      _showOnlineEvents = false;
-      // _showInPersonEvents = true;
-      _isLocationDropdownOpen = false;
-    });
-  }
-
-  void _applyFilters() {
-    // Create a filter map to pass back to the search
-    final filterData = {
-      'location': _selectedLocation,
-      'startDate': _startDate,
-      'endDate': _endDate,
-      'categories': _selectedCategories,
-      'priceRange': _priceRange,
-      'showFreeEvents': _showFreeEvents,
-      'showPaidEvents': _showPaidEvents,
-      'showOnlineEvents': _showOnlineEvents,
-      // 'showInPersonEvents': _showInPersonEvents,
-    };
-
-    // Close the bottom sheet and return the filter data
-    Navigator.pop(context, filterData);
-
-    // Show a snackbar to confirm filters have been applied
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.check_circle_outline, color: Colors.white),
-            SizedBox(width: 10),
-            Text('Filters applied successfully'),
-          ],
-        ),
-        backgroundColor: Colors.blue[700],
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
       ),
     );
   }

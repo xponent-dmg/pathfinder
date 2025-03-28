@@ -6,6 +6,8 @@ import 'package:path_finder/services/api_services/auth_det.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:path_finder/providers/event_provider.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -67,6 +69,14 @@ class _MapPageState extends State<MapPage> {
 
     // Request location permissions immediately when screen loads
     _requestLocationPermission();
+
+    // Pre-load events data from provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final eventProvider = Provider.of<EventProvider>(context, listen: false);
+      if (eventProvider.eventList.isEmpty) {
+        eventProvider.fetchAllEvents();
+      }
+    });
   }
 
   @override
@@ -255,38 +265,52 @@ class _MapPageState extends State<MapPage> {
       _bottomSheetHeight = _initialBottomSheetHeight; // Reset height
     });
 
-    // Fetch events for this location
+    // Fetch events for this location from provider
     _fetchLocationEvents(location['name']);
   }
 
-  // Placeholder for API call to fetch location events
-  Future<void> _fetchLocationEvents(String locationId) async {
-    // Simulate API call with a delay
-    await Future.delayed(Duration(milliseconds: 800));
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/events/building/$locationId'),
-        headers: {'Content-Type': 'application/json'},
-      );
+  // Updated to use EventProvider instead of direct API call
+  Future<void> _fetchLocationEvents(String locationName) async {
+    setState(() {
+      _loadingEvents = true;
+    });
 
-      if (response.statusCode == 200) {
-        final List<dynamic> events = jsonDecode(response.body);
+    try {
+      // Short delay to show loading state
+      await Future.delayed(const Duration(milliseconds: 300));
+
+      // Get events from provider
+      final eventProvider = Provider.of<EventProvider>(context, listen: false);
+
+      // If provider doesn't have events yet, fetch them
+      if (eventProvider.eventList.isEmpty) {
+        await eventProvider.fetchAllEvents();
+      }
+
+      // Filter events by location name
+      final locationEvents = eventProvider.eventList.where((event) {
+        // Check if the event's location matches the selected location
+        return event['location']?.toString().toLowerCase() ==
+                locationName.toLowerCase() ||
+            event['roomno']?.toString().toLowerCase() ==
+                locationName.toLowerCase();
+      }).toList();
+
+      // Update state with filtered events
+      if (mounted) {
         setState(() {
-          _locationEvents =
-              events.map((e) => e as Map<String, dynamic>).toList();
+          _locationEvents = locationEvents;
           _loadingEvents = false;
         });
-      } else {
+      }
+    } catch (e) {
+      if (mounted) {
         setState(() {
           _locationEvents = [];
           _loadingEvents = false;
         });
       }
-    } catch (e) {
-      setState(() {
-        _locationEvents = [];
-        _loadingEvents = false;
-      });
+      print('Error fetching location events: $e');
     }
   }
 
@@ -301,14 +325,15 @@ class _MapPageState extends State<MapPage> {
     _fetchBuildings(category);
   }
 
-  void _onViewEventButtonPressed(String eventId) {
+  void _onViewEventButtonPressed(Map<String, dynamic> event) {
     // Navigate to event details page
-    Navigator.pushNamed(context, '/event_page', arguments: eventId);
+    Navigator.pushNamed(context, '/event_page', arguments: event);
   }
 
   @override
   Widget build(BuildContext context) {
     // Set status bar to transparent with dark icons
+    // final location = ModalRoute.of(context)?.settings.arguments as String?;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
@@ -634,7 +659,9 @@ class _MapPageState extends State<MapPage> {
                           ],
                         ),
                       ),
-
+                      SizedBox(
+                        height: 10,
+                      ),
                       // Divider
                       Divider(
                         thickness: 1,
@@ -696,7 +723,7 @@ class _MapPageState extends State<MapPage> {
                                           contentPadding:
                                               const EdgeInsets.all(12),
                                           title: Text(
-                                            event['name'],
+                                            event['name'] ?? "no name",
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -726,7 +753,7 @@ class _MapPageState extends State<MapPage> {
                                           trailing: ElevatedButton(
                                             onPressed: () =>
                                                 _onViewEventButtonPressed(
-                                                    event['id']),
+                                                    event),
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.blue[700],
                                               foregroundColor: Colors.white,
@@ -753,38 +780,38 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       // Only show floating action buttons when location details are not shown
-      floatingActionButton: _showLocationDetails
-          ? null // Hide when details are shown
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  heroTag: 'centerMapButton',
-                  onPressed: () async {
-                    final controller = await _controller.future;
-                    controller.animateCamera(
-                        CameraUpdate.newCameraPosition(_initialPosition));
-                  },
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.center_focus_strong,
-                    color: Colors.blue[700],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                FloatingActionButton(
-                  heroTag: 'myLocationButton',
-                  onPressed: () {
-                    _getUserLocation(); // Use the user location function from map_screen
-                  },
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.my_location,
-                    color: Colors.blue[700],
-                  ),
-                ),
-              ],
-            ),
+      // floatingActionButton: _showLocationDetails
+      //     ? null // Hide when details are shown
+      //     : Column(
+      //         mainAxisAlignment: MainAxisAlignment.end,
+      //         children: [
+      //           FloatingActionButton(
+      //             heroTag: 'centerMapButton',
+      //             onPressed: () async {
+      //               final controller = await _controller.future;
+      //               controller.animateCamera(
+      //                   CameraUpdate.newCameraPosition(_initialPosition));
+      //             },
+      //             backgroundColor: Colors.white,
+      //             child: Icon(
+      //               Icons.center_focus_strong,
+      //               color: Colors.blue[700],
+      //             ),
+      //           ),
+      //           const SizedBox(height: 16),
+      //           FloatingActionButton(
+      //             heroTag: 'myLocationButton',
+      //             onPressed: () {
+      //               _getUserLocation(); // Use the user location function from map_screen
+      //             },
+      //             backgroundColor: Colors.white,
+      //             child: Icon(
+      //               Icons.my_location,
+      //               color: Colors.blue[700],
+      //             ),
+      //           ),
+      //         ],
+      //       ),
     );
   }
 

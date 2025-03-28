@@ -39,6 +39,7 @@ class TodayCard extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           color: Colors.grey[800],
                         ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -50,6 +51,7 @@ class TodayCard extends StatelessWidget {
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             // event["date"] ?? "00-00-00",
@@ -59,6 +61,7 @@ class TodayCard extends StatelessWidget {
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           )
                         ],
                       )
@@ -73,34 +76,38 @@ class TodayCard extends StatelessWidget {
                             ? Image.network(
                                 event['pic'],
                                 width: double.infinity,
-                                height: 129,
+                                height: 110,
                                 fit: BoxFit.cover,
                               )
                             : Image.asset('assets/event-pic.jpg'),
                       ),
                     ],
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 15),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      event["name"],
+                      event["name"] ?? "Untitled Event",
                       style: TextStyle(
                         color: Colors.grey[700],
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  SizedBox(height: 5),
+                  SizedBox(height: 2),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      event["desc"],
+                      event["desc"] ?? "",
                       style: TextStyle(
                         color: Colors.grey[700],
-                        fontSize: 10,
+                        fontSize: 9,
                       ),
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -116,8 +123,8 @@ class TodayCard extends StatelessWidget {
                 ),
               )),
           Positioned(
-              top: 178,
-              left: 18,
+              top: 162,
+              left: 15,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(7),
                 child: Image.asset(

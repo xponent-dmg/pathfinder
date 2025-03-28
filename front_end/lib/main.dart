@@ -8,7 +8,6 @@ import './providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
     url: AuthDet().supaBaseUrl,

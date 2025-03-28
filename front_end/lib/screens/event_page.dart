@@ -27,7 +27,9 @@ class _EventPageState extends State<EventPage> {
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(event['pic']),
+                image: (event['pic'] != null)
+                    ? NetworkImage(event['pic'])
+                    : AssetImage('assets/event-pic.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -59,10 +61,15 @@ class _EventPageState extends State<EventPage> {
                             bottomLeft: Radius.circular(15),
                             bottomRight: Radius.circular(15),
                           ),
-                          child: Image.network(
-                            event['pic'],
-                            fit: BoxFit.cover,
-                          ),
+                          child: event['pic'] != null
+                              ? Image.network(
+                                  event['pic'],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/event-pic.jpg',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
 
@@ -103,7 +110,8 @@ class _EventPageState extends State<EventPage> {
                                       color: Colors.black54,
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
-                                  Text("${event['date']} - ${event['time']}",
+                                  Text(
+                                      "${event['date'] ?? "no date"} - ${event['time'] ?? "no time"}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -117,7 +125,7 @@ class _EventPageState extends State<EventPage> {
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
                                   Text(
-                                      "${event['location']}, ${event['roomno']}",
+                                      "${event['location'] ?? "no location"}, ${event['roomno'] ?? "no room"}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -173,7 +181,7 @@ class _EventPageState extends State<EventPage> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    Text(event['clubName'],
+                                    Text(event['clubName'] ?? "no clubname",
                                         style: TextStyle(
                                             color: Colors
                                                 .black54)), // Changed to dark color
@@ -215,7 +223,7 @@ class _EventPageState extends State<EventPage> {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          event['desc'],
+                          event['desc'] ?? "no desc",
                           style: TextStyle(
                             color: Colors.black87, // Changed to dark color
                             fontSize: 14,
@@ -243,14 +251,19 @@ class _EventPageState extends State<EventPage> {
                           ),
                         ),
                         SizedBox(height: 12),
-                        Container(
-                          height: 200,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            image: DecorationImage(
-                              image: AssetImage("assets/maps_pic.webp"),
-                              fit: BoxFit.cover,
+                        GestureDetector(
+                          //arguments  can be handled later
+                          onTap: () => Navigator.pushNamed(context, '/map',
+                              arguments: event['location']),
+                          child: Container(
+                            height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                image: AssetImage("assets/maps_pic.webp"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),

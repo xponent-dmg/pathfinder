@@ -8,7 +8,7 @@ import 'package:path_finder/screens/search_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
 import 'package:path_finder/screens/start_page.dart';
-import 'package:path_finder/widgets/event_page.dart';
+import 'package:path_finder/screens/event_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
