@@ -18,7 +18,7 @@ router.post("/create", auth, async (req, res) => {
   }
   try {
     // Find building by name
-    let building = "Online";
+    let building;
     if (req.user.isOnline === false) {
       console.log("Looking for building:", req.body.building);
       building = await Building.findOne({ name: req.body.building });
@@ -34,7 +34,6 @@ router.post("/create", auth, async (req, res) => {
 
     const event = new Event({
       name: req.body.name,
-      building: req.body.isOnline ? building : building._id,
       imageUrl: req.body.imageUrl,
       price: req.body.price,
       startTime: req.body.startTime,
@@ -46,6 +45,7 @@ router.post("/create", auth, async (req, res) => {
       categories: req.body.categories,
       clubName: req.user.clubName,
       createdBy: req.user.id,
+      ...(req.body.isOnline ? {} : { building: building._id }),
     });
     console.log("Event object created:", event);
 
