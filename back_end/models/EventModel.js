@@ -11,7 +11,7 @@ const EventSchema = new mongoose.Schema(
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     information: { type: String },
-    price: { type: Number, required: true },
+    price: { type: Number, required: true, min: 0 },
     isOnline: { type: Boolean, default: false },
     isMandatory: { type: Boolean, default: false },
     roomno: { type: String },

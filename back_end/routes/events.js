@@ -18,20 +18,23 @@ router.post("/create", auth, async (req, res) => {
   }
   try {
     // Find building by name
-    console.log("Looking for building:", req.body.building);
-    const building = await Building.findOne({ name: req.body.building });
-    if (!building) {
-      console.log("Building not found:", req.body.building);
-      return res.status(400).send({
-        error:
-          "Invalid building name. Must be one of: AB1, AB2, AB3, Clock_Tower, MG",
-      });
+    let building = "Online";
+    if (req.user.isOnline === false) {
+      console.log("Looking for building:", req.body.building);
+      building = await Building.findOne({ name: req.body.building });
+      if (!building) {
+        console.log("Building not found:", req.body.building);
+        return res.status(400).send({
+          error:
+            "Invalid building name. Must be one of: AB1, AB2, AB3, Clock_Tower, MG",
+        });
+      }
+      console.log("Building found:", building.name, building._id);
     }
-    console.log("Building found:", building.name, building._id);
 
     const event = new Event({
       name: req.body.name,
-      building: building._id,
+      building: req.body.isOnline ? "Online" : building._id,
       imageUrl: req.body.imageUrl,
       price: req.body.price,
       startTime: req.body.startTime,
