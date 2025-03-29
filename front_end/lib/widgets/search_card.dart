@@ -101,7 +101,7 @@ class SearchCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            event['date'] ?? "no date",
+                            event['date'] ?? "date is null",
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontSize: 14,
@@ -120,7 +120,7 @@ class SearchCard extends StatelessWidget {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            event['location'] ?? "unknown",
+                            event['location'] ?? "Online",
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontSize: 14,

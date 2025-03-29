@@ -23,7 +23,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
   final _eventNameController = TextEditingController();
   final _eventDetailsController = TextEditingController();
   final _eventLocationController = TextEditingController();
-  final _clubNameController = TextEditingController();
   final _roomNoController = TextEditingController();
   final _priceController = TextEditingController();
 
@@ -58,7 +57,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
     _eventNameController.dispose();
     _eventDetailsController.dispose();
     _eventLocationController.dispose();
-    _clubNameController.dispose();
     _roomNoController.dispose();
     _priceController.dispose();
     super.dispose();
@@ -108,6 +106,18 @@ class _EventCreatePageState extends State<EventCreatePage> {
     if (picked != null && picked != _startTime) {
       setState(() {
         _startTime = picked;
+
+        // If end time exists and is before the new start time, reset end time
+        if (_endTime != null && _isEndTimeBeforeStartTime()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(
+              text:
+                  'End time has been reset as it was before the new start time',
+              color: Colors.orange,
+            ).build(),
+          );
+          _endTime = null;
+        }
       });
     }
   }
@@ -115,13 +125,41 @@ class _EventCreatePageState extends State<EventCreatePage> {
   Future<void> _selectEndTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: _endTime ?? TimeOfDay.now(),
+      initialTime: _endTime ??
+          (_startTime != null
+              ? TimeOfDay(
+                  hour: (_startTime!.hour + 1) % 24, minute: _startTime!.minute)
+              : TimeOfDay.now()),
     );
     if (picked != null && picked != _endTime) {
       setState(() {
-        _endTime = picked;
+        // Check if selected end time is after start time
+        if (_startTime != null && _isTimeAfter(_startTime!, picked)) {
+          _endTime = picked;
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackbar(
+              text: 'End time must be after start time',
+              color: Colors.red,
+            ).build(),
+          );
+        }
       });
     }
+  }
+
+  // Helper method to check if end time is after start time
+  bool _isTimeAfter(TimeOfDay time1, TimeOfDay time2) {
+    return time1.hour < time2.hour ||
+        (time1.hour == time2.hour && time1.minute < time2.minute);
+  }
+
+  // Check if current end time is before start time
+  bool _isEndTimeBeforeStartTime() {
+    if (_startTime == null || _endTime == null) return false;
+    return _endTime!.hour < _startTime!.hour ||
+        (_endTime!.hour == _startTime!.hour &&
+            _endTime!.minute <= _startTime!.minute);
   }
 
   // Navigate to the next step
@@ -136,19 +174,29 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
       // Check price if it's not a free event
       if (!_isFreeEvent) {
-        canProgress = canProgress &&
-            _priceController.text.isNotEmpty &&
-            double.tryParse(_priceController.text) != null;
+        if (_priceController.text.isEmpty) {
+          canProgress = false;
+        } else {
+          // Check if price is valid and not negative
+          double? price = double.tryParse(_priceController.text);
+          canProgress = price != null && price >= 0;
+        }
       }
     } else if (_currentStep == 2) {
       canProgress =
           _eventDate != null && _startTime != null && _endTime != null;
 
+      // Validate time sequence
+      if (_startTime != null && _endTime != null) {
+        if (_isEndTimeBeforeStartTime()) {
+          canProgress = false;
+        }
+      }
+
       // For online events, we don't need location
       // For in-person events, we need location
       if (!_isOnlineEvent) {
         canProgress = canProgress && _eventLocationController.text.isNotEmpty;
-        // Room number is optional
       }
     }
 
@@ -172,15 +220,23 @@ class _EventCreatePageState extends State<EventCreatePage> {
           errorMessage = 'Please enter event details';
         } else if (!_isFreeEvent && _priceController.text.isEmpty) {
           errorMessage = 'Please enter a price for the event';
-        } else if (!_isFreeEvent &&
-            double.tryParse(_priceController.text) == null) {
-          errorMessage = 'Please enter a valid price';
+        } else if (!_isFreeEvent) {
+          double? price = double.tryParse(_priceController.text);
+          if (price == null) {
+            errorMessage = 'Please enter a valid price';
+          } else if (price < 0) {
+            errorMessage = 'Price cannot be negative';
+          }
         }
       } else if (_currentStep == 2) {
         if (_eventDate == null) {
           errorMessage = 'Please select a date';
-        } else if (_startTime == null || _endTime == null) {
-          errorMessage = 'Please select both start and end time';
+        } else if (_startTime == null) {
+          errorMessage = 'Please select a start time';
+        } else if (_endTime == null) {
+          errorMessage = 'Please select an end time';
+        } else if (_isEndTimeBeforeStartTime()) {
+          errorMessage = 'End time must be after start time';
         } else if (!_isOnlineEvent && _eventLocationController.text.isEmpty) {
           errorMessage = 'Please enter a location';
         }
@@ -206,6 +262,17 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
   Future<void> _handleCreateEvent() async {
     if (_formKey.currentState!.validate()) {
+      // Additional validation for time sequence
+      if (_isEndTimeBeforeStartTime()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackbar(
+            text: 'End time must be after start time',
+            color: Colors.red,
+          ).build(),
+        );
+        return;
+      }
+
       // Show loading indicator
       if (_mounted) {
         setState(() {
@@ -219,18 +286,20 @@ class _EventCreatePageState extends State<EventCreatePage> {
 
       try {
         // Prepare price
-        double? price = 0;
+        double price = 0;
         if (!_isFreeEvent) {
-          price = double.tryParse(_priceController.text);
+          // We can safely parse here because we've already validated
+          price = double.tryParse(_priceController.text) ?? 0;
+          // Additional safety check
+          if (price < 0) price = 0;
         }
 
         // Call API to create event
         Map<String, dynamic> result = await _eventsService.createEvent(
           name: _eventNameController.text,
           details: _eventDetailsController.text,
-          location:
-              _isOnlineEvent ? "no location" : _eventLocationController.text,
-          roomNo: _isOnlineEvent ? "N/A" : _roomNoController.text,
+          location: _isOnlineEvent ? "Online" : _eventLocationController.text,
+          roomNo: _isOnlineEvent ? "" : _roomNoController.text,
           eventDate: _eventDate!,
           startTime: _formatTimeOfDay(_startTime!),
           endTime: _formatTimeOfDay(_endTime!),
@@ -239,7 +308,7 @@ class _EventCreatePageState extends State<EventCreatePage> {
           isFree: _isFreeEvent,
           isMandatory: _isMandatoryEvent,
           isOnline: _isOnlineEvent,
-          price: price!,
+          price: price,
         );
 
         // Check if widget is still mounted before updating state
@@ -667,36 +736,6 @@ class _EventCreatePageState extends State<EventCreatePage> {
             return null;
           },
         ),
-
-        SizedBox(height: 16),
-
-        // Club Name
-        Text(
-          "Club Name (Optional)",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        SizedBox(height: 8),
-        TextFormField(
-          controller: _clubNameController,
-          decoration: InputDecoration(
-            hintText: "Enter organizing club name",
-            fillColor: Colors.grey[100],
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 16,
-            ),
-            prefixIcon: Icon(Icons.people, color: Colors.blue[700]),
-          ),
-        ),
       ],
     );
   }
@@ -812,8 +851,14 @@ class _EventCreatePageState extends State<EventCreatePage> {
                 if (value == null || value.trim().isEmpty) {
                   return 'Please enter a price';
                 }
-                if (double.tryParse(value) == null) {
+
+                double? price = double.tryParse(value);
+                if (price == null) {
                   return 'Please enter a valid price';
+                }
+
+                if (price < 0) {
+                  return 'Price cannot be negative';
                 }
               }
               return null;

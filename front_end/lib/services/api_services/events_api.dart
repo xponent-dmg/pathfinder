@@ -51,12 +51,17 @@ class EventsService {
           // Image data comes from Supabase
           event["pic"] = elem['imageUrl']; // This URL is from Supabase
           event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
+          event['isMandatory'] = elem['isMandatory'] ?? false;
+          event['isOnline'] = elem['isOnline'] ?? false;
+          event['price'] = elem['price'] ?? 0;
+          event['category'] = elem['category'];
 
           // Parse the date-time
           try {
             if (elem["startTime"] != null) {
               DateTime parsedDate = DateTime.parse(elem["startTime"]).toLocal();
               event["time"] = DateFormat("HH:mm").format(parsedDate);
+              event["date"] = DateFormat("MMMM d").format(parsedDate);
               event["day"] = DateFormat("EEEE").format(parsedDate);
             } else {
               // Default values if startTime is missing
@@ -150,7 +155,6 @@ class EventsService {
         'isOnline': isOnline,
         'price': price,
       };
-
 
       print("DEBUG: Sending event data with Supabase imageUrl: $imageUrl");
 
@@ -332,11 +336,11 @@ class EventsService {
               event["location"] = elem['building']['name'];
               print("DEBUG: API: Event location: ${event['location']}");
             } else {
-              event["location"] = "unknown";
+              event["location"] = "Online";
               print("DEBUG: API: Event has no building information");
             }
 
-            event['roomno'] = elem['roomno'] ?? "NaN";
+            event['roomno'] = elem['roomno'] ?? "";
             print("DEBUG: API: Event roomno: ${event['roomno']}");
 
             // Add additional filter-related fields

@@ -55,7 +55,7 @@ class TodayCard extends StatelessWidget {
                           ),
                           Text(
                             // event["date"] ?? "00-00-00",
-                            event["clubName"] ?? "NaN",
+                          event["clubName"] ?? "NaN",
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontSize: 12,

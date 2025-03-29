@@ -111,7 +111,7 @@ class _EventPageState extends State<EventPage> {
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
                                   Text(
-                                      "${event['date'] ?? "no date"} - ${event['time'] ?? "no time"}",
+                                      "${event['date'] ?? "date is not there"} - ${event['time'] ?? "no time"}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -125,7 +125,7 @@ class _EventPageState extends State<EventPage> {
                                       size: 16), // Changed to dark color
                                   SizedBox(width: 8),
                                   Text(
-                                      "${event['location'] ?? "no location"}, ${event['roomno'] ?? "no room"}",
+                                      "${event['location'] ?? "Online"} ${event['roomno'] ?? ""}",
                                       style: TextStyle(
                                           color: Colors
                                               .black54)), // Changed to dark color
@@ -298,7 +298,7 @@ class _EventPageState extends State<EventPage> {
                         elevation: 8,
                       ),
                       child: Text(
-                        'Buy Ticket \$90',
+                        'Register${(event['isOnline']) ? "" : (" ₹${event['price']}")}',
                         style: GoogleFonts.poppins(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
