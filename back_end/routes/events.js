@@ -34,7 +34,7 @@ router.post("/create", auth, async (req, res) => {
 
     const event = new Event({
       name: req.body.name,
-      building: req.body.isOnline ? "Online" : building._id,
+      building: req.body.isOnline ? building : building._id,
       imageUrl: req.body.imageUrl,
       price: req.body.price,
       startTime: req.body.startTime,
