@@ -103,6 +103,10 @@ class EventsService {
     required String endTime,
     File? imageFile, // Keep this parameter but don't use it in the request
     BuildContext? context,
+    bool isFree = true,
+    bool isMandatory = false,
+    bool isOnline = false,
+    double price = 0,
   }) async {
     final userProvider = context!.read<UserProvider>();
     final supaBaseServ = SupabaseService();
@@ -133,7 +137,7 @@ class EventsService {
       String startDateTime = "$formattedDate $startTime:00";
       String endDateTime = "$formattedDate $endTime:00";
 
-      // Create JSON payload
+      // Create JSON payload with new fields
       Map<String, dynamic> payload = {
         'name': name,
         'information': details,
@@ -142,7 +146,11 @@ class EventsService {
         'roomno': roomNo,
         'startTime': startDateTime,
         'endTime': endDateTime,
+        'isMandatory': isMandatory,
+        'isOnline': isOnline,
+        'price': price,
       };
+
 
       print("DEBUG: Sending event data with Supabase imageUrl: $imageUrl");
 
