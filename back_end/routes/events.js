@@ -45,7 +45,7 @@ router.post("/create", auth, async (req, res) => {
       categories: req.body.categories,
       clubName: req.user.clubName,
       createdBy: req.user.id,
-      ...(req.body.isOnline ? {} : { building: building._id }),
+      ...(req.body.isOnline ? {} : { building: building?._id }),
     });
     console.log("Event object created:", event);
 

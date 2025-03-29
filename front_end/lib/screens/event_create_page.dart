@@ -228,7 +228,8 @@ class _EventCreatePageState extends State<EventCreatePage> {
         Map<String, dynamic> result = await _eventsService.createEvent(
           name: _eventNameController.text,
           details: _eventDetailsController.text,
-          location: _isOnlineEvent ? "Online" : _eventLocationController.text,
+          location:
+              _isOnlineEvent ? "no location" : _eventLocationController.text,
           roomNo: _isOnlineEvent ? "N/A" : _roomNoController.text,
           eventDate: _eventDate!,
           startTime: _formatTimeOfDay(_startTime!),
