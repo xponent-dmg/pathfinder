@@ -19,14 +19,14 @@ router.post("/create", auth, async (req, res) => {
   try {
     // Find building by name
     let building;
-    if (req.user.isOnline === false) {
+    if (req.body.isOnline === false) {
       console.log("Looking for building:", req.body.building);
       building = await Building.findOne({ name: req.body.building });
       if (!building) {
         console.log("Building not found:", req.body.building);
         return res.status(400).send({
           error:
-            "Invalid building name. Must be one of: AB1, AB2, AB3, Clock_Tower, MG",
+            "Invalid building name",
         });
       }
       console.log("Building found:", building.name, building._id);
@@ -54,9 +54,11 @@ router.post("/create", auth, async (req, res) => {
     console.log("Event saved successfully with ID:", event._id);
 
     // Update the building document to include this event
-    building.events.push(event._id);
-    await building.save();
-    console.log("Event added to building events array");
+    if (!req.body.isOnline) {
+      building.events.push(event._id);
+      await building.save();
+      console.log("Event added to building events array");
+    }
 
     // Update the club leader document to include this event
     console.log("Looking for club leader with ID:", req.user.id);
@@ -70,7 +72,8 @@ router.post("/create", auth, async (req, res) => {
     }
 
     // Populate building name for response if not online
-    if (!req.body.isOnline) {
+    if (req.body.isOnline === false) {
+      console.log("trying to push event to location");
       await event.populate("building", "name");
     }
     console.log("Sending response with populated event:", event);
