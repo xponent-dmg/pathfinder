@@ -69,8 +69,10 @@ router.post("/create", auth, async (req, res) => {
       console.log("Club leader not found with ID:", req.user.id);
     }
 
-    // Populate building name for response
-    await event.populate("building", "name");
+    // Populate building name for response if not online
+    if (!req.body.isOnline) {
+      await event.populate("building", "name");
+    }
     console.log("Sending response with populated event:", event);
     res.status(201).send(event);
   } catch (error) {
