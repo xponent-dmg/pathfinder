@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/profile_picture_service.dart';
-import 'package:path_finder/widgets/filter_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:path_finder/providers/user_provider.dart';
 
@@ -167,31 +166,6 @@ class _HeaderState extends State<Header> {
                         ),
                       ),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        final filterResult = await showModalBottomSheet(
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          context: context,
-                          builder: (context) => SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.75,
-                            child: FilterOverlay(),
-                          ),
-                        );
-
-                        // Process filter results
-                        if (filterResult != null) {
-                          print('Filter applied: ${filterResult.toString()}');
-                        }
-                      },
-                      icon: Icon(
-                        Icons.filter_alt,
-                        color: Colors.grey,
-                      ),
-                    )
                   ],
                 ),
               ),

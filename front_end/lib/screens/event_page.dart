@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 
+import 'package:path_finder/providers/user_provider.dart';
+
 class EventPage extends StatefulWidget {
   const EventPage({super.key});
 
@@ -174,7 +176,7 @@ class _EventPageState extends State<EventPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Zack Foster',
+                                      UserProvider().name,
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black, // Changed to black

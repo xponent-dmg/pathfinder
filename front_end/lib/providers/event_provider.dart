@@ -57,8 +57,31 @@ class EventProvider extends ChangeNotifier {
         'DEBUG: date range=${startDate?.toIso8601String()}-${endDate?.toIso8601String()}');
     print('DEBUG: isMandatory=$isMandatory, isOnline=$isOnline');
 
+    // If we don't have any filters, just use the full event list we already have
+    if ([
+      query,
+      category,
+      clubName,
+      location,
+      minPrice,
+      maxPrice,
+      startDate,
+      endDate,
+      isMandatory,
+      isOnline
+    ].every((element) => element == null)) {
+      print('DEBUG: No filters applied, using full event list');
+      _filteredEvents = List.of(_eventList); // Create a copy of the full list
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
+
     try {
-      final events = await _eventsService.getAllEvents(
+      // If we have _eventList populated, try filtering locally first for better performance
+      // if (_eventList.isNotEmpty) {
+      //   print('DEBUG: Using local filtering for better performance');
+      _filteredEvents = await _eventsService.getAllEvents(
         query: query,
         category: category,
         clubName: clubName,
@@ -71,11 +94,129 @@ class EventProvider extends ChangeNotifier {
         isOnline: isOnline,
       );
 
+      print('DEBUG: API returned ${_filteredEvents.length} events');
+      // _filteredEvents = events;
+      // _isLoading = false;
+      notifyListeners();
+      _filteredEvents = _eventList.where((event) {
+        // Apply filters one by one, returning false as soon as any filter doesn't match
+
+        // Text search (query)
+        if (query != null && query.isNotEmpty) {
+          final lowercaseQuery = query.toLowerCase();
+          final name = event['name']?.toString().toLowerCase() ?? '';
+          final desc = event['desc']?.toString().toLowerCase() ?? '';
+          if (!name.contains(lowercaseQuery) &&
+              !desc.contains(lowercaseQuery)) {
+            return false;
+          }
+        }
+
+        // Category filter
+        if (category != null && category.isNotEmpty) {
+          final eventCategory =
+              event['category']?.toString().toLowerCase() ?? '';
+          if (eventCategory != category.toLowerCase()) {
+            return false;
+          }
+        }
+
+        // Club name filter
+        if (clubName != null && clubName.isNotEmpty) {
+          final eventClubName =
+              event['clubName']?.toString().toLowerCase() ?? '';
+          if (!eventClubName.contains(clubName.toLowerCase())) {
+            return false;
+          }
+        }
+
+        // Location filter
+        // if (location != null && location.isNotEmpty) {
+        //   final eventLocation =
+        //       event['building']?['name'].toString().toLowerCase() ?? '';
+        //   if(roomNo != null && location.isNotEmpty){
+        //     final roomNo = event['roomno']?.toString().toLowerCase() ?? '';
+
+        //   }
+        //   if (!eventLocation.contains(location.toLowerCase()) &&
+        //       !roomNo.contains(location.toLowerCase())) {
+        //     return false;
+        //   }
+        // }
+
+        // Price filter
+        if (minPrice != null || maxPrice != null) {
+          final eventPrice =
+              double.tryParse(event['price']?.toString() ?? '0') ?? 0;
+
+          if (minPrice != null && eventPrice < minPrice) {
+            return false;
+          }
+          if (maxPrice != null && eventPrice > maxPrice) {
+            return false;
+          }
+        }
+
+        // Date filter
+        if (startDate != null || endDate != null) {
+          try {
+            final eventDateStr = event['event_date'];
+            if (eventDateStr != null) {
+              final eventDate = DateTime.parse(eventDateStr);
+
+              if (startDate != null && eventDate.isBefore(startDate)) {
+                return false;
+              }
+
+              if (endDate != null) {
+                // Add 1 day to end date to include the entire end date
+                final adjustedEndDate = endDate.add(const Duration(days: 1));
+                if (eventDate.isAfter(adjustedEndDate)) {
+                  return false;
+                }
+              }
+            } else {
+              // If event has no date and filter includes date, exclude it
+              if (startDate != null || endDate != null) {
+                return false;
+              }
+            }
+          } catch (e) {
+            // If date parsing fails and filter includes date, exclude the event
+            print('DEBUG: Error parsing event date: $e');
+            if (startDate != null || endDate != null) {
+              return false;
+            }
+          }
+        }
+
+        // Mandatory event filter
+        if (isMandatory != null) {
+          final isEventMandatory = event['isMandatory'] ?? false;
+          if (isMandatory != isEventMandatory) {
+            return false;
+          }
+        }
+
+        // Online event filter
+        if (isOnline != null) {
+          final isEventOnline = event['isOnline'] ?? false;
+          if (isOnline != isEventOnline) {
+            return false;
+          }
+        }
+
+        // If all filters passed, include this event
+        return true;
+      }).toList();
+
       print(
-          'DEBUG: searchAndFilterEvents received ${events.length} events from API');
-      _filteredEvents = events;
+          'DEBUG: Local filtering complete - found ${_filteredEvents.length} matches out of ${_eventList.length} events');
       _isLoading = false;
       notifyListeners();
+      // } else {
+      //   // If we don't have _eventList populated, make an API call
+      //   print('DEBUG: No cached events, calling API with filters');
     } catch (e) {
       print('DEBUG: ERROR in searchAndFilterEvents: $e');
       _error = e.toString();
@@ -363,7 +504,8 @@ class EventProvider extends ChangeNotifier {
 
   // Reset filters
   void resetFilters() {
-    _filteredEvents = _eventList;
+    print('DEBUG: Resetting filters, showing all ${_eventList.length} events');
+    _filteredEvents = List.of(_eventList); // Create a copy of the full list
     notifyListeners();
   }
 }

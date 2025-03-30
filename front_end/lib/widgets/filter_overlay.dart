@@ -645,7 +645,7 @@ class _FilterOverlayState extends State<FilterOverlay> {
   void _applyFilters() {
     print('DEBUG: FILTER: Starting _applyFilters in FilterOverlay');
 
-    // Create a filter map with the parameters for our event provider
+    // Create a filter map for logging/debugging
     final filterData = {
       'location': _selectedLocation,
       'startDate': _startDate,
@@ -669,24 +669,49 @@ class _FilterOverlayState extends State<FilterOverlay> {
     print(
         'DEBUG: FILTER: Mandatory: $_showMandatoryEvents, Online: $_showOnlineEvents');
 
-    // Apply filters using the provider
+    // Get category if available (use first selected category)
+    String? category;
+    if (_selectedCategories.isNotEmpty) {
+      category = _selectedCategories.first;
+      print('DEBUG: FILTER: Using category: $category for API filtering');
+    }
+
+    // Apply filters using the provider's searchAndFilterEvents method
     try {
       print('DEBUG: FILTER: Accessing event provider to apply filters');
       final eventProvider = Provider.of<EventProvider>(context, listen: false);
       print('DEBUG: FILTER: Provider accessed successfully');
 
-      eventProvider.applyLocalFilters(
-        location: _selectedLocation,
-        categories: _selectedCategories.isNotEmpty ? _selectedCategories : null,
-        startDate: _startDate,
-        endDate: _endDate,
-        minPrice: minPrice.toDouble(),
-        maxPrice: maxPrice?.toDouble(),
-        isMandatory: _showMandatoryEvents ? true : null,
-        isOnline: _showOnlineEvents ? true : null,
-      );
+      // Only apply filters if at least one filter is selected
+      if (_selectedLocation != null ||
+          _selectedCategories.isNotEmpty ||
+          _startDate != null ||
+          _endDate != null ||
+          _priceRange.start > 0 ||
+          _priceRange.end < 1000 ||
+          _showMandatoryEvents ||
+          _showOnlineEvents) {
+        print(
+            'DEBUG: FILTER: At least one filter is selected, applying filters');
 
-      print('DEBUG: FILTER: Filters applied successfully');
+        // Use searchAndFilterEvents method to filter events
+        eventProvider.searchAndFilterEvents(
+          location: _selectedLocation,
+          category: category,
+          startDate: _startDate,
+          endDate: _endDate,
+          minPrice: _priceRange.start > 0 ? _priceRange.start : null,
+          maxPrice: _priceRange.end < 1000 ? _priceRange.end : null,
+          isMandatory: _showMandatoryEvents ? true : null,
+          isOnline: _showOnlineEvents ? true : null,
+        );
+
+        print('DEBUG: FILTER: Filters applied successfully');
+      } else {
+        print(
+            'DEBUG: FILTER: No filters selected, resetting to show all events');
+        eventProvider.resetFilters();
+      }
     } catch (e) {
       print('DEBUG: FILTER: Error applying filters: $e');
     }
