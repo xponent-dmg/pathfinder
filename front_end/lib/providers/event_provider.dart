@@ -131,18 +131,12 @@ class EventProvider extends ChangeNotifier {
         }
 
         // Location filter
-        // if (location != null && location.isNotEmpty) {
-        //   final eventLocation =
-        //       event['building']?['name'].toString().toLowerCase() ?? '';
-        //   if(roomNo != null && location.isNotEmpty){
-        //     final roomNo = event['roomno']?.toString().toLowerCase() ?? '';
-
-        //   }
-        //   if (!eventLocation.contains(location.toLowerCase()) &&
-        //       !roomNo.contains(location.toLowerCase())) {
-        //     return false;
-        //   }
-        // }
+        if (location != null && location.isNotEmpty) {
+          final eventLocation = event['location'].toString().toLowerCase();
+          if (!eventLocation.contains(location.toLowerCase())) {
+            return false;
+          }
+        }
 
         // Price filter
         if (minPrice != null || maxPrice != null) {

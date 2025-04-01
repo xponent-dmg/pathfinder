@@ -8,7 +8,7 @@ const BuildingSchema = new mongoose.Schema(
       enum: [
         "Main Gate",
         "Guest House",
-        "MBA amphitheater",
+        "MBA Amphitheater",
         "MG Auditorium",
         "Reception",
         "Admin Block",

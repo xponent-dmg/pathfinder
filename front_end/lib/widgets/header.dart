@@ -15,28 +15,15 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   File? _file;
-  // StreamSubscription? _profilePictureSubscription;
 
   @override
   void initState() {
     super.initState();
     _loadProfilePicture();
-
-    // Subscribe to profile picture changes
-    // _profilePictureSubscription =
-    //     ProfilePictureService.profilePictureStream.listen((file) {
-    //   if (mounted) {
-    //     setState(() {
-    //       _file = file;
-    //     });
-    //   }
-    // });
   }
 
   @override
   void dispose() {
-    // Cancel subscription when widget is disposed
-    // _profilePictureSubscription?.cancel();
     super.dispose();
   }
 

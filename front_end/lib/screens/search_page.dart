@@ -17,12 +17,9 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize or fetch data if needed
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final eventProvider = Provider.of<EventProvider>(context, listen: false);
-      if (eventProvider.eventList.isEmpty) {
-        eventProvider.fetchAllEvents();
-      }
+      eventProvider.fetchAllEvents();
     });
   }
 
@@ -113,8 +110,6 @@ class _SearchPageState extends State<SearchPage> {
             onChanged: _handleSearch,
           ),
         ),
-        // Remove the additional filter icon from actions
-        actions: [], // Empty to remove duplicate icon
       ),
       body: Consumer<EventProvider>(
         builder: (context, eventProvider, child) {
@@ -248,7 +243,7 @@ class EventCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           event["location"] != null
-                              ? "${event['location']}${(event['roomno'] != null) ? (' - Room ' + event['roomno']) : ''}"
+                              ? "${event['location']}${(event['roomno'] != '' && event['roomno'] != null) ? (' - Room ' + event['roomno']) : ''}"
                               : "Location not specified",
                           style: TextStyle(
                             color: Colors.grey[600],

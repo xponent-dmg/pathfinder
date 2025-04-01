@@ -244,7 +244,7 @@ class EventsService {
       }
 
       if (location != null && location.isNotEmpty) {
-        queryParams['location'] = location;
+        queryParams['building'] = location;
         print('DEBUG: API: Adding query param: location=$location');
       }
 

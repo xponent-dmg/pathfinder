@@ -25,8 +25,7 @@ router.post("/create", auth, async (req, res) => {
       if (!building) {
         console.log("Building not found:", req.body.building);
         return res.status(400).send({
-          error:
-            "Invalid building name",
+          error: "Invalid building name",
         });
       }
       console.log("Building found:", building.name, building._id);
@@ -137,6 +136,18 @@ router.get("/search", async (req, res) => {
         filters.startTime.$gte = new Date(req.query.startDate);
       if (req.query.endDate)
         filters.startTime.$lte = new Date(req.query.endDate);
+    }
+
+    //isOnline filter
+    if (req.query.isOnline !== undefined) {
+      const isOnline = req.query.isOnline === "true"; 
+      filters.isOnline = isOnline;
+    }
+
+    //isMandatory filter
+    if (req.query.isMandatory !== undefined) {
+      const isMandatory = req.query.isMandatory === "true"; 
+      filters.isMandatory = isMandatory;
     }
 
     console.log("Applying filters:", filters);
