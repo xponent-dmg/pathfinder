@@ -33,14 +33,17 @@ class _ClubLeaderSigninState extends State<ClubLeaderSignin>
         );
 
     if (result['success']) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context)
-          .showSnackBar(CustomSnackbar(text: "Login Successful").build());
-
-      // Navigate to home screen or club leader dashboard
-      Future.delayed(Duration(seconds: 1), () {
+          .showSnackBar(CustomSnackbar(text: "Login Successful").build())
+          .closed
+          .then((_) {
+        if (!mounted) return;
+        // Navigate to home screen or club leader dashboard
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       });
     } else {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(text: result['message'], color: Colors.red).build());
     }

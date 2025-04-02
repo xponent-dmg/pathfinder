@@ -67,7 +67,7 @@ class ApiService {
           userProvider.setRole("student");
 
           // Fetch user details right away
-          await userProvider.getUserDet();
+          await userProvider.getUserDet('api/auth/user');
         }
 
         // Save token to secure storage if remember me is checked
@@ -134,7 +134,7 @@ class ApiService {
           userProvider.setRole("clubleader");
 
           // Fetch user details right away
-          await userProvider.getUserDet();
+          await userProvider.getUserDet('api/auth/clubleader');
         }
 
         // Store token in secure storage if remember me is checked

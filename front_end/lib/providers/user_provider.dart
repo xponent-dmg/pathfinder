@@ -24,12 +24,12 @@ class UserProvider with ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   // Load token and get user details in one function
-  Future<bool> setTokenAndGetUserDetails(String token) async {
+  Future<bool> setTokenAndGetUserDetails(String endpoint,String token) async {
     _token = token;
     notifyListeners();
 
     try {
-      await getUserDet();
+      await getUserDet(endpoint);
       return true;
     } catch (e) {
       print("Error getting user details after setting token: $e");
@@ -38,14 +38,14 @@ class UserProvider with ChangeNotifier {
   }
 
   // Load token from secure storage when needed
-  Future<bool> loadTokenFromStorage() async {
+  Future<bool> loadTokenFromStorage(String endpoint) async {
     try {
       final storedToken = await _tokenService.getToken();
       if (storedToken != null && storedToken.isNotEmpty) {
         _token = storedToken;
         notifyListeners();
         // Get user details if we have a token
-        await getUserDet();
+        await getUserDet(endpoint);
         return true;
       }
       return false;
@@ -75,7 +75,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getUserDet() async {
+  Future<void> getUserDet(String endpoint) async {
     // Don't try to get user details if no token
     if (_token.isEmpty) return;
 
@@ -85,7 +85,7 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
 
       Map<String, dynamic> user =
-          await _apiService.authenticatedGet('/api/auth/user', _token);
+          await _apiService.authenticatedGet(endpoint, _token);
 
       // Update user details
       name = user['name'] ?? '';
