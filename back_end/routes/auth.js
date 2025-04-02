@@ -117,6 +117,7 @@ router.post("/login-user", async (req, res) => {
   }
 });
 
+//get user det
 router.get("/user", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ").at(1);
@@ -133,6 +134,30 @@ router.get("/user", async (req, res) => {
     }
 
     return res.status(200).json(user);
+  } catch (e) {
+    return res.status(500).json({ error: `Server error` });
+  }
+});
+
+//get clubleader det
+router.get("/clubleader", async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ").at(1);
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized, no token provided" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const clubLeaderId = decoded.id;
+
+    const clubLeader = await ClubLeader.findById(clubLeaderId).select(
+      "-password"
+    );
+    if (!clubLeader) {
+      return res.status(404).json({ error: "Clubleader not found" });
+    }
+
+    return res.status(200).json(clubLeader);
   } catch (e) {
     return res.status(500).json({ error: `Server error` });
   }
