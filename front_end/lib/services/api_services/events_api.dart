@@ -106,7 +106,7 @@ class EventsService {
     required DateTime eventDate,
     required String startTime,
     required String endTime,
-    File? imageFile, // Keep this parameter but don't use it in the request
+    File? imageFile,
     BuildContext? context,
     bool isFree = true,
     bool isMandatory = false,

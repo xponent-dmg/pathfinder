@@ -24,4 +24,20 @@ class SupabaseService {
       return null;
     }
   }
+
+  Future<String?> uploadProfilePicture(File imageFile, String username) async {
+    final String fileName =
+        '$username-${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final String filePath = 'profile-pics/$fileName';
+    try {
+      print("uploading profile-pic to supabase: $filePath");
+      await _supabase.storage.from('pathfinder').upload(filePath, imageFile);
+      final String publicUrl =
+          _supabase.storage.from('pathfinder').getPublicUrl(filePath);
+      return publicUrl;
+    } catch (e) {
+      print("Upload error");
+      return null;
+    }
+  }
 }

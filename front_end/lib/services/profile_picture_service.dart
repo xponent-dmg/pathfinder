@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_finder/services/api_services/auth_det.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,14 +30,14 @@ class ProfilePictureService {
   }
 
   // Pick image from gallery
-  static Future<File?> pickImageFromGallery(String currTime) async {
+  static Future<File?> pickImageFromGallery() async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
       imageQuality: 80,
     );
     if (image != null) {
       final savedImage =
-          await _saveImageToAppDirectory(File(image.path), currTime);
+          await _storeProfilePic(File(image.path));
       await _saveProfilePicturePath(savedImage.path);
       return savedImage;
     }
@@ -45,7 +46,7 @@ class ProfilePictureService {
   }
 
   // Take a photo with camera
-  static Future<File?> takePhoto(currTime) async {
+  static Future<File?> takePhoto() async {
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
@@ -53,7 +54,7 @@ class ProfilePictureService {
 
     if (photo != null) {
       final savedImage =
-          await _saveImageToAppDirectory(File(photo.path), currTime);
+          await _storeProfilePic(File(photo.path));
       await _saveProfilePicturePath(savedImage.path);
       return savedImage;
     }
@@ -61,13 +62,21 @@ class ProfilePictureService {
     return null;
   }
 
-  // Save image to app's documents directory
-  static Future<File> _saveImageToAppDirectory(
-      File image, String currTime) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final String path = directory.path;
-    final fileName = 'profile_$currTime.jpg';
-    final finalPath = '$path/$fileName';
+  // // Save image to app's documents directory
+  // static Future<File> _storeProfilePic(
+  //     File image, String currTime) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final String path = directory.path;
+  //   final fileName = 'profile_$currTime.jpg';
+  //   final finalPath = '$path/$fileName';
+  //   final File newImage = await image.copy(finalPath);
+  //   return newImage;
+  // }
+
+  static Future<File> _storeProfilePic(
+      File image) async {
+    final fileName = 'profile_${DateTime.now().microsecondsSinceEpoch}.jpg';
+    final finalPath = '${AuthDet().supaBaseUrl}/$fileName';
     final File newImage = await image.copy(finalPath);
     return newImage;
   }

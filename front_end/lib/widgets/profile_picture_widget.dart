@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_finder/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 import '../services/profile_picture_service.dart';
 
 class ProfilePictureWidget extends StatefulWidget {
