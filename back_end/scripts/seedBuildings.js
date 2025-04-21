@@ -168,8 +168,8 @@ const buildings = [
   {
     name: "D1 Block",
     coordinates: {
-      lat: 12.843705570631009,
-      lng: 80.1522032530841,
+      lat: 12.843653268619796,
+      lng: 80.15223543959195,
     },
     category: "Hostel",
   },
