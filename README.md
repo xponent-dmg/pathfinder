@@ -1,7 +1,5 @@
 # Pathfinder 
-A full-stack app built using **Flutter** and **Node.js** with **MongoDB Atlas** as the database.
-
-Pathfinder is a feature-rich application that showcases blending modern technologies to build scalable and secure apps.
+A full-stack event management mobile app built with Flutter, Node.js, and MongoDB. It enables users to discover, create, and register for college events with features like role-based access (User, Club Leader, Admin), interactive map-based navigation, event filtering, and real-time updates.
 
 ## Tech Stack
 ### Frontend  
