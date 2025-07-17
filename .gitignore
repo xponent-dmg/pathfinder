@@ -1,2 +1,9 @@
 .DS_Store
 .vscode
+
+supabase/.temp/
+supabase/.output/
+supabase/.env
+supabase/secrets.env
+.supabase
+supabase/config.toml

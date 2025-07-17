@@ -1,0 +1,52 @@
+final String _supaBaseUrl = 'https://zttcqbheotutkxaqljvf.supabase.co'\;
+  final String _supaBaseAnon =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0dGNxYmhlb3R1dGt4YXFsanZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDMwNzQ4ODAsImV4cCI6MjA1ODY1MDg4MH0._LikwV4TS1IXI76Jsz0El8P6rsFwL6LiGohiEt9Wexw';
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub-cache/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+generated_plugin_registrant.dart
+
+# iOS
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/.symlinks/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/Runner.xcodeproj/project.xcworkspace/
+ios/build/
+ios/Flutter/App.framework
+ios/Flutter/engine/
+
+# Xcode
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcuserstate
+DerivedData/
+*.xcworkspace
+
+# Android
+.android/
+.gradle/
+local.properties
+*.iml
+.idea/
+android/app/debug
+android/app/profile
+android/app/release
+
+# VS Code
+.vscode/
+
+# Mac
+.DS_Store
+
+# Others
+*.log
+*.tmp
+*.swp
