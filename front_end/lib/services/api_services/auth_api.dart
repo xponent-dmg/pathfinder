@@ -13,9 +13,9 @@ class ApiService {
   final TokenService _tokenService = TokenService();
 
 //register user
-  Future<http.Response> registerUser(
-      String name, String username, String email, String password) async {
+  Future<http.Response> registerUser(String name, String username, String email, String password) async {
     var url = Uri.parse("$baseUrl/api/auth/register-user");
+    print("DEBUG: sending user registration request to $url, with parameters $name, $username, $email, and $password");
     var response = await http.post(
       url,
       headers: {
@@ -32,10 +32,11 @@ class ApiService {
   }
 
 //user login
-  Future<Map<String, dynamic>> userLogin(
-      String username, String password, bool rememberMe,
+  Future<Map<String, dynamic>> userLogin(String username, String password, bool rememberMe,
       [BuildContext? context]) async {
     var url = Uri.parse("$baseUrl/api/auth/login-user");
+    print("DEBUG: sending user login request to $url, with parameters $username, and $password");
+
     var response = await http.post(
       url,
       headers: {
@@ -48,11 +49,7 @@ class ApiService {
     );
 
     // Parse the response
-    Map<String, dynamic> result = {
-      'success': false,
-      'message': 'An error occurred',
-      'statusCode': response.statusCode
-    };
+    Map<String, dynamic> result = {'success': false, 'message': 'An error occurred', 'statusCode': response.statusCode};
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -61,8 +58,7 @@ class ApiService {
 
         // Always save the token to UserProvider
         if (context != null) {
-          final userProvider =
-              Provider.of<UserProvider>(context, listen: false);
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.setToken(token);
           userProvider.setRole("student");
 
@@ -79,12 +75,7 @@ class ApiService {
           print("Remember me not checked, token only saved in memory");
         }
 
-        result = {
-          'success': true,
-          'message': 'Login successful',
-          'statusCode': response.statusCode,
-          'token': token
-        };
+        result = {'success': true, 'message': 'Login successful', 'statusCode': response.statusCode, 'token': token};
       }
     } else {
       try {
@@ -99,8 +90,7 @@ class ApiService {
   }
 
 //clubLeader login
-  Future<Map<String, dynamic>> clubLeaderLogin(
-      String username, String password, bool rememberMe,
+  Future<Map<String, dynamic>> clubLeaderLogin(String username, String password, bool rememberMe,
       [BuildContext? context]) async {
     var url = Uri.parse("$baseUrl/api/auth/login-clubleader");
     var response = await http.post(
@@ -115,11 +105,7 @@ class ApiService {
     );
 
     // Parse the response
-    Map<String, dynamic> result = {
-      'success': false,
-      'message': 'An error occurred',
-      'statusCode': response.statusCode
-    };
+    Map<String, dynamic> result = {'success': false, 'message': 'An error occurred', 'statusCode': response.statusCode};
 
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
@@ -128,8 +114,7 @@ class ApiService {
 
         // Always save to UserProvider
         if (context != null) {
-          final userProvider =
-              Provider.of<UserProvider>(context, listen: false);
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
           userProvider.setToken(token);
           userProvider.setRole("clubleader");
 
@@ -146,12 +131,7 @@ class ApiService {
           print("Remember me not checked, token only saved in memory");
         }
 
-        result = {
-          'success': true,
-          'message': 'Login successful',
-          'statusCode': response.statusCode,
-          'token': token
-        };
+        result = {'success': true, 'message': 'Login successful', 'statusCode': response.statusCode, 'token': token};
       }
     } else {
       try {
@@ -166,8 +146,7 @@ class ApiService {
   }
 
   // Method to make authenticated requests
-  Future<Map<String, dynamic>> authenticatedGet(String endpoint,
-      [String? token]) async {
+  Future<Map<String, dynamic>> authenticatedGet(String endpoint, [String? token]) async {
     final url = Uri.parse('$baseUrl$endpoint');
 
     // If no token provided, try to get from secure storage
@@ -211,8 +190,7 @@ class ApiService {
   }
 
   // Method to make authenticated POST requests
-  Future<http.Response> authenticatedPost(
-      String endpoint, Map<String, dynamic> body) async {
+  Future<http.Response> authenticatedPost(String endpoint, Map<String, dynamic> body) async {
     final token = await _tokenService.getToken();
     final url = Uri.parse('$baseUrl$endpoint');
 

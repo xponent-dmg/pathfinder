@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_finder/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 import '../services/profile_picture_service.dart';
 
 class ProfilePictureWidget extends StatefulWidget {
@@ -50,9 +48,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
                 title: const Text('Choose from Gallery'),
                 onTap: () async {
                   Navigator.pop(context);
-                  final image =
-                      await ProfilePictureService.pickImageFromGallery(
-                          currTime);
+                  final image = await ProfilePictureService.pickImageFromGallery(currTime);
                   if (image != null && mounted) {
                     setState(() {
                       _profilePicture = image;
@@ -82,8 +78,7 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
               if (_profilePicture != null)
                 ListTile(
                   leading: const Icon(Icons.delete, color: Colors.red),
-                  title: const Text('Remove Photo',
-                      style: TextStyle(color: Colors.red)),
+                  title: const Text('Remove Photo', style: TextStyle(color: Colors.red)),
                   onTap: () async {
                     Navigator.pop(context);
                     await ProfilePictureService.removeProfilePicture();
