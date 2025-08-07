@@ -1,4 +1,3 @@
-# Use official Node.js LTS Alpine image for smaller size
 FROM node:lts-alpine
 
 # Create app directory and set ownership
@@ -8,24 +7,14 @@ WORKDIR /app
 # Create a non-root user to run the application
 USER node
 
-# Copy package.json and package-lock.json (if available) as node user
 COPY --chown=node:node package*.json ./
 
-# Install dependencies - use npm install if package-lock.json doesn't exist
-RUN if [ -f package-lock.json ]; then \
-        npm ci --omit=dev && npm cache clean --force; \
-    else \
-        npm install --only=production && npm cache clean --force; \
-    fi
+RUN npm install && npm cache clean --force; 
 
-# Copy application code
 COPY --chown=node:node . .
 
-# Create necessary directories with proper permissions
 RUN mkdir -p logs
 
-# Expose the port
 EXPOSE 3000
 
-# Start the server
 CMD ["npm", "start"]
