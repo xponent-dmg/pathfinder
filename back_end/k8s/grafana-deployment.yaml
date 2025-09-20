@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:12.1.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: "system" # Replace with your desired username
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "system123" # Replace with your desired password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+spec:
+  selector:
+    app: grafana
+  type: NodePort # or LoadBalancer if you want external access
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 32000 # Choose a free port for NodePort

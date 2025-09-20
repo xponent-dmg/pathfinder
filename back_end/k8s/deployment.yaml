@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathfinder-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pathfinder
+  template:
+    metadata:
+      labels:
+        app: pathfinder
+    spec:
+      containers:
+      - name: backend
+        image: pathfinder-backend:latest 
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5050
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
+        livenessProbe:
+          tcpSocket:
+            port: 5050
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          tcpSocket:
+            port: 5050
+          initialDelaySeconds: 5
+          periodSeconds: 5
