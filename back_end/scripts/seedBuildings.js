@@ -22,7 +22,7 @@ const buildings = [
     category: "Others",
   },
   {
-    name: "MBA amphitheater",
+    name: "MBA Amphitheater",
     coordinates: {
       lat: 12.841341209440696, // Replace with actual latitude
       lng: 80.15406539621543, // Replace with actual longitude
