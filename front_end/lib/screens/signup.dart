@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:path_finder/services/supabase_service.dart';
 import 'package:path_finder/widgets/auth_button.dart';
