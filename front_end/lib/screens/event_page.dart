@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:ui';
 
 import 'package:path_finder/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+import '../widgets/custom_snackbar.dart';
+import 'package:path_finder/services/supabase_service.dart';
 
 class EventPage extends StatefulWidget {
   const EventPage({super.key});
@@ -287,7 +290,38 @@ class _EventPageState extends State<EventPage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final userProvider = Provider.of<UserProvider>(context, listen: false);
+                        if (userProvider.token.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            CustomSnackbar(text: "Please login to register", color: Colors.orange).build()
+                          );
+                          return;
+                        }
+
+                        // Show loading indicator
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => Center(child: CircularProgressIndicator()),
+                        );
+
+                        final res = await SupabaseService().registerForEvent(event['id'], userProvider.token);
+                        
+                        // Close loading indicator
+                        Navigator.pop(context);
+
+                        if (res['success']) {
+                          Navigator.pushNamed(context, '/ticket', arguments: {
+                            'event': event,
+                            'ticket_no': res['ticket_no']
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            CustomSnackbar(text: res['message'], color: Colors.red).build()
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors
                             .blue.shade600, // Changed to blue to match theme

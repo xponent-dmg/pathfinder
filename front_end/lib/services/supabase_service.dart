@@ -282,43 +282,110 @@ class SupabaseService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getBuildings({String category = 'All'}) async {
+    try {
+      var query = _supabase.from('buildings').select();
+      
+      if (category != 'All') {
+        query = query.eq('category', category);
+      }
+      
+      final data = await query;
+      return List<Map<String, dynamic>>.from(data);
+    } catch (e) {
+      print("Error fetching buildings: $e");
+      return [];
+    }
+  }
+
+  Future<Map<String, dynamic>> registerForEvent(String eventId, String userId) async {
+    try {
+      final ticketNo = 'TKT-${DateTime.now().millisecondsSinceEpoch}-${userId.substring(0, 4).toUpperCase()}';
+      
+      final response = await _supabase.from('event_registrations').insert({
+        'ticket_no': ticketNo,
+        'user_id': userId,
+        'event_id': eventId,
+        'status': 'Confirmed'
+      }).select().single();
+      
+      return {'success': true, 'ticket_no': ticketNo, 'registration': response};
+    } catch (e) {
+      if (e.toString().contains('duplicate key value')) {
+        return {'success': false, 'message': 'You are already registered for this event.'};
+      }
+      return {'success': false, 'message': 'Failed to register: $e'};
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getRegisteredEvents(String userId) async {
+    try {
+      final data = await _supabase
+          .from('event_registrations')
+          .select('*, events(*, buildings(*))')
+          .eq('user_id', userId);
+          
+      final registeredEvents = (data as List).map((reg) {
+        final event = reg['events'] as Map<String, dynamic>? ?? {};
+        event['ticket_no'] = reg['ticket_no'];
+        event['status'] = reg['status'];
+        return event;
+      }).toList();
+      return registeredEvents;
+    } catch (e) {
+      print("Error fetching registered events: $e");
+      return [];
+    }
+  }
+
+  Map<String, dynamic> processSingleEvent(Map<String, dynamic> elem) {
+    try {
+      Map<String, dynamic> event = {};
+      event["id"] = elem["id"];
+      event["name"] = elem["name"] ?? "NaN";
+      event["desc"] = elem["information"] ?? "No description available";
+      event["clubName"] = elem["club_name"] ?? "NaN";
+      event["pic"] = elem['image_url'];
+      event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
+
+      if (elem['buildings'] != null && elem['buildings']['name'] != null) {
+        event["location"] = elem['buildings']['name'];
+      } else {
+        event["location"] = "Online";
+      }
+
+      event['roomno'] = elem['roomno'] ?? "";
+      event['isMandatory'] = elem['is_mandatory'] ?? false;
+      event['isOnline'] = elem['is_online'] ?? false;
+      event['price'] = elem['price'] ?? 0;
+      event['category'] = (elem['categories'] != null && elem['categories'].isNotEmpty)
+          ? elem['categories'][0]
+          : null;
+
+      if (elem["start_time"] != null) {
+        DateTime parsedDate = DateTime.parse(elem["start_time"]).toLocal();
+        event["time"] = DateFormat("HH:mm").format(parsedDate);
+        event["date"] = DateFormat("MMMM d").format(parsedDate);
+        event["day"] = DateFormat("EEEE").format(parsedDate);
+        event["event_date"] = elem["start_time"];
+      } else {
+        event["time"] = "TBD";
+        event["date"] = "Today";
+        event["day"] = "Today";
+      }
+      return event;
+    } catch (e) {
+      print("Error processing event: $e");
+      return {};
+    }
+  }
+
   List<Map<String, dynamic>> _mapEventsList(List<dynamic> data) {
     List<Map<String, dynamic>> eventList = [];
     for (var elem in data) {
-      try {
-        Map<String, dynamic> event = {};
-        event["name"] = elem["name"] ?? "NaN";
-        event["desc"] = elem["information"] ?? "No description available";
-        event["clubName"] = elem["club_name"] ?? "NaN";
-        event["pic"] = elem['image_url'];
-        event["profile-pic"] = "assets/profile_pics/profile-pic.jpg";
-
-        if (elem['buildings'] != null && elem['buildings']['name'] != null) {
-          event["location"] = elem['buildings']['name'];
-        } else {
-          event["location"] = "Online";
-        }
-
-        event['roomno'] = elem['roomno'] ?? "";
-        event['isMandatory'] = elem['is_mandatory'] ?? false;
-        event['isOnline'] = elem['is_online'] ?? false;
-        event['price'] = elem['price'] ?? 0;
-        event['category'] = (elem['categories'] != null && elem['categories'].isNotEmpty) ? elem['categories'][0] : null;
-
-        if (elem["start_time"] != null) {
-          DateTime parsedDate = DateTime.parse(elem["start_time"]).toLocal();
-          event["time"] = DateFormat("HH:mm").format(parsedDate);
-          event["date"] = DateFormat("MMMM d").format(parsedDate);
-          event["day"] = DateFormat("EEEE").format(parsedDate);
-          event["event_date"] = elem["start_time"];
-        } else {
-          event["time"] = "TBD";
-          event["date"] = "Today";
-          event["day"] = "Today";
-        }
-        eventList.add(event);
-      } catch (e) {
-        print("Error processing event: $e");
+      final processed = processSingleEvent(elem as Map<String, dynamic>);
+      if (processed.isNotEmpty) {
+        eventList.add(processed);
       }
     }
     return eventList;
