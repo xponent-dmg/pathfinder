@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/events_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 
 class EventProvider extends ChangeNotifier {
-  final EventsService _eventsService = EventsService();
+  final SupabaseService _eventsService = SupabaseService();
 
   List<Map<String, dynamic>> _eventList = [];
   List<Map<String, dynamic>> _todaysEvents = [];
+  List<Map<String, dynamic>> _registeredEvents = [];
   List<Map<String, dynamic>> _filteredEvents = [];
   bool _isLoading = false;
   String? _error;
 
   List<Map<String, dynamic>> get eventList => _eventList;
   List<Map<String, dynamic>> get todaysEvents => _todaysEvents;
+  List<Map<String, dynamic>> get registeredEvents => _registeredEvents;
   List<Map<String, dynamic>> get filteredEvents => _filteredEvents;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -472,6 +474,22 @@ class EventProvider extends ChangeNotifier {
         _todaysEvents = events.take(3).toList();
       }
 
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchRegisteredEvents(String userId) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      _registeredEvents = await _eventsService.getRegisteredEvents(userId);
       _isLoading = false;
       notifyListeners();
     } catch (e) {

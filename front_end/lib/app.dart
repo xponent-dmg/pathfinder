@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:path_finder/screens/club_leader.dart';
-import 'package:path_finder/screens/map_page.dart';
+import 'package:path_finder/screens/open_map_page.dart';
 import 'package:path_finder/screens/event_create_page.dart';
-import 'package:path_finder/screens/home_page.dart';
+import 'package:path_finder/home.dart';
 import 'package:path_finder/screens/profile_page.dart';
 import 'package:path_finder/screens/search_page.dart';
 import 'package:path_finder/screens/signin.dart';
 import 'package:path_finder/screens/signup.dart';
 import 'package:path_finder/screens/start_page.dart';
 import 'package:path_finder/screens/event_page.dart';
+import 'package:path_finder/screens/ticket_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -34,15 +35,16 @@ class App extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const StartPage(),
-        '/home': (context) => const HomePage(),
+        '/home': (context) => const Home(),
         '/signin': (context) => const SigninPage(),
         '/signup': (context) => const SignupPage(),
         '/profile': (context) => const ProfilePage(),
         '/clubleader': (context) => const ClubLeaderSignin(),
         '/event_page': (context) => const EventPage(),
         '/event_create': (context) => const EventCreatePage(),
-        '/map': (context) => const MapPage(),
+        '/map': (context) => const OpenMapPage(),
         '/search': (context) => const SearchPage(),
+        '/ticket': (context) => const TicketPage(),
       },
     );
   }
