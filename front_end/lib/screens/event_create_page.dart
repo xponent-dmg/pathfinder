@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../widgets/custom_snackbar.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_finder/services/api_services/events_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 
 class EventCreatePage extends StatefulWidget {
   const EventCreatePage({super.key});
@@ -16,7 +16,7 @@ class EventCreatePage extends StatefulWidget {
 
 class _EventCreatePageState extends State<EventCreatePage> {
   final _formKey = GlobalKey<FormState>();
-  final EventsService _eventsService = EventsService();
+  final SupabaseService _eventsService = SupabaseService();
   bool _isLoading = false;
 
   // Controllers

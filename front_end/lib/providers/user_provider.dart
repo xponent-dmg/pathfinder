@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/auth_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 import 'package:path_finder/services/token_service.dart';
 
 class UserProvider with ChangeNotifier {
@@ -14,7 +14,7 @@ class UserProvider with ChangeNotifier {
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMessage = '';
-  final ApiService _apiService = ApiService();
+  final SupabaseService _apiService = SupabaseService();
   final TokenService _tokenService = TokenService();
 
   String get role => _role;
@@ -85,7 +85,7 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
 
       Map<String, dynamic> user =
-          await _apiService.authenticatedGet('/api/auth/user', _token);
+          await _apiService.getUserDetails(_token, _role);
 
       // Update user details
       name = user['name'] ?? '';

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/auth_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 import 'package:path_finder/widgets/auth_button.dart';
 import 'package:path_finder/widgets/input_field.dart';
 import '../widgets/custom_snackbar.dart';
@@ -21,7 +21,7 @@ class _SignupPageState extends State<SignupPage>
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  ApiService apiService = ApiService();
+  SupabaseService apiService = SupabaseService();
 
   bool _obscurePassword = true;
 
@@ -32,7 +32,7 @@ class _SignupPageState extends State<SignupPage>
         _usernameController.text.trim(),
         _emailController.text.trim(),
         _passwordController.text.trim());
-    if (response.statusCode == 201) {
+    if (response['success']) {
       var snackBar = ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackbar(text: "Registered user successfully").build());
       await snackBar.closed;
@@ -41,7 +41,7 @@ class _SignupPageState extends State<SignupPage>
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackbar(
-              text: jsonDecode(response.body)["error"], color: Colors.red)
+              text: response["message"] ?? "Registration failed", color: Colors.red)
           .build());
     }
   }

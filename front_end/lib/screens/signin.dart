@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/auth_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 import 'package:path_finder/widgets/input_field.dart';
 import 'package:path_finder/widgets/auth_button.dart';
 import '../widgets/custom_snackbar.dart';
@@ -18,7 +18,7 @@ class _SigninPageState extends State<SigninPage>
   // Controllers
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  ApiService apiService = ApiService();
+  SupabaseService apiService = SupabaseService();
 
   bool _obscurePassword = true;
   bool _rememberMe = false;

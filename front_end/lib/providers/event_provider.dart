@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:path_finder/services/api_services/events_api.dart';
+import 'package:path_finder/services/supabase_service.dart';
 
 class EventProvider extends ChangeNotifier {
-  final EventsService _eventsService = EventsService();
+  final SupabaseService _eventsService = SupabaseService();
 
   List<Map<String, dynamic>> _eventList = [];
   List<Map<String, dynamic>> _todaysEvents = [];
